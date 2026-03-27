@@ -23,6 +23,7 @@ import {
 import SEO from '../components/SEO';
 import SymptomTracker, { shouldShowWeeklyCheck } from '../components/programme/SymptomTracker';
 import SymptomChart from '../components/programme/SymptomChart';
+import GuidedJournal from '../components/programme/GuidedJournal';
 
 // ═══════════════════════════════════════════════════════
 // TYPES
@@ -1303,36 +1304,8 @@ export default function Programme() {
           </p>
         </div>
 
-        {/* ═══ APRÈS LA SÉANCE — Questionnaire de ressenti ═══ */}
-        <div className="mb-6 rounded-2xl border border-green-islamic/15 bg-green-islamic/5 p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-islamic/10">
-              <BookOpen className="h-4 w-4 text-green-islamic" />
-            </div>
-            <h3 className="font-heading text-base font-bold text-green-islamic">Après la séance — Notez vos ressentis</h3>
-          </div>
-          <p className="text-sm text-text-secondary mb-3">
-            Il est très important de noter ce que vous avez ressenti pendant la roqya. Cela aide à suivre votre progression.
-          </p>
-          <div className="space-y-2 text-sm text-text-secondary">
-            <p>• Avez-vous ressenti des <strong className="text-text-primary">sensations physiques</strong> (chaleur, froid, picotements, douleurs, tremblements) ?</p>
-            <p>• Avez-vous eu des <strong className="text-text-primary">pensées ou images</strong> particulières pendant l'écoute ?</p>
-            <p>• Avez-vous <strong className="text-text-primary">pleuré, baillé</strong> ou ressenti de l'émotion ?</p>
-            <p>• Vous êtes-vous <strong className="text-text-primary">endormi(e)</strong> pendant la séance ?</p>
-          </div>
-          <textarea
-            className="mt-3 w-full resize-y rounded-xl border border-cream-dark bg-cream px-4 py-3 text-sm text-text-primary outline-none transition focus:border-green-islamic focus:ring-2 focus:ring-green-islamic/20"
-            rows={3}
-            placeholder="Décrivez ce que vous avez ressenti aujourd'hui..."
-            onBlur={(e) => {
-              if (e.target.value) {
-                const key = `ruqya_notes_day_${program.currentDay}`;
-                localStorage.setItem(key, e.target.value);
-              }
-            }}
-            defaultValue={localStorage.getItem(`ruqya_notes_day_${program.currentDay}`) || ''}
-          />
-        </div>
+        {/* ═══ JOURNAL GUIDÉ ═══ */}
+        <GuidedJournal currentDay={program.currentDay} />
 
         <div className="arabesque-separator mx-auto max-w-xs mb-6" />
 
