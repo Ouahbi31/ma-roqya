@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function ReservationConfirmee() {
-  const [searchParams] = useSearchParams();
-  const _sessionId = searchParams.get('session_id');
-
   useEffect(() => {
     // Scroll to top on mount
     window.scrollTo(0, 0);
