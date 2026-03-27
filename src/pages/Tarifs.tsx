@@ -423,7 +423,7 @@ export default function Tarifs() {
                   Réserver ma séance
                 </button>
                 <p className="mt-3 text-xs text-text-secondary">
-                  45 min · Visioconférence · Confidentiel et bienveillant
+                  45 min · Visioconférence / Appel vocal · Confidentiel et bienveillant
                 </p>
               </div>
             </div>
@@ -528,7 +528,7 @@ export default function Tarifs() {
                     </div>
                     <div className="flex items-center gap-2.5">
                       <Video size={16} className="shrink-0 text-green-islamic" />
-                      <span>Visioconférence</span>
+                      <span>Visioconférence / Appel vocal</span>
                     </div>
                     <div className="flex items-center gap-2.5">
                       <Globe size={16} className="shrink-0 text-green-islamic" />
@@ -652,7 +652,7 @@ export default function Tarifs() {
                     </div>
                     <div className="flex items-center gap-2.5">
                       <Video size={16} className="shrink-0 text-green-islamic" />
-                      <span>Visioconférence</span>
+                      <span>Visioconférence / Appel vocal</span>
                     </div>
                     <div className="flex items-center gap-2.5">
                       <Globe size={16} className="shrink-0 text-green-islamic" />
