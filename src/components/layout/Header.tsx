@@ -49,6 +49,7 @@ export default function Header() {
     { to: '/quiz', label: t('nav.quiz') },
     { to: '/forum', label: t('nav.forum') },
     { to: '/programme', label: 'Programme' },
+    { to: '/qui-suis-je', label: 'Qui suis-je' },
     { to: '/tarifs', label: t('nav.pricing') },
   ];
 
@@ -64,6 +65,7 @@ export default function Header() {
   const moreLinks = [
     { to: '/douas', label: t('nav.douas'), icon: HandHeart },
     { to: '/forum', label: t('nav.forum'), icon: MessageCircle },
+    { to: '/qui-suis-je', label: 'Qui suis-je', icon: User },
     { to: '/tarifs', label: t('nav.pricing'), icon: CreditCard },
   ];
 

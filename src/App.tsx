@@ -21,6 +21,7 @@ import Programme from './pages/Programme';
 import Admin from './pages/Admin';
 import AdminRoute from './components/auth/AdminRoute';
 import ReservationConfirmee from './pages/ReservationConfirmee';
+import QuiSuisJe from './pages/QuiSuisJe';
 
 export default function App() {
   const { i18n } = useTranslation();
@@ -49,6 +50,7 @@ export default function App() {
         <Route path="/forum" element={<Forum />} />
         <Route path="/forum/:id" element={<ForumPostPage />} />
         <Route path="/programme" element={<Programme />} />
+        <Route path="/qui-suis-je" element={<QuiSuisJe />} />
         <Route
           path="/dashboard"
           element={
