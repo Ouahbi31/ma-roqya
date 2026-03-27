@@ -57,7 +57,8 @@ export default async function handler(req, res) {
 
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      // Stripe affiche automatiquement les méthodes activées (carte, PayPal, Apple Pay, etc.)
+      // payment_method_types omis = mode automatique
       customer_email: email,
       line_items: [
         {
