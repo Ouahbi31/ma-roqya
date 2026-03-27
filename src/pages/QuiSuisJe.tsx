@@ -14,7 +14,7 @@ export default function QuiSuisJe() {
                 <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-green-islamic/20 to-gold/20 blur-lg" />
                 <img
                   src="/images/frere-muz.jpg"
-                  alt="Frère Muz"
+                  alt="Dr Frère Muz"
                   className="relative h-48 w-48 rounded-full object-cover border-4 border-white shadow-xl md:h-56 md:w-56"
                 />
               </div>
@@ -24,7 +24,7 @@ export default function QuiSuisJe() {
             <div className="flex-1">
               <p className="text-sm font-semibold uppercase tracking-wider text-gold">Qui suis-je ?</p>
               <h1 className="font-heading mt-2 text-3xl font-bold text-green-islamic md:text-4xl">
-                Frère Muz
+                Dr Frère Muz
               </h1>
               <p className="mt-1 text-lg text-text-secondary">
                 Praticien en Psycho-Roqya & Coach en développement personnel
