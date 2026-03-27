@@ -209,7 +209,7 @@ export default function Tarifs() {
         body: JSON.stringify({
           nom: formName,
           email: formEmail,
-          telephone: formPhone,
+          telephone: '',
           notes: formNotes,
           date_reservation: selectedDate,
           heure: selectedSlot,

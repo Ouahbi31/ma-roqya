@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 
 export default function ReservationConfirmee() {
   const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get('session_id');
+  const _sessionId = searchParams.get('session_id');
 
   useEffect(() => {
     // Scroll to top on mount
