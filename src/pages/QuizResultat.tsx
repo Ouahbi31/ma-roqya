@@ -76,8 +76,8 @@ export default function QuizResultat() {
                   to={`/articles/${a.id}`}
                   className="block rounded-lg border border-cream-dark p-3 transition-colors hover:bg-cream-dark"
                 >
-                  <p className="font-medium text-text-primary">{a.titre}</p>
-                  <p className="text-sm text-text-secondary">{a.temps_lecture} {t('articles.read_time')}</p>
+                  <p className="font-medium text-text-primary">{a.title}</p>
+                  <p className="text-sm text-text-secondary">{a.readTime} {t('articles.read_time')}</p>
                 </Link>
               ))}
             </div>

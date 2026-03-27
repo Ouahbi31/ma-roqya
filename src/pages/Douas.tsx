@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Heart, Play, ChevronDown, BookOpen, Shield, Moon, Sun } from 'lucide-react';
 import { sampleDouas } from '../data/douas';
-import type { Dua } from '../data/douas';
+
 import SEO from '../components/SEO';
 
 const categories = [

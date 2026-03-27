@@ -156,7 +156,7 @@ function getMorningRoutine(type: ProgramType): ChecklistItem[] {
 
   if (type === 'intensive') {
     base.push(
-      { id: 'ruqya-verses', label: 'Versets de ruqya spécifiques', arabic: '\u0622\u064A\u0627\u062A \u0627\u0644\u0631\u0642\u064A\u0629', repetitions: '3x' },
+      { id: 'ruqya-verses', label: 'Versets de roqya spécifiques', arabic: '\u0622\u064A\u0627\u062A \u0627\u0644\u0631\u0642\u064A\u0629', repetitions: '3x' },
       { id: 'dua-protection', label: 'Doua de protection du matin', arabic: '\u0628\u0650\u0633\u0652\u0645\u0650 \u0627\u0644\u0644\u0651\u064E\u0647\u0650 \u0627\u0644\u0651\u064E\u0630\u0650\u064A \u0644\u0627 \u064A\u064E\u0636\u064F\u0631\u0651\u064F \u0645\u064E\u0639\u064E \u0627\u0633\u0652\u0645\u0650\u0647\u0650 \u0634\u064E\u064A\u0652\u0621\u064C', repetitions: '3x' }
     );
   }
@@ -175,7 +175,7 @@ function getEveningRoutine(type: ProgramType): ChecklistItem[] {
   if (type !== 'prevention') {
     base.push({
       id: 'dua-ruqya',
-      label: 'Douas spécifiques de ruqya',
+      label: 'Douas spécifiques de roqya',
       arabic: '\u0623\u064E\u0639\u064F\u0648\u0630\u064F \u0628\u0650\u0643\u064E\u0644\u0650\u0645\u064E\u0627\u062A\u0650 \u0627\u0644\u0644\u0651\u064E\u0647\u0650 \u0627\u0644\u062A\u0651\u064E\u0627\u0645\u0651\u064E\u0627\u062A\u0650 \u0645\u0650\u0646\u0652 \u0634\u064E\u0631\u0651\u0650 \u0645\u064E\u0627 \u062E\u064E\u0644\u064E\u0642\u064E',
     });
   }
@@ -234,7 +234,7 @@ const PROGRAM_INFO: Record<ProgramType, { title: string; duration: number; descr
   intensive: {
     title: 'Programme Guérison Intensive',
     duration: 30,
-    description: 'Un programme complet de 30 jours pour les cas plus sévères, avec des pratiques intensives de ruqya shar\'iyya.',
+    description: 'Un programme complet de 30 jours pour les cas plus sévères, avec des pratiques intensives de roqya shar\'iyya.',
     icon: Flame,
   },
 };
@@ -691,7 +691,7 @@ export default function Programme() {
 
             <div>
               <label className="mb-2 block text-sm font-semibold text-text-primary">
-                Avez-vous déjà fait une ruqya auparavant ?
+                Avez-vous déjà fait une roqya auparavant ?
               </label>
               <div className="grid gap-2 sm:grid-cols-2">
                 <RadioOption name="previousRuqya" value="oui" checked={answers.previousRuqya === 'oui'} label="Oui" onChange={() => updateAnswer('previousRuqya', 'oui')} />
@@ -751,7 +751,7 @@ export default function Programme() {
         return (
           <div className="space-y-2">
             <p className="mb-3 text-xs italic text-text-secondary/80 rounded-lg bg-gold/5 border border-gold/15 px-3 py-2">
-              ⚠️ Ces symptômes sont des indications basées sur l'expérience des praticiens de ruqya. Ce ne sont que des hypothèses qui orientent — chacun de ces signes peut avoir une cause totalement différente. Ne vous enfermez pas dans un diagnostic.
+              ⚠️ Ces symptômes sont des indications basées sur l'expérience des praticiens de roqya. Ce ne sont que des hypothèses qui orientent — chacun de ces signes peut avoir une cause totalement différente. Ne vous enfermez pas dans un diagnostic.
             </p>
             {PHYSICAL_SYMPTOMS.map((s) => (
               <CheckboxOption
@@ -785,7 +785,7 @@ export default function Programme() {
         return (
           <div className="space-y-2">
             <p className="mb-3 text-xs italic text-text-secondary/80 rounded-lg bg-gold/5 border border-gold/15 px-3 py-2">
-              ⚠️ Rappel : aucun de ces signes ne constitue une preuve d'atteinte occulte. Ce sont des indications qui nous orientent, rien de plus. La ruqya est bénéfique dans tous les cas, que l'on soit atteint ou non.
+              ⚠️ Rappel : aucun de ces signes ne constitue une preuve d'atteinte occulte. Ce sont des indications qui nous orientent, rien de plus. La roqya est bénéfique dans tous les cas, que l'on soit atteint ou non.
             </p>
             {SPECIFIC_SYMPTOMS.map((s) => (
               <CheckboxOption
@@ -1196,13 +1196,13 @@ export default function Programme() {
           </div>
         </div>
 
-        {/* ═══ SÉANCE DE RUQYA (Vidéo YouTube) ═══ */}
+        {/* ═══ SÉANCE DE ROQYA (Vidéo YouTube) ═══ */}
         <div className="mb-6 rounded-2xl border border-cream-dark bg-white/80 p-5 shadow-sm">
           <div className="flex items-center gap-2 mb-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-islamic/10">
               <Play className="h-4 w-4 text-green-islamic" />
             </div>
-            <h3 className="font-heading text-base font-bold text-text-primary">Séance de Ruqya du jour</h3>
+            <h3 className="font-heading text-base font-bold text-text-primary">Séance de Roqya du jour</h3>
           </div>
           <p className="text-sm text-text-secondary mb-4">
             Installez-vous selon les consignes ci-dessus, puis lancez la récitation.
@@ -1216,7 +1216,7 @@ export default function Programme() {
                     ? 'waxbAKa-9Fc'
                     : 'waxbAKa-9Fc'
               }?rel=0`}
-              title="Séance de Ruqya"
+              title="Séance de Roqya"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="h-full w-full"
@@ -1224,8 +1224,8 @@ export default function Programme() {
           </div>
           <p className="mt-3 text-xs text-text-secondary text-center">
             {program.type === 'intensive'
-              ? 'Ruqya Shariya complète — Sheikh Mishary Alafasy (1h13)'
-              : 'Ruqya — Sheikh Mishary Alafasy (chaîne officielle)'}
+              ? 'Roqya Shariya complète — Sheikh Mishary Alafasy (1h13)'
+              : 'Roqya — Sheikh Mishary Alafasy (chaîne officielle)'}
           </p>
         </div>
 
@@ -1238,7 +1238,7 @@ export default function Programme() {
             <h3 className="font-heading text-base font-bold text-green-islamic">Après la séance — Notez vos ressentis</h3>
           </div>
           <p className="text-sm text-text-secondary mb-3">
-            Il est très important de noter ce que vous avez ressenti pendant la ruqya. Cela aide à suivre votre progression.
+            Il est très important de noter ce que vous avez ressenti pendant la roqya. Cela aide à suivre votre progression.
           </p>
           <div className="space-y-2 text-sm text-text-secondary">
             <p>• Avez-vous ressenti des <strong className="text-text-primary">sensations physiques</strong> (chaleur, froid, picotements, douleurs, tremblements) ?</p>
@@ -1379,9 +1379,9 @@ export default function Programme() {
   return (
     <div className="min-h-screen bg-cream py-16 md:py-24">
       <SEO
-        title="Programme de Ruqya personnalise - MaRoqya"
-        description="Obtenez un programme de ruqya personnalise selon vos symptomes. Questionnaire, suivi quotidien, videos de ruqya et checklist d'adhkar."
-        keywords="programme ruqya personnalise, auto-ruqya, ruqya seul, adhkar quotidien, douas guerison, sourate protection"
+        title="Programme de Roqya personnalise - MaRoqya"
+        description="Obtenez un programme de roqya personnalise selon vos symptomes. Questionnaire, suivi quotidien, videos de roqya et checklist d'adhkar."
+        keywords="programme roqya personnalise, auto-roqya, roqya seul, adhkar quotidien, douas guerison, sourate protection"
         url="/programme"
       />
       <div className="mx-auto max-w-5xl px-4">
@@ -1390,7 +1390,7 @@ export default function Programme() {
             {/* Page header */}
             <div className="text-center mb-8">
               <h1 className="font-heading text-3xl font-bold text-green-islamic md:text-4xl">
-                Programme de Ruqya personnalisé
+                Programme de Roqya personnalisé
               </h1>
               <p className="mt-3 text-text-secondary">
                 Répondez à quelques questions pour recevoir un programme adapté à votre situation.

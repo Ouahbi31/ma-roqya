@@ -66,13 +66,13 @@ export default function Dashboard() {
                 className="card-islamic p-5 transition-transform hover:-translate-y-1"
               >
                 <span className="mb-2 inline-block rounded-full bg-green-islamic/10 px-3 py-1 text-xs font-medium text-green-islamic">
-                  {article.categorie}
+                  {article.category}
                 </span>
                 <h3 className="mb-2 font-heading text-lg font-semibold text-text-primary">
-                  {article.titre}
+                  {article.title}
                 </h3>
-                <p className="line-clamp-2 text-sm text-text-secondary">{article.resume}</p>
-                <p className="mt-3 text-xs text-text-secondary">{article.temps_lecture} {t('articles.read_time')}</p>
+                <p className="line-clamp-2 text-sm text-text-secondary">{article.excerpt}</p>
+                <p className="mt-3 text-xs text-text-secondary">{article.readTime} {t('articles.read_time')}</p>
               </Link>
             ))}
           </div>

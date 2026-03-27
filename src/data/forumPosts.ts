@@ -24,7 +24,7 @@ export const sampleForumPosts: ForumPost[] = [
     user_name: 'AbdAllah_93',
     titre: 'Comment trouver un raqi de confiance dans ma région ?',
     contenu:
-      "As-salamu alaykum. Je cherche un praticien de ruqya shar'iyya de confiance dans la région parisienne. J'ai entendu beaucoup d'histoires de charlatans qui profitent de la détresse des gens, et je veux m'assurer de consulter quelqu'un qui pratique selon le Coran et la Sunna uniquement. Quels sont les critères à vérifier ? Est-ce qu'il y a des signes qui doivent alerter ? Jazakum Allahu khayran pour vos conseils.",
+      "As-salamu alaykum. Je cherche un praticien de roqya shar'iyya de confiance dans la région parisienne. J'ai entendu beaucoup d'histoires de charlatans qui profitent de la détresse des gens, et je veux m'assurer de consulter quelqu'un qui pratique selon le Coran et la Sunna uniquement. Quels sont les critères à vérifier ? Est-ce qu'il y a des signes qui doivent alerter ? Jazakum Allahu khayran pour vos conseils.",
     categorie: 'questions',
     replies_count: 15,
     created_at: '2026-02-03T10:15:00Z',
