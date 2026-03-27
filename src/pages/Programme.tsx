@@ -17,8 +17,12 @@ import {
   BookOpen,
   Droplets,
   Play,
+  BarChart3,
+  Bell,
 } from 'lucide-react';
 import SEO from '../components/SEO';
+import SymptomTracker, { shouldShowWeeklyCheck } from '../components/programme/SymptomTracker';
+import SymptomChart from '../components/programme/SymptomChart';
 
 // ═══════════════════════════════════════════════════════
 // TYPES
@@ -427,6 +431,8 @@ export default function Programme() {
 
   const [step, setStep] = useState(0);
   const [completionMsg, setCompletionMsg] = useState<string | null>(null);
+  const [trackerTab, setTrackerTab] = useState<'programme' | 'evolution'>('programme');
+  const [showBilan, setShowBilan] = useState(false);
 
   const [answers, setAnswers] = useState<QuestionnaireAnswers>(() => {
     const saved = loadFromStorage<QuestionnaireAnswers>(STORAGE_KEYS.answers);
@@ -1060,6 +1066,8 @@ export default function Programme() {
       );
     }
 
+    const bilanDue = program.startDate ? shouldShowWeeklyCheck(program.startDate) : false;
+
     return (
       <div className="mx-auto max-w-2xl">
         {/* Header */}
@@ -1082,6 +1090,72 @@ export default function Programme() {
           </button>
         </div>
 
+        {/* Notification bilan hebdo */}
+        {bilanDue && !showBilan && trackerTab === 'programme' && (
+          <button
+            onClick={() => { setShowBilan(true); setTrackerTab('evolution'); }}
+            className="mb-4 flex w-full items-center gap-3 rounded-xl border border-gold/30 bg-gold/5 p-4 text-left transition hover:bg-gold/10"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold/15">
+              <Bell className="h-5 w-5 text-gold" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-text-primary">
+                Bilan hebdomadaire disponible
+              </p>
+              <p className="text-xs text-text-secondary">
+                Évaluez vos symptômes pour suivre votre progression
+              </p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-gold" />
+          </button>
+        )}
+
+        {/* Onglets Programme / Évolution */}
+        <div className="mb-6 flex rounded-xl border border-cream-dark bg-white/80 p-1">
+          <button
+            onClick={() => { setTrackerTab('programme'); setShowBilan(false); }}
+            className={`flex-1 flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-semibold transition ${
+              trackerTab === 'programme'
+                ? 'bg-green-islamic text-white shadow-sm'
+                : 'text-text-secondary hover:text-text-primary'
+            }`}
+          >
+            <BookOpen className="h-4 w-4" />
+            Programme
+          </button>
+          <button
+            onClick={() => setTrackerTab('evolution')}
+            className={`flex-1 flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-semibold transition ${
+              trackerTab === 'evolution'
+                ? 'bg-green-islamic text-white shadow-sm'
+                : 'text-text-secondary hover:text-text-primary'
+            }`}
+          >
+            <BarChart3 className="h-4 w-4" />
+            Évolution
+            {bilanDue && trackerTab !== 'evolution' && (
+              <span className="flex h-2 w-2 rounded-full bg-gold" />
+            )}
+          </button>
+        </div>
+
+        {/* Contenu onglet Évolution */}
+        {trackerTab === 'evolution' && (
+          <div className="space-y-6 mb-8">
+            {showBilan || bilanDue ? (
+              <SymptomTracker
+                startDate={program.startDate}
+                onComplete={() => setShowBilan(false)}
+              />
+            ) : null}
+            <SymptomChart />
+          </div>
+        )}
+
+        {/* Contenu onglet Programme */}
+        {trackerTab !== 'evolution' && (
+        <>
         {/* Overall progress */}
         <div className="rounded-2xl border border-cream-dark bg-white/80 p-4 shadow-sm mb-6">
           <div className="flex items-center justify-between mb-2">
@@ -1368,6 +1442,8 @@ export default function Programme() {
           Ce programme est un outil d'accompagnement spirituel basé sur le Coran et la Sunnah.
           Il ne se substitue pas aux autres moyens qu'Allah a mis à notre disposition.
         </p>
+        </>
+        )}
       </div>
     );
   }
