@@ -10,19 +10,12 @@ import {
   ClipboardList,
   BarChart3,
   Users,
-  Star,
 } from 'lucide-react';
 import SEO from '../components/SEO';
 
 const stepIcons = [BookOpen, Shield, Heart];
 
 const featureIcons = [Book, MessageCircle, Video, ClipboardList, BarChart3, Users];
-
-const testimonials = [
-  { name: 'Soeur F.', stars: 5, key: 'testimonial1' },
-  { name: 'Frere M.', stars: 5, key: 'testimonial2' },
-  { name: 'Soeur A.', stars: 4, key: 'testimonial3' },
-];
 
 export default function Home() {
   const { t } = useTranslation();
@@ -138,37 +131,6 @@ export default function Home() {
                     {t(`home.feature${idx + 1}_desc`)}
                   </p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="arabesque-separator mx-auto max-w-lg" />
-
-      {/* Testimonials Section */}
-      <section className="py-16 md:py-24">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="font-heading text-center text-3xl font-bold text-green-islamic md:text-4xl">
-            {t('home.testimonials_title')}
-          </h2>
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {testimonials.map((item) => (
-              <div key={item.key} className="card-islamic p-8">
-                <div className="flex gap-1">
-                  {Array.from({ length: item.stars }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-5 w-5 fill-gold text-gold"
-                    />
-                  ))}
-                </div>
-                <p className="mt-4 text-text-secondary italic">
-                  "{t(`home.${item.key}`)}"
-                </p>
-                <p className="mt-4 font-semibold text-text-primary">
-                  {item.name}
-                </p>
               </div>
             ))}
           </div>
