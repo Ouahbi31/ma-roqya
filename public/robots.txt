@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Sitemap: https://ma-roqya.fr/sitemap.xml
+
+# Block admin/auth pages
+Disallow: /dashboard
+Disallow: /profil
+Disallow: /premium/

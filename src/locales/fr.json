@@ -1,0 +1,209 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "articles": "Articles",
+    "douas": "Douas",
+    "quiz": "Quiz",
+    "forum": "Forum",
+    "pricing": "Tarifs",
+    "dashboard": "Tableau de bord",
+    "premium": "Premium",
+    "login": "Connexion",
+    "register": "Inscription",
+    "logout": "Déconnexion",
+    "profile": "Mon profil"
+  },
+  "home": {
+    "hero_title": "Votre guide spirituel vers la guérison",
+    "hero_subtitle": "Accompagnement bienveillant et authentique pour vous protéger et guérir des maux occultes, fondé sur le Coran et la Sunnah.",
+    "hero_verse": "Et quand je suis malade, c'est Lui qui me guérit",
+    "hero_verse_ref": "Sourate Ash-Shu'ara, 26:80",
+    "cta_free": "Commencer gratuitement",
+    "cta_premium": "Découvrir l'abonnement",
+    "steps_title": "Un chemin en 3 étapes",
+    "step1_title": "Comprendre",
+    "step1_desc": "Apprenez à identifier les signes du mauvais œil, de la sorcellerie et de la possession à travers des articles détaillés et vérifiés.",
+    "step2_title": "Se protéger",
+    "step2_desc": "Découvrez les douas et pratiques prophétiques quotidiennes pour vous protéger, vous et vos proches.",
+    "step3_title": "Guérir",
+    "step3_desc": "Suivez un programme de roqya personnalisé avec l'aide de conseillers bienveillants.",
+    "features_title": "Ce que MaRoqya vous offre",
+    "testimonials_title": "Témoignages",
+    "stats_articles": "Articles",
+    "stats_douas": "Douas",
+    "stats_members": "Membres",
+    "feature1_title": "Articles approfondis",
+    "feature1_desc": "Des articles vérifiés sur le mauvais oeil, la sorcellerie et la possession, basés sur le Coran et la Sunnah.",
+    "feature2_title": "Chat avec un conseiller",
+    "feature2_desc": "Échangez en privé avec un conseiller bienveillant pour un accompagnement personnalisé.",
+    "feature3_title": "Consultation vidéo",
+    "feature3_desc": "Bénéficiez d'une consultation vidéo avec un spécialiste de la roqya.",
+    "feature4_title": "Programme personnalisé",
+    "feature4_desc": "Un plan de roqya adapté à votre situation, étape par étape.",
+    "feature5_title": "Suivi et statistiques",
+    "feature5_desc": "Suivez votre progression et votre état émotionnel au fil du temps.",
+    "feature6_title": "Communauté bienveillante",
+    "feature6_desc": "Rejoignez un forum d'entraide entre frères et soeurs, dans le respect et la bienveillance.",
+    "testimonial1": "Grâce à MaRoqya, j'ai enfin compris ce que je traversais et j'ai trouvé les bonnes douas. Qu'Allah récompense l'équipe.",
+    "testimonial2": "Le programme personnalisé m'a beaucoup aidé. Les conseillers sont à l'écoute et bienveillants. Je recommande vivement.",
+    "testimonial3": "Les articles sont très bien écrits et m'ont permis de mieux comprendre ma situation. Le forum est aussi un vrai soutien."
+  },
+  "auth": {
+    "login_title": "Connexion",
+    "register_title": "Créer un compte",
+    "email": "Adresse email",
+    "password": "Mot de passe",
+    "firstname": "Prénom",
+    "login_btn": "Se connecter",
+    "register_btn": "S'inscrire",
+    "google_btn": "Continuer avec Google",
+    "no_account": "Pas encore de compte ?",
+    "has_account": "Déjà un compte ?",
+    "privacy_note": "Vos données restent privées, insha'Allah. Nous ne partageons rien.",
+    "forgot_password": "Mot de passe oublié ?"
+  },
+  "dashboard": {
+    "welcome": "Bienvenue",
+    "welcome_msg": "Que la paix soit sur vous. Voici votre espace personnel.",
+    "quick_access": "Accès rapides",
+    "latest_articles": "Derniers articles",
+    "my_favorite_douas": "Mes douas favorites",
+    "take_quiz": "Passer le quiz",
+    "premium_banner_title": "Passez à l'accompagnement personnalisé",
+    "premium_banner_desc": "Chat privé, consultation vidéo, programme sur mesure et suivi hebdomadaire.",
+    "premium_banner_cta": "Découvrir le Premium"
+  },
+  "articles": {
+    "title": "Articles",
+    "subtitle": "Apprenez et comprenez les maux occultes à la lumière du Coran et de la Sunnah.",
+    "filter_all": "Tous",
+    "filter_ayn": "Mauvais œil",
+    "filter_sihr": "Sorcellerie",
+    "filter_mass": "Possession",
+    "filter_prevention": "Prévention",
+    "filter_healing": "Guérison",
+    "level_all": "Tous niveaux",
+    "level_beginner": "Débutant",
+    "level_intermediate": "Intermédiaire",
+    "level_advanced": "Avancé",
+    "read_time": "min de lecture",
+    "read_more": "Lire la suite"
+  },
+  "douas": {
+    "title": "Douas & Roqya",
+    "subtitle": "Invocations protectrices et guérisseuses issues du Coran et de la Sunnah authentique.",
+    "filter_all": "Toutes",
+    "filter_daily": "Protection quotidienne",
+    "filter_healing": "Guérison",
+    "filter_sleep": "Avant de dormir",
+    "filter_morning": "Matin & Soir",
+    "add_favorite": "Ajouter aux favoris",
+    "remove_favorite": "Retirer des favoris",
+    "transliteration": "Translittération",
+    "translation": "Traduction"
+  },
+  "quiz": {
+    "title": "Quiz d'auto-évaluation",
+    "subtitle": "Répondez à ces questions avec sincérité pour mieux comprendre votre situation spirituelle.",
+    "disclaimer": "Ce quiz ne constitue pas un diagnostic médical ou religieux certifié. Il s'agit d'un outil d'orientation bienveillant.",
+    "start": "Commencer le quiz",
+    "next": "Question suivante",
+    "previous": "Question précédente",
+    "finish": "Voir mes résultats",
+    "question_of": "Question {{current}} sur {{total}}",
+    "result_title": "Vos résultats",
+    "result_low": "Vos symptômes semblent légers. Nous vous recommandons de maintenir vos pratiques protectrices quotidiennes.",
+    "result_medium": "Certains signes méritent attention. Consultez nos articles et renforcez vos douas quotidiennes.",
+    "result_high": "Nous vous conseillons un accompagnement plus approfondi. Le programme premium pourrait vous aider.",
+    "save_results": "Sauvegarder mes résultats",
+    "recommended_articles": "Articles recommandés",
+    "recommended_douas": "Douas recommandées"
+  },
+  "forum": {
+    "title": "Forum communautaire",
+    "subtitle": "Un espace d'entraide bienveillant entre frères et sœurs.",
+    "rules": "Règles : Bienveillance, respect, pas de jugement. Qu'Allah nous guide tous.",
+    "categories": {
+      "testimonials": "Témoignages",
+      "questions": "Questions",
+      "help": "Entraide",
+      "douas": "Douas collectives"
+    },
+    "new_post": "Nouveau sujet",
+    "reply": "Répondre",
+    "replies": "réponses",
+    "post_title": "Titre du sujet",
+    "post_content": "Votre message",
+    "post_submit": "Publier",
+    "report": "Signaler",
+    "login_to_post": "Connectez-vous pour participer"
+  },
+  "pricing": {
+    "title": "Nos formules",
+    "subtitle": "Choisissez l'accompagnement qui vous convient",
+    "free_title": "Gratuit",
+    "free_price": "0€",
+    "free_period": "pour toujours",
+    "premium_title": "Premium",
+    "premium_price": "9,90€",
+    "premium_period": "/mois",
+    "free_features": [
+      "Accès à tous les articles éducatifs",
+      "Bibliothèque complète de douas & roqya",
+      "Quiz d'auto-évaluation",
+      "Forum communautaire"
+    ],
+    "premium_features": [
+      "Tout le contenu gratuit",
+      "Chat privé avec un conseiller",
+      "Programme de roqya personnalisé",
+      "Suivi émotionnel hebdomadaire",
+      "Emails de motivation avec versets & hadiths",
+      "Tarif préférentiel sur les consultations"
+    ],
+    "subscribe": "S'abonner",
+    "current_plan": "Votre formule actuelle",
+    "faq_title": "Questions fréquentes",
+    "faq": [
+      {
+        "q": "Puis-je annuler à tout moment ?",
+        "a": "Oui, vous pouvez résilier votre abonnement à tout moment. Votre accès premium reste actif jusqu'à la fin de la période payée."
+      },
+      {
+        "q": "Le paiement est-il sécurisé ?",
+        "a": "Absolument. Nous utilisons Stripe, le leader mondial du paiement en ligne. Vos données bancaires ne transitent jamais par nos serveurs."
+      },
+      {
+        "q": "Qui sont les conseillers ?",
+        "a": "Nos conseillers sont des personnes formées en sciences islamiques et en accompagnement spirituel, soucieuses de votre bien-être."
+      }
+    ]
+  },
+  "profile": {
+    "title": "Mon profil",
+    "update": "Mettre à jour",
+    "change_password": "Changer le mot de passe",
+    "manage_subscription": "Gérer mon abonnement",
+    "danger_zone": "Zone sensible",
+    "delete_account": "Supprimer mon compte"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "back": "Retour",
+    "see_all": "Voir tout",
+    "search": "Rechercher...",
+    "medical_disclaimer": "En cas de symptômes physiques, consultez également un médecin. Ce site est un outil de soutien spirituel, pas un remplacement à un raki compétent."
+  },
+  "footer": {
+    "description": "Votre compagnon spirituel pour la protection et la guérison selon le Coran et la Sunnah.",
+    "links": "Liens utiles",
+    "legal": "Mentions légales",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "contact": "Contact",
+    "copyright": "© 2024 MaRoqya. Tous droits réservés."
+  }
+}

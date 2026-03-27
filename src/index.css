@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #F7F2E9;
+  --color-cream-dark: #EDE5D4;
+  --color-green-islamic: #2D6A4F;
+  --color-green-light: #52B788;
+  --color-gold: #B5832A;
+  --color-gold-light: #D4A84B;
+  --color-text-primary: #2C2A26;
+  --color-text-secondary: #6B6459;
+
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Nunito', sans-serif;
+  --font-arabic: 'Amiri', serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    background-color: var(--color-cream);
+  }
+
+  body {
+    margin: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+
+  [dir="rtl"] {
+    font-family: var(--font-arabic);
+  }
+
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6 {
+    font-family: var(--font-arabic);
+  }
+}
+
+@layer components {
+  .islamic-pattern-bg {
+    background-image: url('/patterns/geometric.svg');
+    background-repeat: repeat;
+    background-size: 200px;
+    opacity: 0.03;
+  }
+
+  .arabesque-separator {
+    height: 2px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--color-gold) 20%,
+      var(--color-green-islamic) 50%,
+      var(--color-gold) 80%,
+      transparent
+    );
+  }
+
+  .text-arabic {
+    font-family: var(--font-arabic);
+    direction: rtl;
+    line-height: 2;
+  }
+
+  .card-islamic {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 2px 12px rgba(44, 42, 38, 0.06);
+    border: 1px solid var(--color-cream-dark);
+  }
+
+  .font-arabic {
+    font-family: var(--font-arabic);
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
