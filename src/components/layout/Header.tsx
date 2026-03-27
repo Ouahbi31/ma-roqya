@@ -38,8 +38,8 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-cream border-b border-cream-dark">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
+          {/* Logo — centered on mobile */}
+          <Link to="/" className="flex items-center gap-2 md:flex-none absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0">
             <Star className="h-6 w-6 text-gold fill-gold" />
             <span className="font-heading text-xl font-bold text-green-islamic">
               MaRoqya

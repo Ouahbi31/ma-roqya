@@ -217,7 +217,7 @@ export default function Tarifs() {
   ];
 
   return (
-    <div className="min-h-screen bg-cream py-16 md:py-24">
+    <div className="min-h-screen bg-cream py-8 md:py-24">
       <SEO
         title="Tarifs & Seances de Psycho-Roqya - MaRoqya"
         description="Decouvrez nos formules d'accompagnement et reservez une seance de Psycho-Roqya. Approche unique combinant roqya et accompagnement psychologique."
@@ -236,9 +236,9 @@ export default function Tarifs() {
         </div>
 
         {/* ═══ PRICING CARDS ═══ */}
-        <div className="mt-14 grid gap-8 md:grid-cols-2">
+        <div className="mt-8 md:mt-14 grid gap-6 md:gap-8 md:grid-cols-2">
           {/* Free */}
-          <div className="card-islamic flex flex-col p-8">
+          <div className="card-islamic flex flex-col p-6 md:p-8 text-center md:text-left">
             <h2 className="font-heading text-2xl font-bold text-text-primary">Gratuit</h2>
             <div className="mt-4 flex items-baseline gap-1">
               <span className="font-heading text-4xl font-bold text-green-islamic">0€</span>
@@ -294,7 +294,7 @@ export default function Tarifs() {
         </div>
 
         {/* ═══ SECTION PSYCHO-ROQYA ═══ */}
-        <div className="mt-24">
+        <div id="psycho-roqya" className="mt-24 scroll-mt-20">
           <div className="arabesque-separator mx-auto max-w-lg" />
 
           <div className="mx-auto mt-14 max-w-3xl">
@@ -504,13 +504,16 @@ export default function Tarifs() {
                   </div>
                   <p className="text-sm font-medium text-green-islamic">MaRoqya</p>
                   <h3 className="mt-1 font-heading text-xl font-bold text-text-primary">
-                    Séance de Psycho-Roqya
+                    Séance individuelle
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-text-secondary">
-                    Roqya + accompagnement psychologique pour
-                    pulvériser les blocages et reprendre votre vie en main.
+                    La Psycho-Roqya agit là où les forces occultes opèrent : sur le terrain psychologique. Vous apprenez à identifier les mécanismes d'emprise, à comprendre comment ils agissent sur vous, et à acquérir des outils pour vous en libérer et reprendre votre autonomie.
                   </p>
-                  <div className="mt-6 space-y-3 text-sm text-text-secondary">
+                  <div className="mt-5 flex items-baseline gap-1">
+                    <span className="font-heading text-2xl font-bold text-gold">50€</span>
+                    <span className="text-sm text-text-secondary">/ séance</span>
+                  </div>
+                  <div className="mt-4 space-y-3 text-sm text-text-secondary">
                     <div className="flex items-center gap-2.5">
                       <Clock size={16} className="shrink-0 text-green-islamic" />
                       <span>45 min</span>
@@ -621,11 +624,10 @@ export default function Tarifs() {
                   </div>
                   <p className="text-sm font-medium text-green-islamic">MaRoqya</p>
                   <h3 className="mt-1 font-heading text-xl font-bold text-text-primary">
-                    Séance de Psycho-Roqya
+                    Séance individuelle
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-text-secondary">
-                    Roqya + accompagnement psychologique pour
-                    pulvériser les blocages et reprendre votre vie en main.
+                    La Psycho-Roqya agit là où les forces occultes opèrent : sur le terrain psychologique. Vous apprenez à identifier les mécanismes d'emprise, à comprendre comment ils agissent sur vous, et à acquérir des outils pour vous en libérer et reprendre votre autonomie.
                   </p>
                   <div className="mt-6 space-y-3 text-sm text-text-secondary">
                     <div className="flex items-center gap-2.5">
@@ -695,6 +697,13 @@ export default function Tarifs() {
                       />
                     </div>
 
+                    {/* Price */}
+                    <div className="rounded-xl bg-green-islamic/5 border border-green-islamic/15 px-4 py-3 text-center">
+                      <span className="font-heading text-2xl font-bold text-green-islamic">50€</span>
+                      <span className="ml-1 text-sm text-text-secondary">/ séance</span>
+                      <p className="mt-1 text-xs text-text-secondary">45 min · Paiement sécurisé via Stripe</p>
+                    </div>
+
                     {/* Cancellation policy */}
                     <div className="rounded-xl bg-gold/5 border border-gold/20 px-4 py-3">
                       <p className="text-xs font-semibold text-gold mb-1">Politique d'annulation</p>
@@ -740,7 +749,7 @@ export default function Tarifs() {
                         disabled={loading || !formName || !formEmail || !acceptTerms}
                         className="rounded-xl bg-green-islamic px-8 py-3 text-sm font-semibold text-white transition hover:bg-gold disabled:opacity-50"
                       >
-                        {loading ? 'Redirection vers le paiement...' : 'Payer et réserver'}
+                        {loading ? 'Redirection vers le paiement...' : 'Payer 50€ et réserver'}
                       </button>
                     </div>
                   </form>

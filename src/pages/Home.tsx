@@ -71,6 +71,12 @@ export default function Home() {
             >
               {t('home.cta_premium')}
             </Link>
+            <Link
+              to="/tarifs#psycho-roqya"
+              className="inline-block rounded-lg bg-gold px-8 py-3 font-semibold text-white transition hover:opacity-90"
+            >
+              Réserver une séance individuelle
+            </Link>
           </div>
         </div>
       </section>
