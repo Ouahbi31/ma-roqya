@@ -45,17 +45,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { prenom } },
+      options: {
+        data: { prenom },
+        emailRedirectTo: window.location.origin + '/login',
+      },
     });
     if (error) return { error: error.message };
-    if (data.user) {
-      await supabase.from('profiles').upsert({
-        id: data.user.id,
-        prenom,
-        email,
-        is_premium: false,
-      });
-    }
+    // Le profil sera créé automatiquement par le trigger SQL handle_new_user
+    // L'utilisateur doit confirmer son email avant de pouvoir se connecter
     return { error: null };
   },
 

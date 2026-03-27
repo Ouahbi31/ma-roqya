@@ -1,37 +1,79 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/authStore';
+import { CheckCircle } from 'lucide-react';
 
 export default function Register() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { register, loginWithGoogle } = useAuthStore();
 
   const [prenom, setPrenom] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
-    setLoading(true);
 
+    if (password.length < 6) {
+      setError('Le mot de passe doit contenir au moins 6 caractères.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Les mots de passe ne correspondent pas.');
+      return;
+    }
+
+    setLoading(true);
     const result = await register(email, password, prenom);
     setLoading(false);
 
     if (result.error) {
       setError(result.error);
     } else {
-      navigate('/dashboard');
+      setEmailSent(true);
     }
   };
 
   const handleGoogle = async () => {
     await loginWithGoogle();
   };
+
+  if (emailSent) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-cream px-4 py-12">
+        <div className="card-islamic w-full max-w-md p-8 text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-islamic/10">
+            <CheckCircle className="h-8 w-8 text-green-islamic" />
+          </div>
+          <h1 className="font-heading mt-6 text-2xl font-bold text-green-islamic">
+            Vérifiez votre email
+          </h1>
+          <p className="mt-4 text-text-secondary">
+            Un email de confirmation a été envoyé à <strong className="text-text-primary">{email}</strong>.
+          </p>
+          <p className="mt-2 text-sm text-text-secondary">
+            Cliquez sur le lien dans l'email pour activer votre compte, puis connectez-vous.
+          </p>
+          <Link
+            to="/login"
+            className="mt-8 inline-block rounded-lg bg-green-islamic px-8 py-3 font-semibold text-white transition hover:opacity-90"
+          >
+            Aller à la connexion
+          </Link>
+          <p className="mt-4 text-xs text-text-secondary">
+            Vous n'avez pas reçu l'email ? Vérifiez vos spams.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-cream px-4 py-12">
@@ -92,8 +134,28 @@ export default function Register() {
               id="password"
               type="password"
               required
+              minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 w-full rounded-lg border border-cream-dark bg-white px-4 py-3 text-text-primary outline-none transition focus:border-green-islamic focus:ring-1 focus:ring-green-islamic"
+              placeholder="Minimum 6 caractères"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-text-primary"
+            >
+              Confirmer le mot de passe
+            </label>
+            <input
+              id="confirmPassword"
+              type="password"
+              required
+              minLength={6}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="mt-1 w-full rounded-lg border border-cream-dark bg-white px-4 py-3 text-text-primary outline-none transition focus:border-green-islamic focus:ring-1 focus:ring-green-islamic"
             />
           </div>
