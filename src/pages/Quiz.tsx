@@ -118,9 +118,9 @@ export default function Quiz() {
           <button
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className="flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-cream-dark disabled:opacity-30"
+            className="flex items-center gap-1 rounded-lg px-4 py-3 text-sm font-medium text-text-secondary transition-colors hover:bg-cream-dark disabled:opacity-30 active:scale-[0.97]"
           >
-            <ChevronLeft size={16} /> {t('quiz.previous')}
+            <ChevronLeft size={18} /> {t('quiz.previous')}
           </button>
 
           {isLastQuestion ? (
@@ -135,9 +135,9 @@ export default function Quiz() {
             <button
               onClick={handleNext}
               disabled={!hasAnswered}
-              className="flex items-center gap-1 rounded-lg bg-green-islamic px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gold disabled:opacity-50"
+              className="flex items-center gap-1 rounded-lg bg-green-islamic px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-gold disabled:opacity-50 active:scale-[0.97]"
             >
-              {t('quiz.next')} <ChevronRight size={16} />
+              {t('quiz.next')} <ChevronRight size={18} />
             </button>
           )}
         </div>

@@ -92,6 +92,24 @@
   .animate-slide-up {
     animation: slideUp 0.4s ease-out;
   }
+
+  /* Mobile touch optimizations */
+  .btn-primary {
+    @apply active:scale-[0.97] transition-transform;
+  }
+
+  /* Ensure minimum touch targets on mobile */
+  @media (max-width: 768px) {
+    .card-islamic {
+      border-radius: 0.75rem;
+    }
+
+    /* Prevent text selection on interactive elements */
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+  }
 }
 
 @keyframes slideUp {

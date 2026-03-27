@@ -34,7 +34,7 @@ export default function Profil() {
                 type="text"
                 value={prenom}
                 onChange={(e) => setPrenom(e.target.value)}
-                className="w-full rounded-lg border border-cream-dark bg-cream px-4 py-2 text-text-primary outline-none focus:border-green-islamic"
+                className="w-full rounded-lg border border-cream-dark bg-cream px-4 py-3 text-base text-text-primary outline-none focus:border-green-islamic"
               />
             </div>
             <button className="btn-primary text-sm">{t('profile.update')}</button>
@@ -81,12 +81,12 @@ export default function Profil() {
             <input
               type="password"
               placeholder="Nouveau mot de passe"
-              className="w-full rounded-lg border border-cream-dark bg-cream px-4 py-2 text-text-primary outline-none focus:border-green-islamic"
+              className="w-full rounded-lg border border-cream-dark bg-cream px-4 py-3 text-base text-text-primary outline-none focus:border-green-islamic"
             />
             <input
               type="password"
               placeholder="Confirmer le mot de passe"
-              className="w-full rounded-lg border border-cream-dark bg-cream px-4 py-2 text-text-primary outline-none focus:border-green-islamic"
+              className="w-full rounded-lg border border-cream-dark bg-cream px-4 py-3 text-base text-text-primary outline-none focus:border-green-islamic"
             />
             <button className="btn-primary text-sm">{t('profile.update')}</button>
           </div>

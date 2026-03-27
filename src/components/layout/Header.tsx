@@ -123,7 +123,7 @@ export default function Header() {
                 href="https://calendly.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full bg-gold px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-gold/90"
+                className="rounded-full bg-gold px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-gold/90 active:scale-[0.97]"
               >
                 Réserver
               </a>

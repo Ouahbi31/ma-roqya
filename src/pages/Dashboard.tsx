@@ -37,7 +37,7 @@ export default function Dashboard() {
               <Link
                 key={link.to}
                 to={link.to}
-                className="card-islamic flex flex-col items-center gap-3 p-6 transition-transform hover:-translate-y-1"
+                className="card-islamic flex flex-col items-center gap-2 sm:gap-3 p-4 sm:p-6 transition-transform hover:-translate-y-1 active:scale-[0.97]"
               >
                 <div className={`${link.color} rounded-xl p-3 text-white`}>
                   <link.icon size={24} />

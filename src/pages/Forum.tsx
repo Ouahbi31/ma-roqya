@@ -101,14 +101,14 @@ export default function Forum() {
               placeholder={t('forum.post_title')}
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
-              className="mb-3 w-full rounded-lg border border-cream-dark bg-cream px-4 py-2 text-text-primary outline-none focus:border-green-islamic"
+              className="mb-3 w-full rounded-lg border border-cream-dark bg-cream px-4 py-3 text-base text-text-primary outline-none focus:border-green-islamic"
             />
             <textarea
               placeholder={t('forum.post_content')}
               value={newContent}
               onChange={(e) => setNewContent(e.target.value)}
               rows={4}
-              className="mb-3 w-full rounded-lg border border-cream-dark bg-cream px-4 py-2 text-text-primary outline-none focus:border-green-islamic"
+              className="mb-3 w-full rounded-lg border border-cream-dark bg-cream px-4 py-3 text-base text-text-primary outline-none focus:border-green-islamic"
             />
             <button type="submit" className="btn-primary text-sm">
               {t('forum.post_submit')}
