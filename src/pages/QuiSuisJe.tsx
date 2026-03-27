@@ -15,7 +15,7 @@ export default function QuiSuisJe() {
                 <img
                   src="/images/frere-muz.jpg"
                   alt="Dr Frère Muz"
-                  className="relative h-48 w-48 rounded-full object-cover border-4 border-white shadow-xl md:h-56 md:w-56"
+                  className="relative h-48 w-48 rounded-full object-cover object-top border-4 border-white shadow-xl md:h-56 md:w-56"
                 />
               </div>
             </div>
