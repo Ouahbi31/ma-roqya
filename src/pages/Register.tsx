@@ -61,15 +61,22 @@ export default function Register() {
           <p className="mt-2 text-sm text-text-secondary">
             Cliquez sur le lien dans l'email pour activer votre compte, puis connectez-vous.
           </p>
+
+          <div className="mt-4 rounded-xl bg-gold/5 border border-gold/20 px-4 py-3 text-left">
+            <p className="text-xs font-semibold text-gold mb-1">Vous ne trouvez pas l'email ?</p>
+            <ul className="text-xs text-text-secondary space-y-1">
+              <li>• Vérifiez votre dossier <strong>Spam</strong> ou <strong>Courrier indésirable</strong></li>
+              <li>• L'expéditeur est <strong>noreply@ma-roqya.fr</strong></li>
+              <li>• L'email peut prendre quelques minutes</li>
+            </ul>
+          </div>
+
           <Link
             to="/login"
-            className="mt-8 inline-block rounded-lg bg-green-islamic px-8 py-3 font-semibold text-white transition hover:opacity-90"
+            className="mt-6 inline-block rounded-lg bg-green-islamic px-8 py-3 font-semibold text-white transition hover:opacity-90"
           >
             Aller à la connexion
           </Link>
-          <p className="mt-4 text-xs text-text-secondary">
-            Vous n'avez pas reçu l'email ? Vérifiez vos spams.
-          </p>
         </div>
       </div>
     );
