@@ -120,7 +120,7 @@ export default function Header() {
             {/* Mobile: CTA "Réserver" */}
             <div className="flex md:hidden items-center gap-2">
               <Link
-                to="/tarifs"
+                to="/tarifs?booking=1"
                 className="rounded-full bg-gold px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-gold/90 active:scale-[0.97]"
               >
                 Réserver
@@ -146,7 +146,7 @@ export default function Header() {
             <div className="hidden md:flex items-center gap-3">
               {/* Bouton Réserver desktop */}
               <Link
-                to="/tarifs"
+                to="/tarifs?booking=1"
                 className="rounded-full bg-gold px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-gold/90"
               >
                 Réserver une séance

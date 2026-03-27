@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useMemo, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Check,
@@ -55,7 +55,15 @@ export default function Tarifs() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   // ═══ Modal booking state ═══
+  const [searchParams] = useSearchParams();
   const [modalOpen, setModalOpen] = useState(false);
+
+  // Auto-open modal if ?booking=1 in URL
+  useEffect(() => {
+    if (searchParams.get('booking') === '1') {
+      setModalOpen(true);
+    }
+  }, [searchParams]);
   const [step, setStep] = useState<'calendar' | 'form'>('calendar');
   const [currentMonth, setCurrentMonth] = useState(() => {
     const now = new Date();
