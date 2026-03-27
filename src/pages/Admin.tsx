@@ -1,15 +1,17 @@
 import { useState } from 'react';
-import { CalendarDays, MessageSquare, CreditCard } from 'lucide-react';
+import { CalendarDays, MessageSquare, CreditCard, Users } from 'lucide-react';
 import AdminDisponibilites from '../components/admin/AdminDisponibilites';
 import AdminMessages from '../components/admin/AdminMessages';
 import AdminReservations from '../components/admin/AdminReservations';
+import AdminUtilisateurs from '../components/admin/AdminUtilisateurs';
 
-type Tab = 'reservations' | 'disponibilites' | 'messages';
+type Tab = 'reservations' | 'disponibilites' | 'messages' | 'utilisateurs';
 
 const TABS: { key: Tab; label: string; icon: typeof CalendarDays }[] = [
   { key: 'reservations', label: 'Réservations', icon: CreditCard },
   { key: 'disponibilites', label: 'Disponibilités', icon: CalendarDays },
   { key: 'messages', label: 'Messages', icon: MessageSquare },
+  { key: 'utilisateurs', label: 'Utilisateurs', icon: Users },
 ];
 
 export default function Admin() {
@@ -50,6 +52,7 @@ export default function Admin() {
         {activeTab === 'reservations' && <AdminReservations />}
         {activeTab === 'disponibilites' && <AdminDisponibilites />}
         {activeTab === 'messages' && <AdminMessages />}
+        {activeTab === 'utilisateurs' && <AdminUtilisateurs />}
       </div>
     </div>
   );
