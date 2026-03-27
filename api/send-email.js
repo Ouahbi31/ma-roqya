@@ -1,7 +1,5 @@
-import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -31,7 +29,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'to or toAll is required' });
     }
 
-    const from = 'MaRoqya <noreply@ma-roqya.fr>';
+    // Use onboarding@resend.dev until custom domain is verified
+    const from = 'MaRoqya <onboarding@resend.dev>';
 
     if (toAll) {
       const { data: profiles, error: dbError } = await supabase
@@ -51,42 +50,44 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'No valid email addresses found' });
       }
 
-      // Resend batch: send individually to each user (max 100 per batch call)
-      const batches = [];
-      for (let i = 0; i < emails.length; i += 100) {
-        const chunk = emails.slice(i, i + 100);
-        batches.push(
-          resend.batch.send(
-            chunk.map((email) => ({
-              from,
-              to: [email],
-              subject,
-              html,
-            }))
-          )
-        );
+      // Send individually
+      const results = [];
+      for (const email of emails) {
+        const result = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ from, to: [email], subject, html }),
+        });
+        const data = await result.json();
+        results.push({ email, status: result.ok ? 'sent' : 'failed', data });
       }
 
-      await Promise.all(batches);
-
-      return res.status(200).json({ success: true, count: emails.length });
+      return res.status(200).json({ success: true, count: emails.length, results });
     }
 
     // Single email
-    const { error: sendError } = await resend.emails.send({
-      from,
-      to: [to],
-      subject,
-      html,
+    const result = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ from, to: [to], subject, html }),
     });
 
-    if (sendError) {
-      return res.status(500).json({ error: sendError.message });
+    const data = await result.json();
+
+    if (!result.ok) {
+      console.error('Resend error:', data);
+      return res.status(500).json({ error: data.message || 'Email send failed' });
     }
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true, data });
   } catch (err) {
     console.error('send-email error:', err);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: err.message || 'Internal server error' });
   }
 }
