@@ -1,9 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  BookOpen,
-  Shield,
-  Heart,
   Book,
   MessageCircle,
   Video,
@@ -12,8 +9,6 @@ import {
   Users,
 } from 'lucide-react';
 import SEO from '../components/SEO';
-
-const stepIcons = [BookOpen, Shield, Heart];
 
 const featureIcons = [Book, MessageCircle, Video, ClipboardList, BarChart3, Users];
 
@@ -70,38 +65,6 @@ export default function Home() {
             >
               Réserver une séance individuelle
             </Link>
-          </div>
-        </div>
-      </section>
-
-      <div className="arabesque-separator mx-auto max-w-lg" />
-
-      {/* 3 Steps Section */}
-      <section className="py-16 md:py-24">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="font-heading text-center text-3xl font-bold text-green-islamic md:text-4xl">
-            {t('home.steps_title')}
-          </h2>
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {[1, 2, 3].map((step, idx) => {
-              const Icon = stepIcons[idx];
-              return (
-                <div
-                  key={step}
-                  className="card-islamic flex flex-col items-center p-8 text-center"
-                >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-islamic/10">
-                    <Icon className="h-8 w-8 text-green-islamic" />
-                  </div>
-                  <h3 className="font-heading mt-6 text-xl font-bold text-text-primary">
-                    {t(`home.step${step}_title`)}
-                  </h3>
-                  <p className="mt-3 text-text-secondary">
-                    {t(`home.step${step}_desc`)}
-                  </p>
-                </div>
-              );
-            })}
           </div>
         </div>
       </section>
