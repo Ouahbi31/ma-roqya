@@ -137,25 +137,6 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="arabesque-separator mx-auto max-w-lg" />
-
-      {/* Stats Bar */}
-      <section className="bg-green-islamic py-12">
-        <div className="mx-auto flex max-w-4xl flex-col items-center justify-around gap-8 px-4 md:flex-row">
-          {[
-            { value: '50+', label: t('home.stats_articles') },
-            { value: '30+', label: t('home.stats_douas') },
-            { value: '1000+', label: t('home.stats_members') },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <p className="font-heading text-4xl font-bold text-white md:text-5xl">
-                {stat.value}
-              </p>
-              <p className="mt-2 text-lg text-white/80">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
