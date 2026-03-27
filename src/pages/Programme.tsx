@@ -49,10 +49,8 @@ interface QuestionnaireAnswers {
 interface DiagnosisDetails {
   score: number;
   totalSymptoms: number;
-  dominantCondition: 'ayn' | 'sihr' | 'mass' | 'general';
-  aynIndicators: number;
-  sihrIndicators: number;
-  massIndicators: number;
+  gravityFactors: string[];
+  advice: string[];
 }
 
 interface DayProgress {
@@ -336,73 +334,115 @@ function diagnose(answers: QuestionnaireAnswers): { type: ProgramType; severity:
   const totalSpecific = answers.specificSymptoms.length;
   const totalSymptoms = totalPhysical + totalPsych + totalSpecific;
 
-  // ── Score computation ──
+  // ── Score par gravité (pas par quantité) ──
   let score = 0;
+  const gravityFactors: string[] = [];
 
-  // Duration weight (0-3)
-  if (answers.duration === '>1an') score += 3;
-  else if (answers.duration === '6-12') score += 2;
-  else if (answers.duration === '1-6') score += 1;
+  // Facteurs LOURDS — pèsent fortement
+  if (answers.duration === '>1an') { score += 4; gravityFactors.push('Symptômes présents depuis plus d\'un an'); }
+  else if (answers.duration === '6-12') { score += 2; gravityFactors.push('Symptômes présents depuis 6 à 12 mois'); }
+  else if (answers.duration === '1-6') { score += 1; }
 
-  // Prayer & Quran practice — lower practice = slightly more vulnerable (0-4)
-  if (answers.prayer === 'rarement') score += 2;
-  else if (answers.prayer === 'parfois') score += 1;
-  if (answers.quran === 'jamais') score += 2;
-  else if (answers.quran === 'rarement') score += 1;
+  if (answers.prayer === 'rarement') { score += 3; gravityFactors.push('Prière irrégulière — un facteur de vulnérabilité spirituelle'); }
+  else if (answers.prayer === 'parfois') { score += 1; }
 
-  // Symptom counts — scaled to keep proportional (max ~24 raw)
-  // Divide to avoid score explosion with many checkboxes
-  score += totalPhysical * 0.8;
-  score += totalPsych * 0.8;
-  score += totalSpecific * 1.2;
+  if (answers.quran === 'jamais') { score += 3; gravityFactors.push('Pas de lecture du Coran — renforcer cette pratique est essentiel'); }
+  else if (answers.quran === 'rarement') { score += 1; }
 
-  // Suspected cause (0-3)
-  if (answers.suspectedCause === 'mass') score += 3;
-  else if (answers.suspectedCause === 'sihr') score += 2;
-  else if (answers.suspectedCause === 'ayn') score += 1;
+  // Symptômes spécifiques GRAVES (poids élevé)
+  const heavySpecific = [
+    'Réaction forte à l\'écoute du Coran (pleurs, tremblements, douleurs)',
+    'Blocages dans la vie (mariage, travail, projets)',
+    'Changement soudain de comportement',
+    'Sensation de présence autour de vous',
+  ];
+  heavySpecific.forEach((s) => {
+    if (answers.specificSymptoms.includes(s)) {
+      score += 3;
+      gravityFactors.push(s);
+    }
+  });
 
-  // ── Detect dominant condition ──
-  // Key specific symptoms that point to each condition
-  const aynIndicators = ['headaches', 'fatigue', 'heaviness', 'palpitations'].filter(s => answers.physicalSymptoms.includes(s)).length;
-  const sihrIndicators = ['blockages', 'relationshipProblems', 'badLuck', 'behaviorChange'].filter(s => answers.specificSymptoms.includes(s)).length
-    + (['nightmares'].filter(s => answers.specificSymptoms.includes(s)).length);
-  const massIndicators = ['quranReaction', 'presence', 'behaviorChange'].filter(s => answers.specificSymptoms.includes(s)).length
-    + (['isolation', 'avoidPrayer'].filter(s => answers.psychologicalSymptoms.includes(s)).length);
+  // Symptômes spécifiques MOYENS
+  const mediumSpecific = [
+    'Cauchemars avec serpents, chiens, ou chutes',
+    'Problèmes relationnels récurrents (couple, famille)',
+    'Malchance répétée et échecs inexpliqués',
+    'Aversion pour certains lieux ou personnes',
+  ];
+  mediumSpecific.forEach((s) => {
+    if (answers.specificSymptoms.includes(s)) score += 1.5;
+  });
 
-  let dominantCondition: 'ayn' | 'sihr' | 'mass' | 'general' = 'general';
-  if (answers.suspectedCause === 'ayn' || answers.suspectedCause === 'sihr' || answers.suspectedCause === 'mass') {
-    dominantCondition = answers.suspectedCause;
+  // Symptômes psychologiques GRAVES
+  const heavyPsych = [
+    'Éloignement de la prière et du Coran',
+    'Pensées obsessionnelles ou intrusives',
+    'Waswas (chuchotements/doutes) fréquents',
+  ];
+  heavyPsych.forEach((s) => {
+    if (answers.psychologicalSymptoms.includes(s)) {
+      score += 2;
+      if (!gravityFactors.includes(s)) gravityFactors.push(s);
+    }
+  });
+
+  // Symptômes psychologiques LÉGERS
+  const lightPsych = ['Anxiété ou angoisse permanente', 'Tristesse profonde sans raison apparente', 'Irritabilité ou colère excessive', 'Envie de s\'isoler des gens', 'Difficultés de concentration'];
+  lightPsych.forEach((s) => {
+    if (answers.psychologicalSymptoms.includes(s)) score += 0.5;
+  });
+
+  // Symptômes physiques — poids léger (souvent du stress)
+  score += totalPhysical * 0.3;
+
+  // ── Conseils personnalisés selon le niveau ──
+  let advice: string[];
+  let type: ProgramType;
+  let severity: Severity;
+
+  if (answers.suspectedCause === 'prevention' || (totalSymptoms <= 2 && score < 5)) {
+    type = 'prevention';
+    severity = 'leger';
+    advice = [
+      'Maintenir les 5 prières quotidiennes',
+      'Réciter les adhkar du matin et du soir chaque jour',
+      'Écouter le Coran régulièrement',
+      'Faire des douas de protection (Ayat Al-Kursi, les 3 Qul)',
+      'Vos symptômes sont légers. Ces pratiques vous protégeront in sha\'Allah.',
+    ];
+  } else if (score < 12) {
+    type = 'light';
+    severity = 'modere';
+    advice = [
+      'Renforcer votre routine d\'adhkar matin et soir',
+      'Écouter Sourate Al-Baqara au moins 1 fois par semaine',
+      'Boire de l\'eau coranisée quotidiennement',
+      'Renforcez vos pratiques et observez l\'évolution sur 15 jours',
+    ];
+    if (answers.consultedDoctor === 'non') {
+      advice.push('Nous vous recommandons aussi de consulter un médecin pour écarter les causes médicales.');
+    }
   } else {
-    // Auto-detect from symptoms
-    const maxInd = Math.max(aynIndicators, sihrIndicators, massIndicators);
-    if (maxInd >= 2) {
-      if (massIndicators === maxInd) dominantCondition = 'mass';
-      else if (sihrIndicators === maxInd) dominantCondition = 'sihr';
-      else dominantCondition = 'ayn';
+    type = 'intensive';
+    severity = 'severe';
+    advice = [
+      'Écouter une roqya audio quotidiennement',
+      'Boire de l\'eau coranisée et se masser avec de l\'huile d\'olive coranisée',
+      'Prendre un bain avec eau de Sidr (feuilles de jujubier)',
+      'Lire ou écouter Sourate Al-Baqara en entier régulièrement',
+      'Consulter un raqi de confiance pour un accompagnement personnalisé',
+      'Ne restez pas seul(e). Un accompagnement plus poussé est recommandé.',
+    ];
+    if (answers.consultedDoctor === 'non') {
+      advice.push('Consultez également un médecin pour écarter toute cause médicale.');
     }
   }
 
-  // ── Determine program ──
-  // Prevention: very few symptoms OR user selected prevention
-  if (answers.suspectedCause === 'prevention' || (totalSymptoms <= 2 && score < 5)) {
-    return {
-      type: 'prevention', severity: 'leger',
-      details: { score, totalSymptoms, dominantCondition, aynIndicators, sihrIndicators, massIndicators },
-    };
-  }
-
-  // Light: mild to moderate (score 0-10, symptoms ≤8)
-  if (score < 10 || (totalSymptoms <= 5 && score < 13)) {
-    return {
-      type: 'light', severity: 'modere',
-      details: { score, totalSymptoms, dominantCondition, aynIndicators, sihrIndicators, massIndicators },
-    };
-  }
-
-  // Intensive: everything above
   return {
-    type: 'intensive', severity: 'severe',
-    details: { score, totalSymptoms, dominantCondition, aynIndicators, sihrIndicators, massIndicators },
+    type,
+    severity,
+    details: { score, totalSymptoms, gravityFactors, advice },
   };
 }
 
@@ -851,15 +891,14 @@ export default function Programme() {
           <div className="space-y-6">
             <div>
               <label className="mb-2 block text-sm font-semibold text-text-primary">
-                Pensez-vous être atteint(e) de :
+                Quel est votre objectif principal ?
               </label>
               <div className="grid gap-2 sm:grid-cols-2">
                 {[
-                  { v: 'ayn', l: 'Mauvais oeil (\'ayn)' },
-                  { v: 'sihr', l: 'Sorcellerie (sihr)' },
-                  { v: 'mass', l: 'Possession (mass)' },
-                  { v: 'unknown', l: 'Je ne sais pas' },
-                  { v: 'prevention', l: 'Prévention uniquement' },
+                  { v: 'guerison', l: 'Je cherche la guérison' },
+                  { v: 'prevention', l: 'Prévention et protection' },
+                  { v: 'renforcement', l: 'Renforcer ma pratique spirituelle' },
+                  { v: 'unknown', l: 'Je ne sais pas encore' },
                 ].map((opt) => (
                   <RadioOption
                     key={opt.v}
@@ -875,7 +914,7 @@ export default function Programme() {
 
             <div>
               <label className="mb-2 block text-sm font-semibold text-text-primary">
-                Avez-vous déjà cherché d'autres moyens pour résoudre ces symptômes ?
+                Avez-vous consulté un médecin pour ces symptômes ?
               </label>
               <div className="grid gap-2 sm:grid-cols-2">
                 <RadioOption name="consultedDoctor" value="oui" checked={answers.consultedDoctor === 'oui'} label="Oui" onChange={() => updateAnswer('consultedDoctor', 'oui')} />
@@ -937,7 +976,7 @@ export default function Programme() {
           {diagnosisDetails && (
             <div className="mt-5 rounded-xl border border-cream-dark bg-cream p-4">
               <h3 className="mb-3 text-sm font-semibold text-text-primary">Analyse de vos réponses</h3>
-              <div className="grid gap-3 sm:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-lg bg-white/70 px-3 py-2.5 text-center">
                   <div className="text-2xl font-bold text-green-islamic">{diagnosisDetails.totalSymptoms}</div>
                   <div className="text-[11px] text-text-secondary">symptômes identifiés</div>
@@ -948,50 +987,38 @@ export default function Programme() {
                   </div>
                   <div className="text-[11px] text-text-secondary">durée des symptômes</div>
                 </div>
-                <div className="rounded-lg bg-white/70 px-3 py-2.5 text-center">
-                  <div className="text-2xl font-bold text-green-islamic">
-                    {diagnosisDetails.dominantCondition === 'ayn' ? "Mauvais œil" :
-                     diagnosisDetails.dominantCondition === 'sihr' ? "Sorcellerie" :
-                     diagnosisDetails.dominantCondition === 'mass' ? "Possession" : "Général"}
+              </div>
+
+              {/* Facteurs de gravité identifiés */}
+              {diagnosisDetails.gravityFactors.length > 0 && (
+                <div className="mt-4">
+                  <h4 className="text-xs font-semibold text-text-primary mb-2">Points d'attention identifiés :</h4>
+                  <div className="space-y-1.5">
+                    {diagnosisDetails.gravityFactors.map((factor, i) => (
+                      <div key={i} className="flex items-start gap-2 rounded-lg bg-white/70 px-3 py-2">
+                        <span className="mt-0.5 text-gold">•</span>
+                        <span className="text-xs text-text-secondary">{factor}</span>
+                      </div>
+                    ))}
                   </div>
-                  <div className="text-[11px] text-text-secondary">orientation probable</div>
+                </div>
+              )}
+
+              {/* Conseils personnalisés */}
+              <div className="mt-4">
+                <h4 className="text-xs font-semibold text-text-primary mb-2">Nos recommandations :</h4>
+                <div className="space-y-1.5">
+                  {diagnosisDetails.advice.map((a, i) => (
+                    <div key={i} className="flex items-start gap-2 rounded-lg bg-green-islamic/5 px-3 py-2">
+                      <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-islamic" />
+                      <span className="text-xs text-text-secondary">{a}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Indicateurs par type */}
-              <div className="mt-3 space-y-1.5">
-                {diagnosisDetails.aynIndicators > 0 && (
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 rounded-full bg-green-islamic/20 flex-1">
-                      <div className="h-full rounded-full bg-green-islamic transition-all" style={{ width: `${Math.min(diagnosisDetails.aynIndicators / 4 * 100, 100)}%` }} />
-                    </div>
-                    <span className="w-24 text-[11px] text-text-secondary">Mauvais œil ({diagnosisDetails.aynIndicators}/4)</span>
-                  </div>
-                )}
-                {diagnosisDetails.sihrIndicators > 0 && (
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 rounded-full bg-gold/20 flex-1">
-                      <div className="h-full rounded-full bg-gold transition-all" style={{ width: `${Math.min(diagnosisDetails.sihrIndicators / 5 * 100, 100)}%` }} />
-                    </div>
-                    <span className="w-24 text-[11px] text-text-secondary">Sorcellerie ({diagnosisDetails.sihrIndicators}/5)</span>
-                  </div>
-                )}
-                {diagnosisDetails.massIndicators > 0 && (
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 rounded-full bg-red-200 flex-1">
-                      <div className="h-full rounded-full bg-red-500 transition-all" style={{ width: `${Math.min(diagnosisDetails.massIndicators / 5 * 100, 100)}%` }} />
-                    </div>
-                    <span className="w-24 text-[11px] text-text-secondary">Possession ({diagnosisDetails.massIndicators}/5)</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Conseil personnalisé */}
-              <p className="mt-3 text-xs italic text-text-secondary leading-relaxed">
-                {diagnosisDetails.dominantCondition === 'ayn' && "Vos symptômes orientent vers un possible mauvais œil ('ayn). Ce programme met l'accent sur les sourates protectrices (Al-Falaq, An-Nas) et les adhkar quotidiens."}
-                {diagnosisDetails.dominantCondition === 'sihr' && "Vos symptômes montrent des signes pouvant être liés à de la sorcellerie (sihr). Le programme inclut les versets spécifiques contre la sorcellerie et l'écoute régulière de Sourate Al-Baqara."}
-                {diagnosisDetails.dominantCondition === 'mass' && "Vos symptômes indiquent une possible atteinte par un djinn (mass). Le programme intensif inclut l'écoute quotidienne de Sourate Al-Baqara et des versets puissants contre la possession."}
-                {diagnosisDetails.dominantCondition === 'general' && "Vos symptômes ne pointent pas vers une cause spécifique. Ce programme général renforcera votre protection spirituelle de manière globale, insha'Allah."}
+              <p className="mt-4 text-[11px] italic text-text-secondary/70 leading-relaxed">
+                ⚠️ Ce diagnostic est une indication basée sur vos réponses. Il ne remplace pas l'avis d'un professionnel de santé ni celui d'un raqi qualifié. La roqya est bénéfique dans tous les cas, que l'on soit atteint ou non.
               </p>
             </div>
           )}
