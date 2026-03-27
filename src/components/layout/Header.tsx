@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Star, Menu, X, ChevronDown, LogOut, User } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
@@ -7,10 +7,22 @@ import { useAuthStore } from '../../store/authStore';
 export default function Header() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, profile, logout } = useAuthStore();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+
+  // Fermer le menu mobile quand on change de page
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  // Bloquer le scroll quand le menu est ouvert
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
 
   const navLinks = [
     { to: '/', label: t('nav.home') },
@@ -38,8 +50,8 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-cream border-b border-cream-dark">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo — centered on mobile */}
-          <Link to="/" className="flex items-center gap-2 md:flex-none absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2">
             <Star className="h-6 w-6 text-gold fill-gold" />
             <span className="font-heading text-xl font-bold text-green-islamic">
               MaRoqya
@@ -52,16 +64,19 @@ export default function Header() {
               <Link
                 key={link.to}
                 to={link.to}
-                className="text-sm font-medium text-text-secondary hover:text-green-islamic transition-colors"
+                className={`text-sm font-medium transition-colors ${
+                  location.pathname === link.to
+                    ? 'text-green-islamic'
+                    : 'text-text-secondary hover:text-green-islamic'
+                }`}
               >
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          {/* Right section */}
+          {/* Right section desktop */}
           <div className="hidden md:flex items-center gap-3">
-            {/* Language switcher */}
             <div className="flex items-center gap-1">
               <button
                 onClick={() => switchLanguage('fr')}
@@ -143,7 +158,7 @@ export default function Header() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 text-text-primary"
+            className="md:hidden p-2 text-text-primary z-50"
             aria-label="Toggle menu"
           >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -151,125 +166,69 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile slide-in sidebar */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          {/* Overlay */}
-          <div
-            className="fixed inset-0 bg-black/30"
-            onClick={() => setMobileOpen(false)}
-          />
-
-          {/* Sidebar */}
-          <div className="fixed inset-y-0 start-0 w-72 bg-cream shadow-xl overflow-y-auto">
-            <div className="flex items-center justify-between p-4 border-b border-cream-dark">
+      {/* Mobile fullscreen overlay menu */}
+      <div
+        className={`fixed inset-0 z-40 md:hidden bg-cream transition-all duration-300 ease-in-out ${
+          mobileOpen
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 -translate-y-full pointer-events-none'
+        }`}
+      >
+        <div className="flex flex-col h-full pt-20 pb-8 px-6">
+          {/* Navigation links — grands et centrés */}
+          <nav className="flex flex-col items-center gap-2 flex-1 justify-center">
+            {navLinks.map((link) => (
               <Link
-                to="/"
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2"
+                key={link.to}
+                to={link.to}
+                className={`text-2xl font-heading font-bold transition-colors py-2 ${
+                  location.pathname === link.to
+                    ? 'text-green-islamic'
+                    : 'text-text-primary hover:text-green-islamic'
+                }`}
               >
-                <Star className="h-5 w-5 text-gold fill-gold" />
-                <span className="font-heading text-lg font-bold text-green-islamic">
-                  MaRoqya
-                </span>
+                {link.label}
               </Link>
-              <button
-                onClick={() => setMobileOpen(false)}
-                className="p-1 text-text-secondary"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
+            ))}
+          </nav>
 
-            <nav className="flex flex-col p-4 gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-text-primary hover:bg-cream-dark transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
-
-              {user && (
+          {/* Bottom section */}
+          <div className="flex flex-col items-center gap-4 pt-6 border-t border-cream-dark">
+            {user ? (
+              <>
                 <Link
                   to="/dashboard"
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-green-islamic hover:bg-cream-dark transition-colors"
+                  className="w-full max-w-xs rounded-lg bg-green-islamic px-6 py-3 text-center font-semibold text-white transition hover:opacity-90"
                 >
                   {t('nav.dashboard')}
                 </Link>
-              )}
-            </nav>
-
-            {/* Language switcher (mobile) */}
-            <div className="px-4 py-3 border-t border-cream-dark">
-              <div className="flex items-center gap-2">
                 <button
-                  onClick={() => switchLanguage('fr')}
-                  className={`flex-1 px-3 py-2 text-sm rounded-lg font-medium transition-colors ${
-                    i18n.language === 'fr'
-                      ? 'bg-green-islamic text-white'
-                      : 'bg-cream-dark text-text-secondary'
-                  }`}
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-sm font-medium text-red-600"
                 >
-                  Fran\u00e7ais
+                  <LogOut className="h-4 w-4" />
+                  {t('nav.logout')}
                 </button>
-                <button
-                  onClick={() => switchLanguage('ar')}
-                  className={`flex-1 px-3 py-2 text-sm rounded-lg font-medium transition-colors ${
-                    i18n.language === 'ar'
-                      ? 'bg-green-islamic text-white'
-                      : 'bg-cream-dark text-text-secondary'
-                  }`}
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/register"
+                  className="w-full max-w-xs rounded-lg bg-green-islamic px-6 py-3 text-center font-semibold text-white transition hover:opacity-90"
                 >
-                  \u0639\u0631\u0628\u064a
-                </button>
-              </div>
-            </div>
-
-            {/* Auth section (mobile) */}
-            <div className="px-4 py-3 border-t border-cream-dark">
-              {user ? (
-                <div className="flex flex-col gap-1">
-                  <span className="px-3 py-2 text-sm font-medium text-text-secondary">
-                    {profile?.prenom}
-                  </span>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setMobileOpen(false);
-                    }}
-                    className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-cream-dark transition-colors"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    {t('nav.logout')}
-                  </button>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-2">
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileOpen(false)}
-                    className="rounded-lg px-3 py-2.5 text-center text-sm font-medium text-green-islamic border border-green-islamic hover:bg-cream-dark transition-colors"
-                  >
-                    {t('nav.login')}
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setMobileOpen(false)}
-                    className="rounded-lg bg-green-islamic px-3 py-2.5 text-center text-sm font-medium text-white hover:bg-green-islamic/90 transition-colors"
-                  >
-                    {t('nav.register')}
-                  </Link>
-                </div>
-              )}
-            </div>
+                  {t('nav.register')}
+                </Link>
+                <Link
+                  to="/login"
+                  className="text-sm font-semibold text-green-islamic hover:underline"
+                >
+                  {t('nav.login')}
+                </Link>
+              </>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </header>
   );
 }
