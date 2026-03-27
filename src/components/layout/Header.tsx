@@ -327,6 +327,15 @@ export default function Header() {
                     <Shield className="h-5 w-5" />
                     <span className="font-medium text-sm">{t('nav.dashboard')}</span>
                   </Link>
+                  {profile?.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      className="flex items-center gap-4 rounded-xl px-4 py-3 text-gold hover:bg-gold/10 transition-colors"
+                    >
+                      <Star className="h-5 w-5" />
+                      <span className="font-medium text-sm">Administration</span>
+                    </Link>
+                  )}
                   <button
                     onClick={handleLogout}
                     className="flex w-full items-center gap-4 rounded-xl px-4 py-3 text-red-500 hover:bg-red-50 transition-colors"
