@@ -20,6 +20,7 @@ import Profil from './pages/Profil';
 import Programme from './pages/Programme';
 import Admin from './pages/Admin';
 import AdminRoute from './components/auth/AdminRoute';
+import ReservationConfirmee from './pages/ReservationConfirmee';
 
 export default function App() {
   const { i18n } = useTranslation();
@@ -41,6 +42,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/tarifs" element={<Tarifs />} />
+        <Route path="/reservation-confirmee" element={<ReservationConfirmee />} />
         <Route path="/articles" element={<Articles />} />
         <Route path="/articles/:id" element={<ArticleDetail />} />
         <Route path="/douas" element={<Douas />} />

@@ -200,10 +200,34 @@ export default function Tarifs() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!selectedDate || !selectedSlot) return;
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1000));
-    setLoading(false);
-    setSubmitted(true);
+    try {
+      const res = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nom: formName,
+          email: formEmail,
+          telephone: formPhone,
+          notes: formNotes,
+          date_reservation: selectedDate,
+          heure: selectedSlot,
+          user_id: null,
+        }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('Erreur lors de la création du paiement. Veuillez réessayer.');
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Erreur de connexion. Veuillez réessayer.');
+      setLoading(false);
+    }
   }
 
   const freeFeatures = [

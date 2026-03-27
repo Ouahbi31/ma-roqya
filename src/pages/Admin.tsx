@@ -1,17 +1,19 @@
 import { useState } from 'react';
-import { CalendarDays, MessageSquare } from 'lucide-react';
+import { CalendarDays, MessageSquare, CreditCard } from 'lucide-react';
 import AdminDisponibilites from '../components/admin/AdminDisponibilites';
 import AdminMessages from '../components/admin/AdminMessages';
+import AdminReservations from '../components/admin/AdminReservations';
 
-type Tab = 'disponibilites' | 'messages';
+type Tab = 'reservations' | 'disponibilites' | 'messages';
 
 const TABS: { key: Tab; label: string; icon: typeof CalendarDays }[] = [
+  { key: 'reservations', label: 'Réservations', icon: CreditCard },
   { key: 'disponibilites', label: 'Disponibilités', icon: CalendarDays },
   { key: 'messages', label: 'Messages', icon: MessageSquare },
 ];
 
 export default function Admin() {
-  const [activeTab, setActiveTab] = useState<Tab>('disponibilites');
+  const [activeTab, setActiveTab] = useState<Tab>('reservations');
 
   return (
     <div className="min-h-screen bg-cream">
@@ -27,12 +29,12 @@ export default function Admin() {
         </div>
 
         {/* Tabs */}
-        <div className="mb-8 flex gap-2">
+        <div className="mb-8 flex gap-2 overflow-x-auto">
           {TABS.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
               onClick={() => setActiveTab(key)}
-              className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition ${
+              className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition whitespace-nowrap ${
                 activeTab === key
                   ? 'bg-green-islamic text-white shadow-sm'
                   : 'border-2 border-green-islamic text-green-islamic hover:bg-green-islamic/5'
@@ -45,6 +47,7 @@ export default function Admin() {
         </div>
 
         {/* Content */}
+        {activeTab === 'reservations' && <AdminReservations />}
         {activeTab === 'disponibilites' && <AdminDisponibilites />}
         {activeTab === 'messages' && <AdminMessages />}
       </div>
