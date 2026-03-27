@@ -30,7 +30,7 @@ export default async function handler(req, res) {
     }
 
     // Use onboarding@resend.dev until custom domain is verified
-    const from = 'MaRoqya <onboarding@resend.dev>';
+    const from = 'MaRoqya <noreply@ma-roqya.fr>';
 
     if (toAll) {
       const { data: profiles, error: dbError } = await supabase
