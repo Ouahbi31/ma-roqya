@@ -14,21 +14,16 @@ import {
   CalendarDays,
 } from 'lucide-react';
 import SEO from '../components/SEO';
+import { supabase } from '../lib/supabase';
 
-// ═══ Slots (in production → Supabase) ═══
-const WEEKLY_SLOTS: Record<number, string[]> = {
+// Fallback slots (used while loading from Supabase)
+const FALLBACK_SLOTS: Record<number, string[]> = {
   1: ['09:00', '10:00', '14:00', '15:00', '16:00'],
   2: ['09:00', '10:00', '14:00', '15:00', '16:00'],
   3: ['09:00', '10:00', '14:00', '15:00', '16:00'],
   4: ['09:00', '10:00', '14:00', '15:00', '16:00'],
-  5: ['09:00', '10:00', '14:00', '15:00', '16:00'],
-  6: ['09:00', '10:00'],
+  5: ['09:00', '10:00', '14:00', '15:00'],
 };
-
-function getSlotsForDate(dateStr: string): string[] {
-  const d = new Date(dateStr + 'T00:00:00');
-  return WEEKLY_SLOTS[d.getDay()] ?? [];
-}
 
 const DAYS_FR = ['DIM', 'LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM'];
 const MONTHS_FR = [
@@ -53,6 +48,32 @@ function addEndTime(slot: string): string {
 export default function Tarifs() {
   const { t } = useTranslation();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  // ═══ Slots from Supabase ═══
+  const [weeklySlots, setWeeklySlots] = useState<Record<number, string[]>>(FALLBACK_SLOTS);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase
+        .from('disponibilites')
+        .select('jour, heure')
+        .eq('actif', true)
+        .order('heure');
+      if (data && data.length > 0) {
+        const grouped: Record<number, string[]> = {};
+        data.forEach((row: { jour: number; heure: string }) => {
+          if (!grouped[row.jour]) grouped[row.jour] = [];
+          grouped[row.jour].push(row.heure);
+        });
+        setWeeklySlots(grouped);
+      }
+    })();
+  }, []);
+
+  function getSlotsForDate(dateStr: string): string[] {
+    const d = new Date(dateStr + 'T00:00:00');
+    return weeklySlots[d.getDay()] ?? [];
+  }
 
   // ═══ Modal booking state ═══
   const [searchParams] = useSearchParams();
@@ -103,7 +124,7 @@ export default function Tarifs() {
       const d = new Date(year, month, i);
       const key = toLocalKey(d);
       const dayOfWeek = d.getDay();
-      const hasSlotsForDay = d >= minBooking && dayOfWeek !== 0 && !!WEEKLY_SLOTS[dayOfWeek];
+      const hasSlotsForDay = d >= minBooking && dayOfWeek !== 0 && !!weeklySlots[dayOfWeek];
       days.push({ date: d, key, isCurrentMonth: true, hasSlots: hasSlotsForDay });
     }
 
@@ -116,7 +137,7 @@ export default function Tarifs() {
     }
 
     return days;
-  }, [currentMonth]);
+  }, [currentMonth, weeklySlots]);
 
   const slots = selectedDate ? getSlotsForDate(selectedDate) : [];
 

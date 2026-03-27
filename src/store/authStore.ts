@@ -8,6 +8,7 @@ interface Profile {
   email: string;
   avatar_url: string | null;
   is_premium: boolean;
+  role: 'user' | 'admin';
 }
 
 interface AuthState {
@@ -93,6 +94,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           email: 'demo@ma-roqya.fr',
           avatar_url: null,
           is_premium: true,
+          role: 'user' as const,
         },
         loading: false,
       });

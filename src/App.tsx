@@ -18,6 +18,8 @@ import Forum from './pages/Forum';
 import ForumPostPage from './pages/ForumPostPage';
 import Profil from './pages/Profil';
 import Programme from './pages/Programme';
+import Admin from './pages/Admin';
+import AdminRoute from './components/auth/AdminRoute';
 
 export default function App() {
   const { i18n } = useTranslation();
@@ -75,6 +77,14 @@ export default function App() {
             <ProtectedRoute>
               <Profil />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <Admin />
+            </AdminRoute>
           }
         />
       </Routes>
