@@ -24,6 +24,7 @@ import SEO from '../components/SEO';
 import SymptomTracker, { shouldShowWeeklyCheck } from '../components/programme/SymptomTracker';
 import SymptomChart from '../components/programme/SymptomChart';
 import GuidedJournal from '../components/programme/GuidedJournal';
+import { PhaseBanner, getCurrentPhase } from '../components/programme/PhaseSystem';
 
 // ═══════════════════════════════════════════════════════
 // TYPES
@@ -140,17 +141,25 @@ interface ChecklistItem {
   repetitions?: string;
 }
 
-function getMorningRoutine(type: ProgramType): ChecklistItem[] {
+function getMorningRoutine(type: ProgramType, phaseId?: string): ChecklistItem[] {
   const base: ChecklistItem[] = [
-    { id: 'fatiha', label: 'Al-Fatiha', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0627\u062A\u062D\u0629', repetitions: type === 'intensive' ? '7x' : '3x' },
-    { id: 'kursi', label: 'Ayat Al-Kursi', arabic: '\u0622\u064A\u0629 \u0627\u0644\u0643\u0631\u0633\u064A', repetitions: type === 'prevention' ? '1x' : '3x' },
+    { id: 'fatiha', label: 'Al-Fatiha', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0627\u062A\u062D\u0629', repetitions: type === 'intensive' && phaseId === 'traitement' ? '7x' : '3x' },
+    { id: 'kursi', label: 'Ayat Al-Kursi', arabic: '\u0622\u064A\u0629 \u0627\u0644\u0643\u0631\u0633\u064A', repetitions: phaseId === 'purification' ? '1x' : '3x' },
     { id: 'ikhlas', label: 'Sourate Al-Ikhlas', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0625\u062E\u0644\u0627\u0635', repetitions: '3x' },
     { id: 'falaq', label: 'Sourate Al-Falaq', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0644\u0642', repetitions: '3x' },
     { id: 'nas', label: 'Sourate An-Nas', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u0627\u0633', repetitions: '3x' },
     { id: 'adhkar-matin', label: 'Adhkar du matin', arabic: '\u0623\u0630\u0643\u0627\u0631 \u0627\u0644\u0635\u0628\u0627\u062D' },
   ];
 
-  if (type !== 'prevention') {
+  // Phase purification : ajouter istighfar et tawba
+  if (phaseId === 'purification') {
+    base.unshift(
+      { id: 'istighfar', label: 'Istighfar (demande de pardon)', arabic: '\u0623\u064E\u0633\u0652\u062A\u064E\u063A\u0652\u0641\u0650\u0631\u064F \u0627\u0644\u0644\u0651\u064E\u0647\u064E', repetitions: '100x' },
+    );
+  }
+
+  // Phase traitement : ajouter versets intensifs
+  if (phaseId === 'traitement' && type !== 'prevention') {
     base.splice(2, 0, {
       id: 'baqara-end',
       label: 'Sourate Al-Baqara v. 285-286',
@@ -159,9 +168,16 @@ function getMorningRoutine(type: ProgramType): ChecklistItem[] {
     });
   }
 
-  if (type === 'intensive') {
+  if (phaseId === 'traitement' && type === 'intensive') {
     base.push(
       { id: 'ruqya-verses', label: 'Versets de roqya spécifiques', arabic: '\u0622\u064A\u0627\u062A \u0627\u0644\u0631\u0642\u064A\u0629', repetitions: '3x' },
+      { id: 'dua-protection', label: 'Doua de protection du matin', arabic: '\u0628\u0650\u0633\u0652\u0645\u0650 \u0627\u0644\u0644\u0651\u064E\u0647\u0650 \u0627\u0644\u0651\u064E\u0630\u0650\u064A \u0644\u0627 \u064A\u064E\u0636\u064F\u0631\u0651\u064F \u0645\u064E\u0639\u064E \u0627\u0633\u0652\u0645\u0650\u0647\u0650 \u0634\u064E\u064A\u0652\u0621\u064C', repetitions: '3x' }
+    );
+  }
+
+  // Phase consolidation : routine allégée + rappel protection
+  if (phaseId === 'consolidation') {
+    base.push(
       { id: 'dua-protection', label: 'Doua de protection du matin', arabic: '\u0628\u0650\u0633\u0652\u0645\u0650 \u0627\u0644\u0644\u0651\u064E\u0647\u0650 \u0627\u0644\u0651\u064E\u0630\u0650\u064A \u0644\u0627 \u064A\u064E\u0636\u064F\u0631\u0651\u064F \u0645\u064E\u0639\u064E \u0627\u0633\u0652\u0645\u0650\u0647\u0650 \u0634\u064E\u064A\u0652\u0621\u064C', repetitions: '3x' }
     );
   }
@@ -169,7 +185,7 @@ function getMorningRoutine(type: ProgramType): ChecklistItem[] {
   return base;
 }
 
-function getEveningRoutine(type: ProgramType): ChecklistItem[] {
+function getEveningRoutine(type: ProgramType, phaseId?: string): ChecklistItem[] {
   const base: ChecklistItem[] = [
     { id: 'kursi-soir', label: 'Ayat Al-Kursi avant de dormir', arabic: '\u0622\u064A\u0629 \u0627\u0644\u0643\u0631\u0633\u064A', repetitions: '1x' },
     { id: 'mulk', label: 'Sourate Al-Mulk', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0644\u0643', repetitions: '1x' },
@@ -177,7 +193,15 @@ function getEveningRoutine(type: ProgramType): ChecklistItem[] {
     { id: 'adhkar-soir', label: 'Adhkar du soir', arabic: '\u0623\u0630\u0643\u0627\u0631 \u0627\u0644\u0645\u0633\u0627\u0621' },
   ];
 
-  if (type !== 'prevention') {
+  // Phase purification : ajouter istighfar du soir
+  if (phaseId === 'purification') {
+    base.push(
+      { id: 'istighfar-soir', label: 'Istighfar avant le sommeil', arabic: '\u0623\u064E\u0633\u0652\u062A\u064E\u063A\u0652\u0641\u0650\u0631\u064F \u0627\u0644\u0644\u0651\u064E\u0647\u064E', repetitions: '33x' },
+    );
+  }
+
+  // Phase traitement : douas intensives
+  if (phaseId === 'traitement' && type !== 'prevention') {
     base.push({
       id: 'dua-ruqya',
       label: 'Douas spécifiques de roqya',
@@ -185,42 +209,59 @@ function getEveningRoutine(type: ProgramType): ChecklistItem[] {
     });
   }
 
-  if (type === 'intensive') {
+  if (phaseId === 'traitement' && type === 'intensive') {
     base.push(
       { id: 'sajda', label: 'Sourate As-Sajda', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0633\u062C\u062F\u0629', repetitions: '1x' },
-      { id: 'dua-sleep', label: 'Doua avant le sommeil', arabic: '\u0628\u0627\u0633\u0645\u0643 \u0627\u0644\u0644\u0647\u0645 \u0623\u0645\u0648\u062A \u0648\u0623\u062D\u064A\u0627' }
     );
   }
+
+  // Toujours la doua du sommeil
+  base.push(
+    { id: 'dua-sleep', label: 'Doua avant le sommeil', arabic: '\u0628\u0627\u0633\u0645\u0643 \u0627\u0644\u0644\u0647\u0645 \u0623\u0645\u0648\u062A \u0648\u0623\u062D\u064A\u0627' }
+  );
 
   return base;
 }
 
-function getBonusActions(type: ProgramType): ChecklistItem[] {
-  if (type === 'prevention') {
-    return [
+function getBonusActions(type: ProgramType, phaseId?: string): ChecklistItem[] {
+  const items: ChecklistItem[] = [];
+
+  // Purification : focus nettoyage
+  if (phaseId === 'purification') {
+    items.push(
+      { id: 'bonus-sidr', label: 'Bain avec eau de Sidr (feuilles de jujubier)', arabic: '\u0645\u0627\u0621 \u0627\u0644\u0633\u062F\u0631' },
+      { id: 'bonus-eau', label: 'Boire de l\'eau coranisée', arabic: '\u0645\u0627\u0621 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064A\u0647' },
+      { id: 'bonus-tawba', label: 'Faire une doua de repentance sincère', arabic: '\u062A\u0648\u0628\u0629' },
       { id: 'bonus-sadaqa', label: 'Faire une sadaqa (aumône)', arabic: '\u0635\u062F\u0642\u0629' },
-      { id: 'bonus-dhikr', label: 'Dhikr supplémentaire (100x SubhanAllah, Alhamdulillah, Allahu Akbar)', arabic: '\u0630\u0643\u0631' },
-    ];
+    );
+    return items;
   }
 
-  if (type === 'light') {
-    return [
-      { id: 'bonus-baqara', label: 'Écouter Sourate Al-Baqara', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0628\u0642\u0631\u0629' },
+  // Traitement : intensif
+  if (phaseId === 'traitement') {
+    items.push(
+      { id: 'bonus-baqara', label: type === 'intensive' ? 'Lire/écouter Sourate Al-Baqara en entier' : 'Écouter Sourate Al-Baqara', arabic: type === 'intensive' ? '\u0633\u0648\u0631\u0629 \u0627\u0644\u0628\u0642\u0631\u0629 \u0643\u0627\u0645\u0644\u0629' : '\u0633\u0648\u0631\u0629 \u0627\u0644\u0628\u0642\u0631\u0629' },
       { id: 'bonus-eau', label: 'Boire de l\'eau coranisée', arabic: '\u0645\u0627\u0621 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064A\u0647' },
       { id: 'bonus-huile', label: 'Se masser avec huile d\'olive coranisée', arabic: '\u0632\u064A\u062A \u0632\u064A\u062A\u0648\u0646 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064A\u0647' },
-      { id: 'bonus-sadaqa', label: 'Faire une sadaqa (aumône)', arabic: '\u0635\u062F\u0642\u0629' },
-    ];
+    );
+    if (type === 'intensive') {
+      items.push(
+        { id: 'bonus-miel', label: 'Prendre du miel pur le matin à jeun', arabic: '\u0639\u0633\u0644' },
+        { id: 'bonus-sidr', label: 'Bain avec eau de Sidr (feuilles de jujubier)', arabic: '\u0645\u0627\u0621 \u0627\u0644\u0633\u062F\u0631' },
+      );
+    }
+    items.push({ id: 'bonus-sadaqa', label: 'Faire une sadaqa (aumône)', arabic: '\u0635\u062F\u0642\u0629' });
+    return items;
   }
 
-  // intensive
-  return [
-    { id: 'bonus-baqara', label: 'Lire/écouter Sourate Al-Baqara en entier', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0628\u0642\u0631\u0629 \u0643\u0627\u0645\u0644\u0629' },
+  // Consolidation : maintien + prévention
+  items.push(
+    { id: 'bonus-dhikr', label: 'Dhikr supplémentaire (100x SubhanAllah, Alhamdulillah, Allahu Akbar)', arabic: '\u0630\u0643\u0631' },
     { id: 'bonus-eau', label: 'Boire de l\'eau coranisée', arabic: '\u0645\u0627\u0621 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064A\u0647' },
-    { id: 'bonus-huile', label: 'Se masser avec huile d\'olive coranisée', arabic: '\u0632\u064A\u062A \u0632\u064A\u062A\u0648\u0646 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064A\u0647' },
-    { id: 'bonus-miel', label: 'Prendre du miel pur le matin à jeun', arabic: '\u0639\u0633\u0644' },
-    { id: 'bonus-sidr', label: 'Bain avec eau de Sidr (feuilles de jujubier)', arabic: '\u0645\u0627\u0621 \u0627\u0644\u0633\u062F\u0631' },
     { id: 'bonus-sadaqa', label: 'Faire une sadaqa (aumône)', arabic: '\u0635\u062F\u0642\u0629' },
-  ];
+    { id: 'bonus-quran', label: 'Lire 1 page du Coran', arabic: '\u062A\u0644\u0627\u0648\u0629 \u0627\u0644\u0642\u0631\u0622\u0646' },
+  );
+  return items;
 }
 
 const PROGRAM_INFO: Record<ProgramType, { title: string; duration: number; description: string; icon: typeof Shield }> = {
@@ -1020,9 +1061,10 @@ export default function Programme() {
 
   function renderTracker() {
     const info = PROGRAM_INFO[program.type];
-    const morningItems = getMorningRoutine(program.type);
-    const eveningItems = getEveningRoutine(program.type);
-    const bonusItems = getBonusActions(program.type);
+    const currentPhase = getCurrentPhase(program.type, program.currentDay);
+    const morningItems = getMorningRoutine(program.type, currentPhase.id);
+    const eveningItems = getEveningRoutine(program.type, currentPhase.id);
+    const bonusItems = getBonusActions(program.type, currentPhase.id);
     const dayProgress = getDayProgress(program.currentDay);
     const overallPercent = getOverallProgress();
     const dayPercent = getDayCompletionPercent(program.currentDay);
@@ -1212,6 +1254,9 @@ export default function Programme() {
             <span className="flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded bg-cream-dark" /> À venir</span>
           </div>
         </div>
+
+        {/* Phase banner */}
+        <PhaseBanner programType={program.type} currentDay={program.currentDay} />
 
         {/* Day progress indicator */}
         <div className="flex items-center justify-between mb-4">
