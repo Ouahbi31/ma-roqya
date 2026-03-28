@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { FileText, Trash2, Loader2, Pencil, X, Check, RotateCcw } from 'lucide-react';
+import { FileText, Trash2, Loader2, Pencil, X, Check, RotateCcw, Search } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { sampleArticles, categoryMeta, type ArticleCategory } from '../../data/articles';
 
@@ -20,6 +20,7 @@ export default function AdminArticles() {
   const [editExcerpt, setEditExcerpt] = useState('');
   const [editCategory, setEditCategory] = useState('');
   const [saving, setSaving] = useState(false);
+  const [search, setSearch] = useState('');
 
   const fetchOverrides = useCallback(async () => {
     const { data } = await supabase
@@ -46,7 +47,10 @@ export default function AdminArticles() {
     };
   });
 
-  const activeArticles = mergedArticles.filter((a) => !a.deleted);
+  const activeArticles = mergedArticles.filter((a) => !a.deleted).filter((a) =>
+    a.title.toLowerCase().includes(search.toLowerCase()) ||
+    a.excerpt.toLowerCase().includes(search.toLowerCase())
+  );
   const deletedArticles = mergedArticles.filter((a) => a.deleted);
 
   const startEdit = (article: typeof mergedArticles[0]) => {
@@ -146,6 +150,19 @@ export default function AdminArticles() {
         <h2 className="mb-4 flex items-center gap-2 font-heading text-lg font-bold text-green-islamic">
           <FileText size={20} /> Articles ({activeArticles.length})
         </h2>
+
+        <div className="mb-4">
+          <div className="relative">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Rechercher..."
+              className="w-full rounded-lg border border-cream-dark bg-cream pl-9 pr-4 py-2.5 text-sm text-text-primary outline-none focus:border-green-islamic"
+            />
+          </div>
+        </div>
 
         {activeArticles.length === 0 ? (
           <p className="py-8 text-center text-sm text-text-secondary">

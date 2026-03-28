@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { MessageCircle, Check, X, Loader2, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { MessageCircle, Check, X, Loader2, Clock, CheckCircle, XCircle, Search } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 interface ForumPostAdmin {
@@ -25,6 +25,7 @@ export default function AdminForum() {
   const [posts, setPosts] = useState<ForumPostAdmin[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<ViewTab>('en_attente');
+  const [search, setSearch] = useState('');
 
   const fetchPosts = useCallback(async () => {
     const { data } = await supabase
@@ -58,7 +59,11 @@ export default function AdminForum() {
     }
   };
 
-  const filtered = posts.filter((p) => p.statut === activeTab);
+  const filtered = posts.filter((p) => p.statut === activeTab).filter((p) =>
+    p.titre.toLowerCase().includes(search.toLowerCase()) ||
+    p.contenu.toLowerCase().includes(search.toLowerCase()) ||
+    p.user_name.toLowerCase().includes(search.toLowerCase())
+  );
   const pendingCount = posts.filter((p) => p.statut === 'en_attente').length;
 
   if (loading) {
@@ -105,6 +110,20 @@ export default function AdminForum() {
             </button>
           );
         })}
+      </div>
+
+      {/* Search */}
+      <div className="mb-4">
+        <div className="relative">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Rechercher..."
+            className="w-full rounded-lg border border-cream-dark bg-cream pl-9 pr-4 py-2.5 text-sm text-text-primary outline-none focus:border-green-islamic"
+          />
+        </div>
       </div>
 
       {/* Posts list */}

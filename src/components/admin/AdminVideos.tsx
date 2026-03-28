@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Video, Trash2, Plus, Loader2, Pencil, X, Check } from 'lucide-react';
+import { Video, Trash2, Plus, Loader2, Pencil, X, Check, Search } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 interface VideoItem {
@@ -31,6 +31,7 @@ export default function AdminVideos() {
   const [success, setSuccess] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
+  const [search, setSearch] = useState('');
 
   const fetchVideos = useCallback(async () => {
     const { data } = await supabase
@@ -111,6 +112,10 @@ export default function AdminVideos() {
     }
   };
 
+  const filteredVideos = videos.filter((v) =>
+    v.title.toLowerCase().includes(search.toLowerCase())
+  );
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -170,16 +175,29 @@ export default function AdminVideos() {
       {/* Videos list */}
       <div className="rounded-xl border border-cream-dark bg-white p-6">
         <h2 className="mb-4 flex items-center gap-2 font-heading text-lg font-bold text-green-islamic">
-          <Video size={20} /> Vidéos ({videos.length})
+          <Video size={20} /> Vidéos ({filteredVideos.length})
         </h2>
 
-        {videos.length === 0 ? (
+        <div className="mb-4">
+          <div className="relative">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Rechercher..."
+              className="w-full rounded-lg border border-cream-dark bg-cream pl-9 pr-4 py-2.5 text-sm text-text-primary outline-none focus:border-green-islamic"
+            />
+          </div>
+        </div>
+
+        {filteredVideos.length === 0 ? (
           <p className="py-8 text-center text-sm text-text-secondary">
             Aucune vidéo pour le moment.
           </p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {videos.map((video) => (
+            {filteredVideos.map((video) => (
               <div
                 key={video.id}
                 className="group overflow-hidden rounded-xl border border-cream-dark bg-cream transition-shadow hover:shadow-md"

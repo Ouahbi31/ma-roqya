@@ -7,6 +7,7 @@ import {
   Send,
   X,
   Loader2,
+  Search,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
@@ -42,6 +43,7 @@ export default function AdminUtilisateurs() {
     ok: boolean;
     text: string;
   } | null>(null);
+  const [search, setSearch] = useState('');
 
   const fetchUsers = useCallback(async () => {
     const { data } = await supabase
@@ -64,6 +66,11 @@ export default function AdminUtilisateurs() {
   const newThisWeek = users.filter(
     (u) => new Date(u.created_at) >= oneWeekAgo
   ).length;
+
+  const filteredUsers = users.filter((u) =>
+    (u.prenom ?? '').toLowerCase().includes(search.toLowerCase()) ||
+    (u.email ?? '').toLowerCase().includes(search.toLowerCase())
+  );
 
   const openModal = (toAll: boolean, email?: string, name?: string) => {
     setModal({
@@ -168,15 +175,29 @@ export default function AdminUtilisateurs() {
         </div>
       </div>
 
+      {/* Search */}
+      <div className="mb-4">
+        <div className="relative">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Rechercher..."
+            className="w-full rounded-lg border border-cream-dark bg-cream pl-9 pr-4 py-2.5 text-sm text-text-primary outline-none focus:border-green-islamic"
+          />
+        </div>
+      </div>
+
       {/* Users list */}
-      {users.length === 0 ? (
+      {filteredUsers.length === 0 ? (
         <div className="py-20 text-center">
           <Users className="mx-auto h-12 w-12 text-cream-dark" />
           <p className="mt-4 text-text-secondary">Aucun utilisateur</p>
         </div>
       ) : (
         <div className="space-y-3">
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <div
               key={user.id}
               className="flex items-center gap-4 rounded-2xl border border-cream-dark bg-white/70 p-4"
