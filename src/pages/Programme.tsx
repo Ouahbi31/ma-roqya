@@ -509,6 +509,8 @@ function QuoteCard({ index }: { index: number }) {
 
 export default function Programme() {
   const user = useAuthStore((s) => s.user);
+  const profile = useAuthStore((s) => s.profile);
+  const isPremium = profile?.is_premium === true;
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Determine initial view from localStorage
@@ -1153,9 +1155,6 @@ export default function Programme() {
 
     const bilanDue = program.startDate ? shouldShowWeeklyCheck(program.startDate) : false;
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { profile: authProfile } = useAuthStore();
-    const isPremium = authProfile?.is_premium === true;
     const FREE_DAYS = 3;
 
     // Premium gate: show overlay when day >= 4 and not premium
