@@ -47,7 +47,7 @@ function addEndTime(slot: string): string {
 }
 
 const PLANS = [
-  { key: 'monthly', label: 'Mensuel', price: '9,99', period: '/mois', priceId: import.meta.env.VITE_STRIPE_PRICE_MONTHLY || 'price_1TFvy3IVUeaxlnKwYDzXfToa' },
+  { key: 'monthly', label: 'Mensuel', price: '9,99', period: '/mois', badge: '', priceId: import.meta.env.VITE_STRIPE_PRICE_MONTHLY || 'price_1TFvy3IVUeaxlnKwYDzXfToa' },
   { key: 'quarterly', label: 'Trimestriel', price: '7,99', period: '/mois', badge: '-20%', priceId: import.meta.env.VITE_STRIPE_PRICE_QUARTERLY || 'price_1TFvy3IVUeaxlnKwihwT4CQk' },
   { key: 'annual', label: 'Annuel', price: '4,99', period: '/mois', badge: '-50%', priceId: import.meta.env.VITE_STRIPE_PRICE_ANNUAL || 'price_1TFvy4IVUeaxlnKwxmKHytDC' },
 ] as const;
