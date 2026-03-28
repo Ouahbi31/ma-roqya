@@ -1,7 +1,9 @@
 import { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Heart, Play, ChevronDown, BookOpen, Shield, Moon, Sun } from 'lucide-react';
+import { Heart, Play, ChevronDown, BookOpen, Shield, Moon, Sun, Lock, Crown } from 'lucide-react';
 import { sampleDouas } from '../data/douas';
+import { useAuthStore } from '../store/authStore';
 
 import SEO from '../components/SEO';
 
@@ -17,8 +19,12 @@ categories.forEach((cat) => {
   (cat as { count: number }).count = sampleDouas.filter((d) => d.categorie === cat.key).length;
 });
 
+const FREE_DOUAS_LIMIT = 10;
+
 export default function Douas() {
   const { t } = useTranslation();
+  const { profile } = useAuthStore();
+  const isPremium = profile?.is_premium === true;
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [expandedDua, setExpandedDua] = useState<Set<string>>(new Set());
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -124,30 +130,60 @@ export default function Douas() {
         </div>
 
         {/* ═══ SECTIONS PAR CATÉGORIE ═══ */}
-        {groupedDouas.map((group) => {
-          const Icon = group.icon;
-          return (
-            <div
-              key={group.key}
-              ref={(el) => { sectionRefs.current[group.key] = el; }}
-              className="mb-10 scroll-mt-24"
-            >
-              {/* Section header */}
-              <div className={`mb-4 flex items-center gap-3 rounded-xl ${group.bg} px-5 py-3`}>
-                <Icon size={22} className={group.color} />
-                <h2 className={`font-heading text-xl font-bold ${group.color}`}>
-                  {group.label}
-                </h2>
-                <span className="ml-auto rounded-full bg-white px-3 py-0.5 text-xs font-medium text-text-secondary">
-                  {group.douas.length} dua{group.douas.length > 1 ? 's' : ''}
-                </span>
-              </div>
+        {(() => {
+          let globalIndex = 0;
+          return groupedDouas.map((group) => {
+            const Icon = group.icon;
+            return (
+              <div
+                key={group.key}
+                ref={(el) => { sectionRefs.current[group.key] = el; }}
+                className="mb-10 scroll-mt-24"
+              >
+                {/* Section header */}
+                <div className={`mb-4 flex items-center gap-3 rounded-xl ${group.bg} px-5 py-3`}>
+                  <Icon size={22} className={group.color} />
+                  <h2 className={`font-heading text-xl font-bold ${group.color}`}>
+                    {group.label}
+                  </h2>
+                  <span className="ml-auto rounded-full bg-white px-3 py-0.5 text-xs font-medium text-text-secondary">
+                    {group.douas.length} dua{group.douas.length > 1 ? 's' : ''}
+                  </span>
+                </div>
 
-              {/* Accordion list */}
-              <div className="space-y-3">
-                {group.douas.map((dua) => {
-                  const isOpen = expandedDua.has(dua.id);
-                  return (
+                {/* Accordion list */}
+                <div className="space-y-3">
+                  {group.douas.map((dua) => {
+                    globalIndex++;
+                    const isLocked = !isPremium && globalIndex > FREE_DOUAS_LIMIT;
+                    const isOpen = expandedDua.has(dua.id) && !isLocked;
+
+                    if (isLocked) {
+                      return (
+                        <div
+                          key={dua.id}
+                          className="relative overflow-hidden rounded-2xl border border-cream-dark bg-white/40"
+                        >
+                          <div className="flex w-full items-center gap-3 px-5 py-4 blur-[2px]">
+                            <ChevronDown size={18} className="shrink-0 text-text-secondary/30" />
+                            <div className="min-w-0 flex-1">
+                              <h3 className="font-heading text-base font-semibold text-text-primary/40 sm:text-lg">
+                                {dua.titre}
+                              </h3>
+                            </div>
+                          </div>
+                          {/* Lock overlay */}
+                          <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-[1px]">
+                            <div className="flex items-center gap-2 rounded-full bg-gold/10 px-4 py-2">
+                              <Lock size={14} className="text-gold" />
+                              <span className="text-sm font-semibold text-gold">Premium</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    return (
                     <div
                       key={dua.id}
                       className={`overflow-hidden rounded-2xl border transition-all ${
@@ -255,7 +291,30 @@ export default function Douas() {
               </div>
             </div>
           );
-        })}
+        });
+        })()}
+
+        {/* Unlock CTA for non-premium */}
+        {!isPremium && sampleDouas.length > FREE_DOUAS_LIMIT && (
+          <div className="mt-6 rounded-2xl border-2 border-gold/20 bg-white/80 p-6 text-center shadow-sm">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gold/10">
+              <Crown className="h-6 w-6 text-gold" />
+            </div>
+            <h3 className="font-heading text-lg font-bold text-text-primary">
+              {sampleDouas.length - FREE_DOUAS_LIMIT} douas suppl&eacute;mentaires disponibles
+            </h3>
+            <p className="mx-auto mt-2 max-w-md text-sm text-text-secondary">
+              D&eacute;bloquez toutes les invocations avec l'abonnement Premium.
+            </p>
+            <Link
+              to="/tarifs"
+              className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gold px-6 py-3 font-semibold text-white transition hover:opacity-90"
+            >
+              <Lock size={16} />
+              D&eacute;bloquer toutes les douas
+            </Link>
+          </div>
+        )}
 
         {/* Disclaimer */}
         <div className="mt-8 rounded-xl bg-cream-dark/50 px-6 py-4 text-center">

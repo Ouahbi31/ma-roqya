@@ -44,6 +44,26 @@ export default async function handler(req, res) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
 
+    // ═══ SUBSCRIPTION: activate premium ═══
+    if (session.mode === 'subscription') {
+      const customerEmail = session.customer_email;
+      if (customerEmail) {
+        const { error: premiumError } = await supabase
+          .from('profiles')
+          .update({ is_premium: true })
+          .eq('email', customerEmail);
+
+        if (premiumError) {
+          console.error('Premium activation error:', premiumError);
+        } else {
+          console.log(`Premium activated for ${customerEmail}`);
+        }
+      }
+      // Don't process reservation logic for subscriptions
+      return res.status(200).json({ received: true });
+    }
+
+    // ═══ RESERVATION: existing booking logic ═══
     // Update reservation status
     const { error } = await supabase
       .from('reservations')
@@ -116,6 +136,34 @@ export default async function handler(req, res) {
     } catch (emailErr) {
       console.error('Client email error:', emailErr);
     }
+  }
+
+  // ═══ SUBSCRIPTION DELETED: deactivate premium ═══
+  if (event.type === 'customer.subscription.deleted') {
+    const subscription = event.data.object;
+    try {
+      const customer = await stripe.customers.retrieve(subscription.customer);
+      if (customer && customer.email) {
+        const { error: deactivateError } = await supabase
+          .from('profiles')
+          .update({ is_premium: false })
+          .eq('email', customer.email);
+
+        if (deactivateError) {
+          console.error('Premium deactivation error:', deactivateError);
+        } else {
+          console.log(`Premium deactivated for ${customer.email}`);
+        }
+      }
+    } catch (err) {
+      console.error('Error handling subscription deletion:', err);
+    }
+  }
+
+  // ═══ INVOICE PAYMENT FAILED ═══
+  if (event.type === 'invoice.payment_failed') {
+    const invoice = event.data.object;
+    console.error(`Payment failed for customer ${invoice.customer}, invoice ${invoice.id}`);
   }
 
   return res.status(200).json({ received: true });

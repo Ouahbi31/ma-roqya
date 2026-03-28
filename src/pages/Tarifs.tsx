@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Check,
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import SEO from '../components/SEO';
 import { supabase } from '../lib/supabase';
+import { useAuthStore } from '../store/authStore';
 
 // Fallback slots (used while loading from Supabase)
 const FALLBACK_SLOTS: Record<number, string[]> = {
@@ -45,9 +46,19 @@ function addEndTime(slot: string): string {
   return `${String(endH).padStart(2, '0')}:${String(endM % 60).padStart(2, '0')}`;
 }
 
+const PLANS = [
+  { key: 'monthly', label: 'Mensuel', price: '9,99', period: '/mois', priceId: import.meta.env.VITE_STRIPE_PRICE_MONTHLY || 'price_1TFvy3IVUeaxlnKwYDzXfToa' },
+  { key: 'quarterly', label: 'Trimestriel', price: '7,99', period: '/mois', badge: '-20%', priceId: import.meta.env.VITE_STRIPE_PRICE_QUARTERLY || 'price_1TFvy3IVUeaxlnKwihwT4CQk' },
+  { key: 'annual', label: 'Annuel', price: '4,99', period: '/mois', badge: '-50%', priceId: import.meta.env.VITE_STRIPE_PRICE_ANNUAL || 'price_1TFvy4IVUeaxlnKwxmKHytDC' },
+] as const;
+
 export default function Tarifs() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { user, profile } = useAuthStore();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<string>('monthly');
+  const [subscriptionLoading, setSubscriptionLoading] = useState(false);
 
   // ═══ Slots from Supabase ═══
   const [weeklySlots, setWeeklySlots] = useState<Record<number, string[]>>(FALLBACK_SLOTS);
@@ -317,17 +328,44 @@ export default function Tarifs() {
           </div>
 
           {/* Premium */}
-          <div className="card-islamic relative flex flex-col border-2 border-gold p-8">
+          <div className="card-islamic relative flex flex-col border-2 border-gold p-6 md:p-8">
             <div className="absolute -top-3 right-6 rounded-full bg-gold px-4 py-1 text-xs font-bold text-white">
               Premium
             </div>
             <h2 className="font-heading text-2xl font-bold text-text-primary">Premium</h2>
+
+            {/* Plan selector */}
+            <div className="mt-4 flex gap-2 rounded-xl bg-cream-dark/50 p-1">
+              {PLANS.map((plan) => (
+                <button
+                  key={plan.key}
+                  onClick={() => setSelectedPlan(plan.key)}
+                  className={`relative flex-1 rounded-lg px-2 py-2 text-xs font-semibold transition ${
+                    selectedPlan === plan.key
+                      ? 'bg-white text-gold shadow-sm'
+                      : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  {plan.badge && (
+                    <span className="absolute -top-2 right-0 rounded-full bg-green-islamic px-1.5 py-0.5 text-[9px] font-bold text-white">
+                      {plan.badge}
+                    </span>
+                  )}
+                  {plan.label}
+                </button>
+              ))}
+            </div>
+
             <div className="mt-4 flex items-baseline gap-1">
-              <span className="font-heading text-4xl font-bold text-gold">9,90€</span>
-              <span className="text-text-secondary">/mois</span>
+              <span className="font-heading text-4xl font-bold text-gold">
+                {PLANS.find((p) => p.key === selectedPlan)?.price}€
+              </span>
+              <span className="text-text-secondary">
+                {PLANS.find((p) => p.key === selectedPlan)?.period}
+              </span>
             </div>
             <p className="mt-3 text-sm text-text-secondary">
-              Un accompagnement personnalisé pour avancer avec sérénité sur votre chemin.
+              Un accompagnement personnalis&eacute; pour avancer avec s&eacute;r&eacute;nit&eacute; sur votre chemin.
             </p>
             <ul className="mt-8 flex-1 space-y-4">
               {premiumFeatures.map((f, i) => (
@@ -337,12 +375,48 @@ export default function Tarifs() {
                 </li>
               ))}
             </ul>
-            <Link
-              to="/register"
-              className="mt-8 block rounded-xl bg-gold py-3 text-center font-semibold text-white transition hover:opacity-90"
-            >
-              S'abonner au Premium
-            </Link>
+
+            {profile?.is_premium ? (
+              <div className="mt-8 rounded-xl bg-green-islamic/10 py-3 text-center font-semibold text-green-islamic">
+                Vous &ecirc;tes Premium
+              </div>
+            ) : (
+              <button
+                disabled={subscriptionLoading}
+                onClick={async () => {
+                  if (!user) {
+                    navigate('/login');
+                    return;
+                  }
+                  setSubscriptionLoading(true);
+                  try {
+                    const plan = PLANS.find((p) => p.key === selectedPlan)!;
+                    const res = await fetch('/api/create-subscription', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        priceId: plan.priceId,
+                        email: user.email,
+                        userId: user.id,
+                      }),
+                    });
+                    const data = await res.json();
+                    if (data.url) {
+                      window.location.href = data.url;
+                    } else {
+                      alert('Erreur lors de la cr\u00e9ation du paiement. Veuillez r\u00e9essayer.');
+                      setSubscriptionLoading(false);
+                    }
+                  } catch {
+                    alert('Erreur de connexion. Veuillez r\u00e9essayer.');
+                    setSubscriptionLoading(false);
+                  }
+                }}
+                className="mt-8 block rounded-xl bg-gold py-3 text-center font-semibold text-white transition hover:opacity-90 disabled:opacity-60"
+              >
+                {subscriptionLoading ? 'Redirection...' : "S'abonner au Premium"}
+              </button>
+            )}
           </div>
         </div>
 

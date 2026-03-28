@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
   ChevronRight,
   ChevronLeft,
@@ -19,12 +20,15 @@ import {
   Play,
   BarChart3,
   Bell,
+  Lock,
+  Crown,
 } from 'lucide-react';
 import SEO from '../components/SEO';
 import SymptomTracker, { shouldShowWeeklyCheck } from '../components/programme/SymptomTracker';
 import SymptomChart from '../components/programme/SymptomChart';
 import GuidedJournal from '../components/programme/GuidedJournal';
 import { PhaseBanner, getCurrentPhase } from '../components/programme/PhaseSystem';
+import { useAuthStore } from '../store/authStore';
 
 // ═══════════════════════════════════════════════════════
 // TYPES
@@ -1137,6 +1141,49 @@ export default function Programme() {
     }
 
     const bilanDue = program.startDate ? shouldShowWeeklyCheck(program.startDate) : false;
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { profile: authProfile } = useAuthStore();
+    const isPremium = authProfile?.is_premium === true;
+    const FREE_DAYS = 3;
+
+    // Premium gate: show overlay when day >= 4 and not premium
+    if (program.currentDay > FREE_DAYS && !isPremium) {
+      return (
+        <div className="mx-auto max-w-2xl">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <h1 className="font-heading text-2xl font-bold text-green-islamic md:text-3xl">
+                {info.title}
+              </h1>
+              <p className="mt-1 text-sm text-text-secondary">
+                Jour {program.currentDay} sur {program.totalDays}
+              </p>
+            </div>
+          </div>
+
+          {/* Premium gate overlay */}
+          <div className="mt-8 rounded-2xl border-2 border-gold/30 bg-white/80 p-8 text-center shadow-lg">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gold/10">
+              <Crown className="h-8 w-8 text-gold" />
+            </div>
+            <h2 className="font-heading text-2xl font-bold text-text-primary">
+              Passez au Premium pour continuer votre programme
+            </h2>
+            <p className="mx-auto mt-3 max-w-md text-text-secondary">
+              Les {FREE_DAYS} premiers jours sont gratuits. D&eacute;bloquez les {program.totalDays - FREE_DAYS} jours restants pour poursuivre votre parcours de gu&eacute;rison.
+            </p>
+            <Link
+              to="/tarifs"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gold px-8 py-3.5 font-semibold text-white transition hover:opacity-90"
+            >
+              <Lock size={18} />
+              D&eacute;couvrir le Premium
+            </Link>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="mx-auto max-w-2xl">
