@@ -147,8 +147,6 @@ function HeroBanner({ article }: { article: Article }) {
           {article.excerpt}
         </p>
         <div className="mt-4 flex items-center gap-4 text-xs text-white/70 sm:text-sm">
-          <span>{article.author.name}</span>
-          <span className="opacity-50">|</span>
           <span>{formatDate(article.date)}</span>
           <span className="opacity-50">|</span>
           <span className="flex items-center gap-1">
@@ -177,13 +175,6 @@ function LargeCard({ article }: { article: Article }) {
           {article.excerpt}
         </p>
         <div className="mt-4 flex items-center gap-3 text-xs text-text-secondary">
-          <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-islamic/10 text-[10px] font-bold text-green-islamic">
-              {article.author.name.charAt(0)}
-            </div>
-            <span>{article.author.name}</span>
-          </div>
-          <span className="opacity-40">|</span>
           <span>{formatDate(article.date)}</span>
           <span className="opacity-40">|</span>
           <span className="flex items-center gap-1">
@@ -212,8 +203,6 @@ function SmallCard({ article }: { article: Article }) {
           {article.excerpt}
         </p>
         <div className="mt-3 flex items-center gap-2 text-xs text-text-secondary">
-          <span>{article.author.name}</span>
-          <span className="opacity-40">|</span>
           <span className="flex items-center gap-1">
             <Clock size={12} /> {article.readTime} min
           </span>
