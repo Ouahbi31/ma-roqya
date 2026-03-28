@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Video, Trash2, Plus, Loader2 } from 'lucide-react';
+import { Video, Trash2, Plus, Loader2, Pencil, X, Check } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 interface VideoItem {
@@ -11,16 +11,12 @@ interface VideoItem {
 }
 
 function extractYoutubeId(url: string): string | null {
-  // youtube.com/watch?v=ID
   const watchMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
   if (watchMatch) return watchMatch[1];
-  // youtu.be/ID
   const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
   if (shortMatch) return shortMatch[1];
-  // youtube.com/shorts/ID
   const shortsMatch = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
   if (shortsMatch) return shortsMatch[1];
-  // raw ID (11 chars)
   if (/^[a-zA-Z0-9_-]{11}$/.test(url.trim())) return url.trim();
   return null;
 }
@@ -33,6 +29,8 @@ export default function AdminVideos() {
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState('');
 
   const fetchVideos = useCallback(async () => {
     const { data } = await supabase
@@ -70,7 +68,7 @@ export default function AdminVideos() {
 
     if (insertError) {
       console.error('Insert error:', insertError);
-      setError(insertError.message || 'Erreur lors de l\'ajout. Déconnectez-vous et reconnectez-vous.');
+      setError(insertError.message || "Erreur lors de l'ajout. Déconnectez-vous et reconnectez-vous.");
     } else {
       setSuccess('Vidéo ajoutée avec succès.');
       setUrl('');
@@ -84,6 +82,32 @@ export default function AdminVideos() {
     const { error: delError } = await supabase.from('videos').delete().eq('id', id);
     if (!delError) {
       setVideos((prev) => prev.filter((v) => v.id !== id));
+    }
+  };
+
+  const startEdit = (video: VideoItem) => {
+    setEditingId(video.id);
+    setEditTitle(video.title);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditTitle('');
+  };
+
+  const saveEdit = async (id: string) => {
+    if (!editTitle.trim()) return;
+    const { error: updateError } = await supabase
+      .from('videos')
+      .update({ title: editTitle.trim() })
+      .eq('id', id);
+
+    if (!updateError) {
+      setVideos((prev) =>
+        prev.map((v) => (v.id === id ? { ...v, title: editTitle.trim() } : v))
+      );
+      setEditingId(null);
+      setEditTitle('');
     }
   };
 
@@ -168,17 +192,54 @@ export default function AdminVideos() {
                     loading="lazy"
                   />
                 </div>
-                <div className="flex items-start justify-between gap-2 p-3">
-                  <p className="text-sm font-medium text-text-primary line-clamp-2">
-                    {video.title}
-                  </p>
-                  <button
-                    onClick={() => handleDelete(video.id)}
-                    className="shrink-0 rounded-lg p-1.5 text-red-400 transition-colors hover:bg-red-50 hover:text-red-600"
-                    title="Supprimer"
-                  >
-                    <Trash2 size={16} />
-                  </button>
+                <div className="p-3">
+                  {editingId === video.id ? (
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        className="w-full rounded-lg border border-cream-dark bg-white px-3 py-2 text-sm text-text-primary outline-none focus:border-green-islamic"
+                        autoFocus
+                      />
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => saveEdit(video.id)}
+                          className="inline-flex items-center gap-1 rounded-lg bg-green-islamic px-3 py-1.5 text-xs font-semibold text-white hover:bg-green-islamic/90"
+                        >
+                          <Check size={14} /> Enregistrer
+                        </button>
+                        <button
+                          onClick={cancelEdit}
+                          className="inline-flex items-center gap-1 rounded-lg border border-cream-dark px-3 py-1.5 text-xs font-semibold text-text-secondary hover:bg-cream"
+                        >
+                          <X size={14} /> Annuler
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-sm font-medium text-text-primary line-clamp-2">
+                        {video.title}
+                      </p>
+                      <div className="flex shrink-0 gap-1">
+                        <button
+                          onClick={() => startEdit(video)}
+                          className="rounded-lg p-1.5 text-gold transition-colors hover:bg-gold/10"
+                          title="Modifier"
+                        >
+                          <Pencil size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(video.id)}
+                          className="rounded-lg p-1.5 text-red-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                          title="Supprimer"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
