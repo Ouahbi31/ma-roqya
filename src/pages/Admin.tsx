@@ -1,17 +1,21 @@
 import { useState } from 'react';
-import { CalendarDays, MessageSquare, CreditCard, Users } from 'lucide-react';
+import { CalendarDays, MessageSquare, CreditCard, Users, Video, MessageCircle } from 'lucide-react';
 import AdminDisponibilites from '../components/admin/AdminDisponibilites';
 import AdminMessages from '../components/admin/AdminMessages';
 import AdminReservations from '../components/admin/AdminReservations';
 import AdminUtilisateurs from '../components/admin/AdminUtilisateurs';
+import AdminVideos from '../components/admin/AdminVideos';
+import AdminForum from '../components/admin/AdminForum';
 
-type Tab = 'reservations' | 'disponibilites' | 'messages' | 'utilisateurs';
+type Tab = 'reservations' | 'disponibilites' | 'messages' | 'utilisateurs' | 'videos' | 'forum';
 
 const TABS: { key: Tab; label: string; icon: typeof CalendarDays }[] = [
   { key: 'reservations', label: 'Réservations', icon: CreditCard },
   { key: 'disponibilites', label: 'Disponibilités', icon: CalendarDays },
   { key: 'messages', label: 'Messages', icon: MessageSquare },
   { key: 'utilisateurs', label: 'Utilisateurs', icon: Users },
+  { key: 'videos', label: 'Vidéos', icon: Video },
+  { key: 'forum', label: 'Forum', icon: MessageCircle },
 ];
 
 export default function Admin() {
@@ -53,6 +57,8 @@ export default function Admin() {
         {activeTab === 'disponibilites' && <AdminDisponibilites />}
         {activeTab === 'messages' && <AdminMessages />}
         {activeTab === 'utilisateurs' && <AdminUtilisateurs />}
+        {activeTab === 'videos' && <AdminVideos />}
+        {activeTab === 'forum' && <AdminForum />}
       </div>
     </div>
   );

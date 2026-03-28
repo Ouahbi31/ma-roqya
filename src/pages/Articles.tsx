@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Search,
@@ -16,6 +16,7 @@ import {
   type Article,
   type ArticleCategory,
 } from '../data/articles';
+import { supabase } from '../lib/supabase';
 import SEO from '../components/SEO';
 
 // ---------------------------------------------------------------------------
@@ -318,18 +319,23 @@ function NewsletterCard() {
   );
 }
 
-/** Sidebar: recent videos placeholder */
+/** Sidebar: recent videos from Supabase */
 function RecentVideos() {
-  const videos = [
-    {
-      id: 'dQw4w9WgXcQ',
-      title: "Introduction à la Roqya Shar'iyya",
-    },
-    {
-      id: 'dQw4w9WgXcQ',
-      title: 'Les adhkar du matin — récitation complète',
-    },
-  ];
+  const [videos, setVideos] = useState<{ id: string; title: string; youtube_id: string }[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from('videos')
+      .select('id, title, youtube_id')
+      .order('created_at', { ascending: false })
+      .limit(3)
+      .then(({ data }) => {
+        if (data) setVideos(data);
+      });
+  }, []);
+
+  if (videos.length === 0) return null;
+
   return (
     <div className="card-islamic p-5">
       <h3 className="flex items-center gap-2 font-heading text-lg font-bold text-text-primary">
@@ -337,10 +343,22 @@ function RecentVideos() {
         Vidéos récentes
       </h3>
       <div className="mt-4 space-y-4">
-        {videos.map((v, i) => (
-          <div key={i} className="group cursor-pointer">
-            <div className="relative aspect-video overflow-hidden rounded-lg bg-gradient-to-br from-green-800 to-emerald-600">
-              <div className="absolute inset-0 flex items-center justify-center">
+        {videos.map((v) => (
+          <a
+            key={v.id}
+            href={`https://www.youtube.com/watch?v=${v.youtube_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block"
+          >
+            <div className="relative aspect-video overflow-hidden rounded-lg">
+              <img
+                src={`https://img.youtube.com/vi/${v.youtube_id}/mqdefault.jpg`}
+                alt={v.title}
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow transition-transform group-hover:scale-110">
                   <Play size={18} className="text-green-islamic ml-0.5" />
                 </div>
@@ -349,7 +367,7 @@ function RecentVideos() {
             <p className="mt-2 text-sm font-medium text-text-primary group-hover:text-green-islamic">
               {v.title}
             </p>
-          </div>
+          </a>
         ))}
       </div>
     </div>
