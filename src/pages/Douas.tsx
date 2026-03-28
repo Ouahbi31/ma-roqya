@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Heart, Play, ChevronDown, BookOpen, Shield, Moon, Sun, Lock, Crown } from 'lucide-react';
+import { Heart, Play, ChevronDown, BookOpen, Shield, Moon, Sun, Lock, Crown, ArrowLeft } from 'lucide-react';
 import { sampleDouas } from '../data/douas';
 import { useAuthStore } from '../store/authStore';
 
@@ -72,6 +72,12 @@ export default function Douas() {
         keywords="douas roqya, invocations protection islam, adhkar matin soir, ayat al kursi, sourate al fatiha guerison, douas protection mauvais oeil"
         url="/douas"
       />
+      {/* Back link */}
+      <div className="mx-auto max-w-4xl px-4 pt-6">
+        <Link to="/" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-green-islamic hover:underline">
+          <ArrowLeft size={16} /> Retour à l'accueil
+        </Link>
+      </div>
       {/* Hero */}
       <div className="bg-gradient-to-b from-cream-dark/50 to-cream px-4 py-12 text-center sm:py-16">
         <h1 className="font-heading text-3xl font-bold text-green-islamic sm:text-4xl lg:text-5xl">

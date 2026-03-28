@@ -8,6 +8,7 @@ import {
   Mail,
   TrendingUp,
   ArrowRight,
+  ArrowLeft,
 } from 'lucide-react';
 import {
   sampleArticles,
@@ -404,6 +405,12 @@ export default function Articles() {
         keywords="articles roqya, blog islam guerison, mauvais oeil symptomes, sorcellerie islam, possession djinn signes, psycho-roqya, eau coranisee, sourate baqara"
         url="/articles"
       />
+      {/* ── Back link ─────────────────────────────────────────────────── */}
+      <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
+        <Link to="/" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-green-islamic hover:underline">
+          <ArrowLeft size={16} /> Retour à l'accueil
+        </Link>
+      </div>
       {/* ── Search bar ────────────────────────────────────────────────── */}
       <div className="border-b border-cream-dark bg-white/60 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
