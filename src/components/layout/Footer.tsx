@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
+import { Star } from 'lucide-react';
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -12,8 +12,11 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <img src="/images/logo-maroqya.png" alt="MaRoqya" className="h-7" />
+          <Link to="/" className="flex items-center gap-2">
+            <Star className="h-4 w-4 text-gold fill-gold" />
+            <span className="font-heading text-sm font-bold text-green-islamic">
+              MaRoqya
+            </span>
           </Link>
 
           {/* Links */}
