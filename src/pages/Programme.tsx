@@ -950,7 +950,6 @@ export default function Programme() {
   function renderResult() {
     const info = PROGRAM_INFO[program.type];
     const sev = SEVERITY_LABELS[program.severity];
-    const IconComp = info.icon;
 
     // ── Consultation CTA (shared across all levels) ──
     const renderConsultationCTA = (variant: 'soft' | 'visible') => (
