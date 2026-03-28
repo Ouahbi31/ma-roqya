@@ -48,7 +48,7 @@ export default function Home() {
 
           <div className="mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row px-2 sm:px-0">
             <Link
-              to="/register"
+              to="/quiz"
               className="w-full sm:w-auto inline-block rounded-xl bg-green-islamic px-6 sm:px-8 py-3.5 sm:py-3 font-semibold text-white text-base sm:text-base transition hover:opacity-90 active:scale-[0.98]"
             >
               {t('home.cta_free')}

@@ -320,7 +320,7 @@ export default function Tarifs() {
               ))}
             </ul>
             <Link
-              to="/register"
+              to="/quiz"
               className="mt-8 block rounded-xl border-2 border-green-islamic py-3 text-center font-semibold text-green-islamic transition hover:bg-green-islamic hover:text-white"
             >
               Commencer gratuitement
