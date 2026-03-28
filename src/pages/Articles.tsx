@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Search,
-  Clock,
   ChevronLeft,
   ChevronRight,
   Play,
