@@ -23,6 +23,7 @@ import {
   Lock,
   Crown,
   ArrowLeft,
+  MessageCircle,
 } from 'lucide-react';
 import SEO from '../components/SEO';
 import SymptomTracker, { shouldShowWeeklyCheck } from '../components/programme/SymptomTracker';
@@ -610,12 +611,14 @@ export default function Programme() {
     const { type, severity, details } = diagnose(answers);
     const info = PROGRAM_INFO[type];
     setDiagnosisDetails(details);
+    // Override totalDays: modere gets 7-day program instead of default 15
+    const totalDays = severity === 'modere' ? 7 : info.duration;
     setProgram({
       type,
       severity,
       startDate: '',
       currentDay: 1,
-      totalDays: info.duration,
+      totalDays,
       dailyProgress: {},
     });
     setView('result');
@@ -949,6 +952,267 @@ export default function Programme() {
     const sev = SEVERITY_LABELS[program.severity];
     const IconComp = info.icon;
 
+    // ── Consultation CTA (shared across all levels) ──
+    const renderConsultationCTA = (variant: 'soft' | 'visible') => (
+      <div className={`mt-6 rounded-2xl border px-5 py-5 ${
+        variant === 'visible'
+          ? 'border-green-islamic/20 bg-green-islamic/5'
+          : 'border-cream-dark bg-[#faf7f2]'
+      }`}>
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-islamic/10">
+            <MessageCircle className="h-5 w-5 text-green-islamic" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm leading-relaxed text-text-primary">
+              {variant === 'visible'
+                ? 'Un accompagnement personnalisé peut faire toute la différence dans votre parcours de guérison. Si vous le souhaitez, je suis disponible pour vous écouter et vous guider.'
+                : 'Si vous ressentez le besoin d\'être écouté(e) ou accompagné(e), n\'hésitez pas. Je suis là pour vous.'}
+            </p>
+            <Link
+              to="/tarifs?booking=1"
+              className={`mt-3 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-medium transition ${
+                variant === 'visible'
+                  ? 'bg-green-islamic text-white shadow-sm hover:bg-gold'
+                  : 'border border-green-islamic/30 text-green-islamic hover:bg-green-islamic/10'
+              }`}
+            >
+              {variant === 'visible' ? 'Prendre rendez-vous' : 'Échanger avec Dr Frère Muz'}
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+
+    // ═══════════════════════════════════════════════════
+    // FAIBLE — Preventive advice (no program)
+    // ═══════════════════════════════════════════════════
+    if (program.severity === 'leger') {
+      const preventiveAdvice = [
+        'Maintenir les 5 prières quotidiennes',
+        'Faire les adhkar du matin et du soir avec régularité',
+        'Lire le Coran régulièrement, même quelques versets par jour',
+        'Dire Bismillah avant chaque action, MashaAllah devant ce qui vous plaît',
+        'Multiplier les invocations de protection (Ayat Al-Kursi, les 3 dernières sourates)',
+        'Préserver les liens familiaux et éviter la médisance',
+      ];
+
+      return (
+        <div className="mx-auto max-w-2xl">
+          <div className="text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-islamic/10">
+              <Shield className="h-8 w-8 text-green-islamic" />
+            </div>
+            <h1 className="font-heading text-3xl font-bold text-green-islamic md:text-4xl">
+              Al hamdoulillah, rien de préoccupant
+            </h1>
+            <p className="mt-3 text-text-secondary leading-relaxed">
+              Vos réponses ne révèlent pas de signes particuliers. Voici quelques conseils pour maintenir votre bien-être spirituel.
+            </p>
+          </div>
+
+          <QuoteCard index={1} />
+
+          {/* Preventive advice cards */}
+          <div className="mt-6 space-y-2.5">
+            {preventiveAdvice.map((advice, i) => (
+              <div key={i} className="flex items-start gap-3 rounded-xl border border-cream-dark bg-white/80 px-4 py-3.5 shadow-sm">
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-islamic" />
+                <span className="text-sm leading-relaxed text-text-primary">{advice}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Link to douas */}
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <Link
+              to="/douas"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-islamic px-8 py-3.5 font-semibold text-white shadow-md transition hover:bg-gold"
+            >
+              <BookOpen className="h-5 w-5" />
+              Découvrir les douas de protection
+            </Link>
+            <button
+              onClick={handleRestart}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-cream-dark px-6 py-3 text-sm font-medium text-text-secondary transition hover:border-green-islamic hover:text-green-islamic"
+            >
+              <RotateCcw className="h-4 w-4" />
+              Refaire le questionnaire
+            </button>
+          </div>
+
+          {/* Soft consultation CTA */}
+          {renderConsultationCTA('soft')}
+
+          {/* Disclaimer */}
+          <p className="mt-8 text-center text-xs text-text-secondary/70">
+            Ce questionnaire est un outil d'orientation et ne constitue pas un diagnostic certifié.
+          </p>
+        </div>
+      );
+    }
+
+    // ═══════════════════════════════════════════════════
+    // MODÉRÉ — 7-day light program
+    // ═══════════════════════════════════════════════════
+    if (program.severity === 'modere') {
+      const modereDays = 7;
+
+      return (
+        <div className="mx-auto max-w-2xl">
+          <div className="text-center">
+            <h1 className="font-heading text-3xl font-bold text-green-islamic md:text-4xl">
+              Quelques points d'attention identifiés
+            </h1>
+            <p className="mt-3 text-text-secondary">
+              Basé sur vos réponses, voici nos recommandations et un programme adapté.
+            </p>
+          </div>
+
+          <QuoteCard index={1} />
+
+          {/* Diagnosis summary */}
+          <div className="mt-6 rounded-2xl border border-cream-dark bg-white/80 p-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10">
+                <Heart className="h-6 w-6 text-gold" />
+              </div>
+              <div>
+                <h2 className="font-heading text-xl font-bold text-text-primary">Programme adapté — {modereDays} jours</h2>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className={`inline-block rounded-full px-3 py-0.5 text-xs font-semibold ${sev.color} ${sev.bg}`}>
+                    {sev.label}
+                  </span>
+                  <span className="text-sm text-text-secondary">{modereDays} jours</span>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-sm leading-relaxed text-text-secondary">
+              Un programme de {modereDays} jours avec des pratiques ciblées pour renforcer votre protection spirituelle.
+            </p>
+
+            {/* Analyse détaillée */}
+            {diagnosisDetails && (
+              <div className="mt-5 rounded-xl border border-cream-dark bg-cream p-4">
+                <h3 className="mb-3 text-sm font-semibold text-text-primary">Analyse de vos réponses</h3>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-lg bg-white/70 px-3 py-2.5 text-center">
+                    <div className="text-2xl font-bold text-green-islamic">{diagnosisDetails.totalSymptoms}</div>
+                    <div className="text-[11px] text-text-secondary">symptômes identifiés</div>
+                  </div>
+                  <div className="rounded-lg bg-white/70 px-3 py-2.5 text-center">
+                    <div className="text-2xl font-bold text-gold">
+                      {answers.duration === '>1an' ? '+1 an' : answers.duration === '6-12' ? '6-12 mois' : answers.duration === '1-6' ? '1-6 mois' : '<1 mois'}
+                    </div>
+                    <div className="text-[11px] text-text-secondary">durée des symptômes</div>
+                  </div>
+                </div>
+
+                {diagnosisDetails.gravityFactors.length > 0 && (
+                  <div className="mt-4">
+                    <h4 className="text-xs font-semibold text-text-primary mb-2">Points d'attention identifiés :</h4>
+                    <div className="space-y-1.5">
+                      {diagnosisDetails.gravityFactors.map((factor, i) => (
+                        <div key={i} className="flex items-start gap-2 rounded-lg bg-white/70 px-3 py-2">
+                          <span className="mt-0.5 text-gold">•</span>
+                          <span className="text-xs text-text-secondary">{factor}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Recommendations */}
+                <div className="mt-4">
+                  <h4 className="text-xs font-semibold text-text-primary mb-2">Nos recommandations :</h4>
+                  <div className="space-y-1.5">
+                    {diagnosisDetails.advice.map((a, i) => (
+                      <div key={i} className="flex items-start gap-2 rounded-lg bg-green-islamic/5 px-3 py-2">
+                        <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-islamic" />
+                        <span className="text-xs text-text-secondary">{a}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="mt-4 text-[11px] italic text-text-secondary/70 leading-relaxed">
+                  Ce diagnostic est une indication basée sur vos réponses. Il ne remplace pas l'avis d'un professionnel de santé ni celui d'un raqi qualifié.
+                </p>
+              </div>
+            )}
+
+            {/* Simplified program content */}
+            <div className="mt-6 space-y-3">
+              <h3 className="text-sm font-semibold text-text-primary">Votre programme de {modereDays} jours comprend :</h3>
+              <div className="space-y-2">
+                <div className="flex items-start gap-2 rounded-xl bg-cream px-3 py-2.5">
+                  <Sun className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                  <span className="text-sm text-text-primary">Adhkar renforcés matin et soir</span>
+                </div>
+                <div className="flex items-start gap-2 rounded-xl bg-cream px-3 py-2.5">
+                  <BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-green-islamic" />
+                  <span className="text-sm text-text-primary">Sourate Al-Baqara 1x par semaine</span>
+                </div>
+                <div className="flex items-start gap-2 rounded-xl bg-cream px-3 py-2.5">
+                  <Droplets className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                  <span className="text-sm text-text-primary">Eau coranisée quotidienne</span>
+                </div>
+                <div className="flex items-start gap-2 rounded-xl bg-cream px-3 py-2.5">
+                  <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-green-islamic" />
+                  <span className="text-sm text-text-primary">Suivi quotidien sur {modereDays} jours</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Reminder */}
+          {answers.consultedDoctor === 'non' && (
+            <div className="mt-4 rounded-xl border border-gold/30 bg-gold/5 px-4 py-3">
+              <p className="text-xs leading-relaxed text-text-secondary">
+                <span className="font-semibold text-gold">Rappel :</span> N'hésitez pas à combiner ce programme spirituel avec tous les moyens qu'Allah a mis à votre disposition pour votre bien-être.
+              </p>
+            </div>
+          )}
+
+          {/* Actions */}
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <button
+              onClick={() => {
+                if (user) {
+                  handleStartProgram();
+                } else {
+                  setShowAuthModal(true);
+                }
+              }}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-islamic px-8 py-3.5 font-semibold text-white shadow-md transition hover:bg-gold"
+            >
+              <Sparkles className="h-5 w-5" />
+              Commencer mon programme
+            </button>
+            <button
+              onClick={handleRestart}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-cream-dark px-6 py-3 text-sm font-medium text-text-secondary transition hover:border-green-islamic hover:text-green-islamic"
+            >
+              <RotateCcw className="h-4 w-4" />
+              Refaire le questionnaire
+            </button>
+          </div>
+
+          {/* Soft consultation CTA */}
+          {renderConsultationCTA('soft')}
+
+          {/* Disclaimer */}
+          <p className="mt-8 text-center text-xs text-text-secondary/70">
+            Ce questionnaire est un outil d'orientation et ne constitue pas un diagnostic certifié.
+          </p>
+        </div>
+      );
+    }
+
+    // ═══════════════════════════════════════════════════
+    // INTENSE (severe) — Full 30-day program
+    // ═══════════════════════════════════════════════════
     return (
       <div className="mx-auto max-w-2xl">
         <div className="text-center">
@@ -965,8 +1229,8 @@ export default function Programme() {
         {/* Diagnosis summary */}
         <div className="mt-6 rounded-2xl border border-cream-dark bg-white/80 p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-islamic/10">
-              <IconComp className="h-6 w-6 text-green-islamic" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
+              <Flame className="h-6 w-6 text-red-700" />
             </div>
             <div>
               <h2 className="font-heading text-xl font-bold text-text-primary">{info.title}</h2>
@@ -983,7 +1247,7 @@ export default function Programme() {
             {info.description}
           </p>
 
-          {/* ── Analyse détaillée ── */}
+          {/* Analyse détaillée */}
           {diagnosisDetails && (
             <div className="mt-5 rounded-xl border border-cream-dark bg-cream p-4">
               <h3 className="mb-3 text-sm font-semibold text-text-primary">Analyse de vos réponses</h3>
@@ -1000,7 +1264,6 @@ export default function Programme() {
                 </div>
               </div>
 
-              {/* Facteurs de gravité identifiés */}
               {diagnosisDetails.gravityFactors.length > 0 && (
                 <div className="mt-4">
                   <h4 className="text-xs font-semibold text-text-primary mb-2">Points d'attention identifiés :</h4>
@@ -1015,7 +1278,7 @@ export default function Programme() {
                 </div>
               )}
 
-              {/* Conseils personnalisés */}
+              {/* Recommendations */}
               <div className="mt-4">
                 <h4 className="text-xs font-semibold text-text-primary mb-2">Nos recommandations :</h4>
                 <div className="space-y-1.5">
@@ -1029,7 +1292,7 @@ export default function Programme() {
               </div>
 
               <p className="mt-4 text-[11px] italic text-text-secondary/70 leading-relaxed">
-                ⚠️ Ce diagnostic est une indication basée sur vos réponses. Il ne remplace pas l'avis d'un professionnel de santé ni celui d'un raqi qualifié. La roqya est bénéfique dans tous les cas, que l'on soit atteint ou non.
+                Ce diagnostic est une indication basée sur vos réponses. Il ne remplace pas l'avis d'un professionnel de santé ni celui d'un raqi qualifié. La roqya est bénéfique dans tous les cas, que l'on soit atteint ou non.
               </p>
             </div>
           )}
@@ -1090,6 +1353,9 @@ export default function Programme() {
             Refaire le questionnaire
           </button>
         </div>
+
+        {/* Visible consultation CTA for severe */}
+        {renderConsultationCTA('visible')}
 
         {/* Disclaimer */}
         <p className="mt-8 text-center text-xs text-text-secondary/70">
