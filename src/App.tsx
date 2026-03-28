@@ -61,22 +61,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/quiz"
-          element={
-            <ProtectedRoute>
-              <Quiz />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/quiz/resultat"
-          element={
-            <ProtectedRoute>
-              <QuizResultat />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz/resultat" element={<QuizResultat />} />
         <Route
           path="/profil"
           element={

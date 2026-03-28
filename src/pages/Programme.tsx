@@ -506,6 +506,8 @@ function QuoteCard({ index }: { index: number }) {
 // ═══════════════════════════════════════════════════════
 
 export default function Programme() {
+  const user = useAuthStore((s) => s.user);
+
   // Determine initial view from localStorage
   const [view, setView] = useState<View>(() => {
     const program = loadFromStorage<ProgramState>(STORAGE_KEYS.program);
@@ -1062,13 +1064,27 @@ export default function Programme() {
 
         {/* Actions */}
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <button
-            onClick={handleStartProgram}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-islamic px-8 py-3.5 font-semibold text-white shadow-md transition hover:bg-gold"
-          >
-            <Sparkles className="h-5 w-5" />
-            Commencer mon programme
-          </button>
+          {user ? (
+            <button
+              onClick={handleStartProgram}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-islamic px-8 py-3.5 font-semibold text-white shadow-md transition hover:bg-gold"
+            >
+              <Sparkles className="h-5 w-5" />
+              Commencer mon programme
+            </button>
+          ) : (
+            <div className="w-full rounded-xl border border-green-islamic/20 bg-green-islamic/5 p-5 text-center">
+              <p className="font-medium text-text-primary">
+                Créez un compte pour sauvegarder vos résultats et commencer le programme
+              </p>
+              <Link
+                to="/register"
+                className="mt-3 inline-flex items-center gap-2 rounded-xl bg-green-islamic px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-gold"
+              >
+                Créer un compte
+              </Link>
+            </div>
+          )}
           <button
             onClick={handleRestart}
             className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-cream-dark px-6 py-3 text-sm font-medium text-text-secondary transition hover:border-green-islamic hover:text-green-islamic"

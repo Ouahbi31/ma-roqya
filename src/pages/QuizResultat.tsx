@@ -1,12 +1,14 @@
 import { useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Shield, AlertTriangle, Heart, ArrowLeft, BookOpen } from 'lucide-react';
+import { Shield, AlertTriangle, Heart, ArrowLeft, BookOpen, UserPlus } from 'lucide-react';
 import { sampleArticles } from '../data/articles';
 import { sampleDouas } from '../data/douas';
+import { useAuthStore } from '../store/authStore';
 
 export default function QuizResultat() {
   const { t } = useTranslation();
   const location = useLocation();
+  const user = useAuthStore((s) => s.user);
   const { score = 0, total = 36 } = (location.state as { score: number; total: number }) || {};
 
   const percentage = Math.round((score / total) * 100);
@@ -99,12 +101,27 @@ export default function QuizResultat() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <button className="btn-primary">{t('quiz.save_results')}</button>
-            <Link to="/dashboard" className="btn-secondary text-center">
-              {t('nav.dashboard')}
-            </Link>
-          </div>
+          {user ? (
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <button className="btn-primary">{t('quiz.save_results')}</button>
+              <Link to="/dashboard" className="btn-secondary text-center">
+                {t('nav.dashboard')}
+              </Link>
+            </div>
+          ) : (
+            <div className="mt-2 rounded-xl border border-green-islamic/20 bg-green-islamic/5 p-5 text-center">
+              <UserPlus size={24} className="mx-auto mb-2 text-green-islamic" />
+              <p className="font-medium text-text-primary">
+                Créez un compte pour sauvegarder vos résultats
+              </p>
+              <Link
+                to="/register"
+                className="mt-3 inline-flex items-center gap-2 rounded-xl bg-green-islamic px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-gold"
+              >
+                Créer un compte
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
