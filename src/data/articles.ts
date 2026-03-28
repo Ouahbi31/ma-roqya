@@ -1352,11 +1352,6 @@ export const sampleArticles: Article[] = [
         type: 'paragraph',
         text: "L'une des erreurs les plus fréquentes dans le monde de la roqya est de tout attribuer au Shaytan ou aux djinns. Chaque difficulté, chaque émotion négative, chaque blocage est immédiatement interprété comme une attaque spirituelle. Or, la réalité est bien plus nuancée que cela.",
       },
-      {
-        type: 'video',
-        youtubeId: 'WkLT_9OAqAE',
-        caption: 'Comprendre la différence entre influence spirituelle et troubles psychologiques',
-      },
       { type: 'heading', level: 2, text: 'Le nafs : un ennemi intérieur souvent ignoré' },
       {
         type: 'paragraph',
@@ -1411,11 +1406,6 @@ export const sampleArticles: Article[] = [
         type: 'paragraph',
         text: "Derrière chaque personne qui consulte un raqi, il y a une histoire de souffrance. Des nuits blanches, des relations brisées, une vie qui s'effondre sans explication apparente. Mais il y a aussi des histoires de renaissance. Des personnes qui ont traversé les ténèbres et retrouvé la lumière, bi idhnillah.",
       },
-      {
-        type: 'video',
-        youtubeId: 'jOElPCAtBKg',
-        caption: 'Témoignages de personnes transformées par la roqya',
-      },
       { type: 'heading', level: 2, text: 'Le parcours de la guérison' },
       {
         type: 'paragraph',
@@ -1463,11 +1453,6 @@ export const sampleArticles: Article[] = [
       {
         type: 'paragraph',
         text: "La meilleure roqya est celle que l'on fait avant d'en avoir besoin. La prévention spirituelle est un devoir pour tout musulman. Le Prophète (paix et salut sur lui) nous a laissé un arsenal complet d'invocations et de pratiques pour nous protéger au quotidien. Le problème, c'est que beaucoup les négligent.",
-      },
-      {
-        type: 'video',
-        youtubeId: 'NREim4sREjQ',
-        caption: 'Les pratiques quotidiennes de protection spirituelle',
       },
       { type: 'heading', level: 2, text: 'Les adhkar du matin et du soir' },
       {
@@ -1531,11 +1516,6 @@ export const sampleArticles: Article[] = [
       {
         type: 'paragraph',
         text: "Quand j'ai commencé à pratiquer la roqya il y a quinze ans, je pensais que tout se résumait à réciter le Coran sur le malade et attendre qu'Allah fasse le reste. Avec le temps, j'ai compris que la réalité était infiniment plus complexe, et que la roqya seule ne suffisait pas toujours.",
-      },
-      {
-        type: 'video',
-        youtubeId: 'AoZ-9GOHLf0',
-        caption: 'Les leçons de 15 ans de pratique de la roqya',
       },
       { type: 'heading', level: 2, text: "La roqya n'est pas une baguette magique" },
       {
