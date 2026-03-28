@@ -1331,4 +1331,249 @@ export const sampleArticles: Article[] = [
       },
     ],
   },
+
+  // 9 -----------------------------------------------------------------------
+  {
+    id: 'art-shaytan-ou-nafs',
+    slug: 'shaytan-ou-nafs-comment-faire-la-difference',
+    title: 'Est-ce le Shaytan ou ton Nafs ? Comment faire la différence',
+    excerpt:
+      "Tous les troubles ne sont pas d'origine spirituelle. Apprenez à distinguer ce qui relève du Shaytan de ce qui relève de votre propre nafs ou d'un trouble psychologique.",
+    category: 'psycho-roqya',
+    imageUrl: '/images/articles/shaytan-ou-nafs.png',
+    imageGradient: 'bg-gradient-to-br from-amber-700 via-amber-500 to-yellow-400',
+    author: authorYoussef,
+    date: '2026-03-22',
+    readTime: 10,
+    featured: false,
+    tags: ['psycho-roqya', 'nafs', 'shaytan', 'discernement', 'psychologie'],
+    content: [
+      {
+        type: 'paragraph',
+        text: "L'une des erreurs les plus fréquentes dans le monde de la roqya est de tout attribuer au Shaytan ou aux djinns. Chaque difficulté, chaque émotion négative, chaque blocage est immédiatement interprété comme une attaque spirituelle. Or, la réalité est bien plus nuancée que cela.",
+      },
+      {
+        type: 'video',
+        youtubeId: 'WkLT_9OAqAE',
+        caption: 'Comprendre la différence entre influence spirituelle et troubles psychologiques',
+      },
+      { type: 'heading', level: 2, text: 'Le nafs : un ennemi intérieur souvent ignoré' },
+      {
+        type: 'paragraph',
+        text: "Le Coran mentionne clairement que le nafs (l'âme) peut pousser l'être humain vers le mal. Ce n'est pas toujours le Shaytan qui est en cause. Parfois, ce sont nos propres penchants, nos blessures émotionnelles non résolues, nos traumas ou encore des troubles anxieux et dépressifs qui se manifestent.",
+      },
+      {
+        type: 'arabic',
+        text: 'إِنَّ النَّفْسَ لَأَمَّارَةٌ بِالسُّوءِ إِلَّا مَا رَحِمَ رَبِّي',
+        translation: "Certes, l'âme est très instigatrice du mal, sauf celle que mon Seigneur protège par Sa miséricorde.",
+        source: 'Sourate Youssouf, 12:53',
+      },
+      { type: 'heading', level: 2, text: "Les signes d'une cause spirituelle" },
+      {
+        type: 'paragraph',
+        text: "Certains signes peuvent orienter vers une cause spirituelle : des réactions inhabituelles lors de la récitation du Coran, des cauchemars récurrents impliquant des animaux ou des poursuites, un changement brutal de comportement sans cause apparente, ou encore des blocages inexplicables dans la vie malgré tous les efforts déployés.",
+      },
+      { type: 'heading', level: 2, text: "Les signes d'une cause psychologique" },
+      {
+        type: 'paragraph',
+        text: "En revanche, d'autres signes orientent davantage vers une cause psychologique : un historique de traumatismes, un environnement familial toxique, des symptômes progressifs et non soudains, ou une amélioration notable avec un suivi psychologique. L'anxiété, la dépression et le stress post-traumatique peuvent mimer des symptômes spirituels.",
+      },
+      {
+        type: 'callout',
+        variant: 'info',
+        text: "La démarche recommandée est de consulter à la fois un raqi de confiance ET un psychologue compétent. La Psycho-Roqya combine les deux approches pour un accompagnement complet. Ne négligez ni l'une ni l'autre.",
+      },
+      { type: 'heading', level: 2, text: 'La méthode du discernement' },
+      {
+        type: 'paragraph',
+        text: "Avant de conclure quoi que ce soit, prenez du recul. Analysez vos symptômes avec honnêteté. Demandez-vous : est-ce que ces troubles existaient avant un événement précis ? Est-ce que j'ai des antécédents familiaux de troubles psychologiques ? Est-ce que la récitation du Coran provoque des réactions physiques inhabituelles ? Le discernement est une qualité essentielle que tout musulman doit cultiver.",
+      },
+    ],
+  },
+
+  // 10 ----------------------------------------------------------------------
+  {
+    id: 'art-temoignages-roqya-transforme',
+    slug: 'temoignages-quand-la-roqya-transforme-des-vies',
+    title: 'Témoignages : quand la roqya transforme des vies',
+    excerpt:
+      "Des parcours de guérison inspirants qui montrent que la roqya, pratiquée avec foi et persévérance, peut transformer des vies brisées par les maux spirituels.",
+    category: 'temoignages',
+    imageUrl: '/images/articles/temoignages-roqya.png',
+    imageGradient: 'bg-gradient-to-br from-pink-700 via-pink-500 to-rose-400',
+    author: authorYoussef,
+    date: '2026-03-24',
+    readTime: 9,
+    featured: false,
+    tags: ['témoignages', 'guérison', 'roqya', 'espoir', 'persévérance'],
+    content: [
+      {
+        type: 'paragraph',
+        text: "Derrière chaque personne qui consulte un raqi, il y a une histoire de souffrance. Des nuits blanches, des relations brisées, une vie qui s'effondre sans explication apparente. Mais il y a aussi des histoires de renaissance. Des personnes qui ont traversé les ténèbres et retrouvé la lumière, bi idhnillah.",
+      },
+      {
+        type: 'video',
+        youtubeId: 'jOElPCAtBKg',
+        caption: 'Témoignages de personnes transformées par la roqya',
+      },
+      { type: 'heading', level: 2, text: 'Le parcours de la guérison' },
+      {
+        type: 'paragraph',
+        text: "La guérison par la roqya n'est pas un événement ponctuel : c'est un parcours. Un frère nous raconte qu'il a souffert pendant trois ans de blocages inexplicables dans sa vie professionnelle et conjugale. Malgré ses compétences, tout échouait. Après avoir entamé un programme de roqya shar'iyya combiné à un suivi psychologique, les choses ont progressivement changé.",
+      },
+      { type: 'heading', level: 2, text: "L'importance de la persévérance" },
+      {
+        type: 'paragraph',
+        text: "Ce que tous ces témoignages ont en commun, c'est la persévérance. Aucune guérison n'a été instantanée. Il y a eu des hauts et des bas, des moments de doute, des rechutes. Mais ceux qui ont tenu bon, qui ont maintenu leurs adhkar, leur récitation quotidienne et leur confiance en Allah, ont fini par voir la lumière au bout du tunnel.",
+      },
+      {
+        type: 'quote',
+        text: "J'ai failli tout abandonner au bout de six mois. Je ne voyais aucune amélioration. Puis un jour, je me suis réveillée et j'ai senti que quelque chose avait changé. Le poids que je portais depuis des années avait disparu. Al-hamdoulillah.",
+        author: 'Témoignage anonyme',
+      },
+      { type: 'heading', level: 2, text: 'La foi comme moteur' },
+      {
+        type: 'paragraph',
+        text: "Chaque personne guérie insiste sur un point : c'est la relation avec Allah qui a fait la différence. Pas seulement la roqya comme acte technique, mais le retour sincère vers Allah, la prière de nuit, le repentir, l'abandon des péchés. La roqya est un moyen, mais c'est Allah qui guérit.",
+      },
+      {
+        type: 'callout',
+        variant: 'tip',
+        text: "Si vous traversez une épreuve spirituelle, ne perdez jamais espoir. Chaque verset récité, chaque invocation prononcée avec sincérité est une arme puissante. La victoire appartient à ceux qui persévèrent. Allah ne laisse jamais Ses serviteurs sans secours.",
+      },
+    ],
+  },
+
+  // 11 ----------------------------------------------------------------------
+  {
+    id: 'art-protection-spirituelle-quotidien',
+    slug: 'se-proteger-spirituellement-au-quotidien',
+    title: 'Se protéger spirituellement au quotidien',
+    excerpt:
+      "Un guide pratique des actes de protection spirituelle à intégrer dans votre routine quotidienne pour vous prémunir contre le mauvais oeil, la sorcellerie et les influences négatives.",
+    category: 'prevention',
+    imageUrl: '/images/articles/protection-quotidienne.png',
+    imageGradient: 'bg-gradient-to-br from-emerald-700 via-emerald-500 to-teal-400',
+    author: authorYoussef,
+    date: '2026-03-26',
+    readTime: 8,
+    featured: false,
+    tags: ['protection', 'adhkar', 'prévention', 'routine', 'Al-Baqara'],
+    content: [
+      {
+        type: 'paragraph',
+        text: "La meilleure roqya est celle que l'on fait avant d'en avoir besoin. La prévention spirituelle est un devoir pour tout musulman. Le Prophète (paix et salut sur lui) nous a laissé un arsenal complet d'invocations et de pratiques pour nous protéger au quotidien. Le problème, c'est que beaucoup les négligent.",
+      },
+      {
+        type: 'video',
+        youtubeId: 'NREim4sREjQ',
+        caption: 'Les pratiques quotidiennes de protection spirituelle',
+      },
+      { type: 'heading', level: 2, text: 'Les adhkar du matin et du soir' },
+      {
+        type: 'paragraph',
+        text: "Les adhkar du matin (après Fajr) et du soir (après Asr) constituent votre bouclier spirituel principal. Ils incluent notamment Ayat al-Kursi, les trois dernières sourates du Coran (Al-Ikhlas, Al-Falaq, An-Nas) récitées trois fois, et les invocations prophétiques de protection. Ne les négligez jamais, même quand vous êtes pressé.",
+      },
+      {
+        type: 'arabic',
+        text: 'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ',
+        translation: "Au nom d'Allah, Celui dont le nom protège de tout mal sur terre et dans les cieux. Il est l'Audient, l'Omniscient.",
+        source: 'Hadith rapporté par At-Tirmidhi et Abou Daoud — à réciter 3 fois matin et soir',
+      },
+      { type: 'heading', level: 2, text: "Le pouvoir de Sourate Al-Baqara" },
+      {
+        type: 'paragraph',
+        text: "Le Prophète (paix et salut sur lui) a dit que le Shaytan fuit la maison dans laquelle on récite Sourate Al-Baqara. Faites-en une habitude : récitez-la chez vous au moins une fois tous les trois jours. Si vous ne pouvez pas la réciter en entier, écoutez-la en audio. L'essentiel est que cette sourate soit présente dans votre foyer.",
+      },
+      { type: 'heading', level: 2, text: 'Les péchés qui affaiblissent la protection' },
+      {
+        type: 'paragraph',
+        text: "Il ne sert à rien de réciter des adhkar le matin si l'on passe la nuit dans le haram. Les péchés créent des brèches dans la protection spirituelle. La musique, le regard illicite, la médisance, la négligence des prières obligatoires : tout cela affaiblit votre bouclier et vous rend vulnérable aux attaques spirituelles.",
+      },
+      { type: 'heading', level: 2, text: 'Votre checklist de protection quotidienne' },
+      {
+        type: 'list',
+        items: [
+          'Adhkar du matin après Salat al-Fajr (Ayat al-Kursi, les 3 Qul, invocations prophétiques)',
+          'Adhkar du soir après Salat al-Asr',
+          'Bismillah avant de manger, de boire, de rentrer chez soi',
+          "Récitation ou écoute de Sourate Al-Baqara dans la maison (au moins tous les 3 jours)",
+          'Prières obligatoires accomplies à l\'heure',
+          'Invocation avant de dormir et les 3 dernières sourates soufflées dans les mains',
+          'Éviter les péchés majeurs et demander le pardon (istighfar) régulièrement',
+          'Faire la prière de Witr avant de dormir',
+        ],
+      },
+      {
+        type: 'callout',
+        variant: 'tip',
+        text: "La régularité est plus importante que la quantité. Mieux vaut des adhkar courts mais constants que de longues récitations occasionnelles. Le Prophète (paix et salut sur lui) a dit que les actes les plus aimés d'Allah sont les plus réguliers, même s'ils sont peu nombreux.",
+      },
+    ],
+  },
+
+  // 12 ----------------------------------------------------------------------
+  {
+    id: 'art-15-ans-de-roqya',
+    slug: 'ce-que-15-ans-de-roqya-mont-appris',
+    title: "Ce que 15 ans de roqya m'ont appris",
+    excerpt:
+      "Après 15 ans de pratique de la roqya et d'accompagnement de centaines de patients, Dr Frère Muz partage les leçons les plus importantes de son parcours.",
+    category: 'conseils',
+    imageUrl: '/images/articles/15-ans-roqya.png',
+    imageGradient: 'bg-gradient-to-br from-amber-700 via-amber-600 to-orange-500',
+    author: authorYoussef,
+    date: '2026-03-28',
+    readTime: 12,
+    featured: false,
+    tags: ['conseils', 'expérience', 'psycho-roqya', 'charlatans', 'sagesse'],
+    content: [
+      {
+        type: 'paragraph',
+        text: "Quand j'ai commencé à pratiquer la roqya il y a quinze ans, je pensais que tout se résumait à réciter le Coran sur le malade et attendre qu'Allah fasse le reste. Avec le temps, j'ai compris que la réalité était infiniment plus complexe, et que la roqya seule ne suffisait pas toujours.",
+      },
+      {
+        type: 'video',
+        youtubeId: 'AoZ-9GOHLf0',
+        caption: 'Les leçons de 15 ans de pratique de la roqya',
+      },
+      { type: 'heading', level: 2, text: "La roqya n'est pas une baguette magique" },
+      {
+        type: 'paragraph',
+        text: "La première leçon, et peut-être la plus importante, c'est que la roqya n'est pas un remède miracle instantané. J'ai vu trop de gens venir en espérant qu'une seule séance allait tout résoudre. La guérison est un processus qui demande du temps, de la patience et surtout un engagement personnel du malade dans sa propre guérison.",
+      },
+      { type: 'heading', level: 2, text: "Pourquoi j'ai intégré la psychologie" },
+      {
+        type: 'paragraph',
+        text: "Au fil des années, j'ai réalisé qu'un pourcentage significatif des personnes qui venaient me voir pour de la roqya souffraient en réalité de troubles psychologiques. Anxiété, dépression, trauma, troubles de la personnalité. Les symptômes ressemblaient à s'y méprendre à ceux d'un mass ou d'un sihr. C'est pour cela que j'ai développé l'approche Psycho-Roqya : allier le soin spirituel au soin psychologique.",
+      },
+      { type: 'heading', level: 2, text: 'Les erreurs que je vois le plus souvent' },
+      {
+        type: 'list',
+        items: [
+          "Consulter des dizaines de raqis différents sans jamais suivre un programme complet avec un seul d'entre eux.",
+          "Négliger les adhkar quotidiens tout en multipliant les séances de roqya — c'est comme prendre un médicament en salle de consultation puis ne plus rien faire chez soi.",
+          "Attribuer chaque problème de la vie au sihr ou au 'ayn sans aucune remise en question personnelle.",
+          "Refuser catégoriquement toute aide psychologique par peur du stigmate ou par méconnaissance.",
+          "Tomber dans les filets de charlatans qui exploitent la détresse des gens.",
+        ],
+      },
+      { type: 'heading', level: 2, text: 'Comment repérer un charlatan' },
+      {
+        type: 'callout',
+        variant: 'warning',
+        text: "Méfiez-vous de tout praticien qui : demande le nom de votre mère, utilise des talismans ou des écritures incompréhensibles, vous isole dans une pièce fermée, exige des sommes exorbitantes, prétend pouvoir diagnostiquer à distance avec certitude, ou vous rend dépendant de ses séances. Un vrai raqi vous apprend à vous soigner vous-même.",
+      },
+      { type: 'heading', level: 2, text: 'Mon conseil à ceux qui souffrent' },
+      {
+        type: 'paragraph',
+        text: "Si je pouvais donner un seul conseil après ces quinze années, ce serait celui-ci : ne déléguez pas votre guérison. Le raqi est un accompagnant, pas un sauveur. C'est vous qui devez faire le travail : réciter vos adhkar, prier vos prières, abandonner les péchés, travailler sur vous-même. La roqya est un catalyseur, mais le vrai changement vient de votre relation personnelle avec Allah.",
+      },
+      {
+        type: 'quote',
+        text: "La roqya la plus puissante est celle que vous faites sur vous-même, avec sincérité, en pleine nuit, quand personne ne vous voit sauf Allah.",
+        author: 'Dr Frère Muz',
+      },
+    ],
+  },
 ];
