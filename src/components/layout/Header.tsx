@@ -95,11 +95,8 @@ export default function Header() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-14 md:h-16 items-center justify-between">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
-              <Star className="h-5 w-5 md:h-6 md:w-6 text-gold fill-gold" />
-              <span className="font-heading text-lg md:text-xl font-bold text-green-islamic">
-                MaRoqya
-              </span>
+            <Link to="/" className="flex items-center">
+              <img src="/images/logo-maroqya.png" alt="MaRoqya" className="h-8 md:h-10" />
             </Link>
 
             {/* Desktop nav */}
