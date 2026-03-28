@@ -353,15 +353,50 @@ function RecentVideos() {
 
 const ARTICLES_PER_PAGE = 9;
 
+interface ArticleOverride {
+  id: string;
+  title: string | null;
+  excerpt: string | null;
+  category: string | null;
+  deleted: boolean;
+}
+
 export default function Articles() {
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const tabsRef = useRef<HTMLDivElement>(null);
+  const [overrides, setOverrides] = useState<ArticleOverride[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from('article_overrides')
+      .select('id, title, excerpt, category, deleted')
+      .then(({ data }) => {
+        if (data) setOverrides(data as ArticleOverride[]);
+      });
+  }, []);
+
+  // --- merge hardcoded data with Supabase overrides ---
+  const articles = useMemo(() => {
+    return sampleArticles
+      .map((article) => {
+        const override = overrides.find((o) => o.id === article.id);
+        if (!override) return article;
+        if (override.deleted) return null;
+        return {
+          ...article,
+          title: override.title ?? article.title,
+          excerpt: override.excerpt ?? article.excerpt,
+          category: (override.category as ArticleCategory) ?? article.category,
+        };
+      })
+      .filter((a): a is Article => a !== null);
+  }, [overrides]);
 
   // --- filter & search ---
   const filtered = useMemo(() => {
-    let list = sampleArticles;
+    let list = articles;
     if (activeFilter !== 'all') {
       list = list.filter((a) => a.category === activeFilter);
     }
@@ -375,10 +410,10 @@ export default function Articles() {
       );
     }
     return list;
-  }, [activeFilter, searchQuery]);
+  }, [activeFilter, searchQuery, articles]);
 
   // --- featured article (always the first featured, regardless of filter) ---
-  const featuredArticle = sampleArticles.find((a) => a.featured) ?? sampleArticles[0];
+  const featuredArticle = articles.find((a) => a.featured) ?? articles[0];
 
   // --- paginated articles (exclude the featured from the grid) ---
   const gridArticles = filtered.filter((a) => a.id !== featuredArticle.id);
@@ -561,8 +596,8 @@ export default function Articles() {
 
           {/* ── Right: sidebar ──────────────────────────────────── */}
           <aside className="w-full shrink-0 space-y-6 lg:w-80">
-            <PopularArticles articles={sampleArticles} />
-            <CategoriesList articles={sampleArticles} />
+            <PopularArticles articles={articles} />
+            <CategoriesList articles={articles} />
             <NewsletterCard />
             <RecentVideos />
           </aside>
