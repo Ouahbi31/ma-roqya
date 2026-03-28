@@ -25,6 +25,9 @@ import AdminRoute from './components/auth/AdminRoute';
 import ReservationConfirmee from './pages/ReservationConfirmee';
 import QuiSuisJe from './pages/QuiSuisJe';
 import PremiumSuccess from './pages/PremiumSuccess';
+import MentionsLegales from './pages/MentionsLegales';
+import PolitiqueConfidentialite from './pages/PolitiqueConfidentialite';
+import ConditionsUtilisation from './pages/ConditionsUtilisation';
 
 export default function App() {
   const { i18n } = useTranslation();
@@ -57,6 +60,9 @@ export default function App() {
         <Route path="/programme" element={<Programme />} />
         <Route path="/qui-suis-je" element={<QuiSuisJe />} />
         <Route path="/premium-success" element={<PremiumSuccess />} />
+        <Route path="/mentions-legales" element={<MentionsLegales />} />
+        <Route path="/confidentialite" element={<PolitiqueConfidentialite />} />
+        <Route path="/cgu" element={<ConditionsUtilisation />} />
         <Route
           path="/dashboard"
           element={
