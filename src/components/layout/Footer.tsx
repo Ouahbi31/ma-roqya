@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Star } from 'lucide-react';
+
 
 export default function Footer() {
   const { t } = useTranslation();
