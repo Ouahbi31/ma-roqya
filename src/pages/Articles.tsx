@@ -337,7 +337,7 @@ function RecentVideos() {
   if (videos.length === 0) return null;
 
   return (
-    <div className="card-islamic p-5">
+    <div id="videos" className="card-islamic p-5 scroll-mt-24">
       <h3 className="flex items-center gap-2 font-heading text-lg font-bold text-text-primary">
         <Play size={18} className="text-gold" />
         Vidéos récentes

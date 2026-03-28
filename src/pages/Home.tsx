@@ -21,7 +21,7 @@ const resourceCards = [
   { icon: BookOpen, label: 'Articles', desc: 'Comprendre la roqya', to: '/articles' },
   { icon: Heart, label: 'Douas', desc: 'Invocations de protection', to: '/douas' },
   { icon: MessageCircle, label: 'Forum', desc: 'Échangez avec la communauté', to: '/forum' },
-  { icon: Play, label: 'Vidéos', desc: 'Contenus éducatifs', to: '/articles' },
+  { icon: Play, label: 'Vidéos', desc: 'Contenus éducatifs', to: '/articles#videos' },
   { icon: ClipboardCheck, label: 'Quiz', desc: 'Évaluez votre situation', to: '/quiz' },
   { icon: Calendar, label: 'Programme', desc: 'Votre parcours de guérison', to: '/programme' },
 ];
