@@ -56,8 +56,8 @@ export const categoryMeta: Record<
 > = {
   ruqya: {
     label: 'Roqya & Guérison',
-    color: 'text-green-800',
-    bg: 'bg-green-100',
+    color: 'text-blue-800',
+    bg: 'bg-blue-100',
   },
   'psycho-roqya': {
     label: 'Psycho-Roqya',
@@ -81,8 +81,8 @@ export const categoryMeta: Record<
   },
   prevention: {
     label: 'Prévention & Protection',
-    color: 'text-emerald-700',
-    bg: 'bg-emerald-100',
+    color: 'text-blue-700',
+    bg: 'bg-blue-100',
   },
   conseils: {
     label: 'Conseils Pratiques',
@@ -129,7 +129,7 @@ export const sampleArticles: Article[] = [
       "Découvrez ce qu'est la roqya légitime selon le Coran et la Sunnah, ses conditions de validité et pourquoi elle reste le seul remède spirituel autorisé en islam.",
     category: 'ruqya',
     imageUrl: '/images/articles/ruqya-shariyya.png',
-    imageGradient: 'bg-gradient-to-br from-green-700 via-green-600 to-emerald-500',
+    imageGradient: 'bg-gradient-to-br from-blue-700 via-blue-600 to-sky-500',
     author: authorYoussef,
     date: '2026-03-20',
     readTime: 10,
@@ -437,7 +437,7 @@ export const sampleArticles: Article[] = [
       "Les vertus immenses de la sourate Al-Baqara pour la protection du foyer et comment l'intégrer dans votre routine spirituelle.",
     category: 'prevention',
     imageUrl: '/images/articles/sourate-baqara.png',
-    imageGradient: 'bg-gradient-to-br from-emerald-600 via-green-500 to-teal-400',
+    imageGradient: 'bg-gradient-to-br from-blue-600 via-sky-500 to-cyan-400',
     author: authorAhmad,
     date: '2026-02-28',
     readTime: 7,
@@ -579,7 +579,7 @@ export const sampleArticles: Article[] = [
       "Reconnaître les signes positifs de progrès dans votre parcours de roqya. Des indicateurs concrets qui montrent que vous avancez vers la guérison.",
     category: 'ruqya',
     imageUrl: '/images/articles/signes-guerison.png',
-    imageGradient: 'bg-gradient-to-br from-green-500 via-emerald-400 to-lime-300',
+    imageGradient: 'bg-gradient-to-br from-sky-500 via-blue-400 to-cyan-300',
     author: authorYoussef,
     date: '2026-02-10',
     readTime: 6,
@@ -1443,7 +1443,7 @@ export const sampleArticles: Article[] = [
       "Un guide pratique des actes de protection spirituelle à intégrer dans votre routine quotidienne pour vous prémunir contre le mauvais oeil, la sorcellerie et les influences négatives.",
     category: 'prevention',
     imageUrl: '/images/articles/protection-quotidienne.png',
-    imageGradient: 'bg-gradient-to-br from-emerald-700 via-emerald-500 to-teal-400',
+    imageGradient: 'bg-gradient-to-br from-blue-700 via-blue-500 to-sky-400',
     author: authorYoussef,
     date: '2026-03-26',
     readTime: 8,

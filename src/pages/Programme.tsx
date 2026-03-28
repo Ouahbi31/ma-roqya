@@ -956,7 +956,7 @@ export default function Programme() {
       <div className={`mt-6 rounded-2xl border px-5 py-5 ${
         variant === 'visible'
           ? 'border-green-islamic/20 bg-green-islamic/5'
-          : 'border-cream-dark bg-[#faf7f2]'
+          : 'border-cream-dark bg-[#F5F9FF]'
       }`}>
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-islamic/10">

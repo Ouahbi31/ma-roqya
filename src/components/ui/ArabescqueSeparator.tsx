@@ -10,7 +10,7 @@ export default function ArabescqueSeparator({
       className={`my-6 h-[2px] w-full ${className}`}
       style={{
         background:
-          "linear-gradient(to right, transparent, #B5832A, #2D6A4F, #B5832A, transparent)",
+          "linear-gradient(to right, transparent, #F5A623, #2E6AB8, #F5A623, transparent)",
       }}
     />
   );

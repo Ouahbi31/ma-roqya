@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #F7F2E9;
-  --color-cream-dark: #EDE5D4;
-  --color-green-islamic: #2D6A4F;
-  --color-green-light: #52B788;
-  --color-gold: #B5832A;
-  --color-gold-light: #D4A84B;
-  --color-text-primary: #2C2A26;
-  --color-text-secondary: #6B6459;
+  --color-cream: #F0F7FF;
+  --color-cream-dark: #D6E8FF;
+  --color-green-islamic: #2E6AB8;
+  --color-green-light: #4A90D9;
+  --color-gold: #D4880A;
+  --color-gold-light: #F5A623;
+  --color-text-primary: #1A2942;
+  --color-text-secondary: #5A6B82;
 
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Nunito', sans-serif;
@@ -73,7 +73,7 @@
   .card-islamic {
     background-color: white;
     border-radius: 1rem;
-    box-shadow: 0 2px 12px rgba(44, 42, 38, 0.06);
+    box-shadow: 0 2px 12px rgba(26, 41, 66, 0.06);
     border: 1px solid var(--color-cream-dark);
   }
 

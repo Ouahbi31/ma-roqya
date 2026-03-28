@@ -268,7 +268,7 @@ function CategoriesList({ articles }: { articles: Article[] }) {
 function NewsletterCard() {
   return (
     <div className="card-islamic overflow-hidden">
-      <div className="bg-gradient-to-br from-green-islamic to-emerald-600 p-5 text-white">
+      <div className="bg-gradient-to-br from-green-islamic to-blue-500 p-5 text-white">
         <Mail size={28} className="mb-3 opacity-80" />
         <h3 className="font-heading text-lg font-bold">Newsletter</h3>
         <p className="mt-1 text-sm text-white/80">

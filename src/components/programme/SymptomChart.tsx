@@ -73,7 +73,7 @@ export default function SymptomChart() {
   // Zone remplie sous la courbe
   const areaPath = `${linePath} L ${getX(dataPoints[dataPoints.length - 1].week)} ${getY(0)} L ${getX(dataPoints[0].week)} ${getY(0)} Z`;
 
-  const lineColor = trend === 'improving' ? '#2D6A4F' : trend === 'worsening' ? '#DC2626' : '#B5832A';
+  const lineColor = trend === 'improving' ? '#2E6AB8' : trend === 'worsening' ? '#DC2626' : '#F5A623';
 
   return (
     <div className="space-y-4">
@@ -136,7 +136,7 @@ export default function SymptomChart() {
                 y1={getY(val)}
                 x2={width - paddingX}
                 y2={getY(val)}
-                stroke="#EDE5D4"
+                stroke="#D6E8FF"
                 strokeWidth={1}
               />
               <text
