@@ -1340,8 +1340,8 @@ export const sampleArticles: Article[] = [
     excerpt:
       "Tous les troubles ne sont pas d'origine spirituelle. Apprenez à distinguer ce qui relève du Shaytan de ce qui relève de votre propre nafs ou d'un trouble psychologique.",
     category: 'psycho-roqya',
-    imageUrl: '/images/articles/shaytan-ou-nafs.png',
-    imageGradient: 'bg-gradient-to-br from-amber-700 via-amber-500 to-yellow-400',
+    imageUrl: '/images/article-shaytan-nafs.jpg',
+    imageGradient: '',
     author: authorYoussef,
     date: '2026-03-22',
     readTime: 10,
