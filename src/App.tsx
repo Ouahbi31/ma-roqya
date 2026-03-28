@@ -11,6 +11,7 @@ import Tarifs from './pages/Tarifs';
 import Dashboard from './pages/Dashboard';
 import Articles from './pages/Articles';
 import ArticleDetail from './pages/ArticleDetail';
+import Videos from './pages/Videos';
 import Douas from './pages/Douas';
 import Quiz from './pages/Quiz';
 import QuizResultat from './pages/QuizResultat';
@@ -47,6 +48,7 @@ export default function App() {
         <Route path="/reservation-confirmee" element={<ReservationConfirmee />} />
         <Route path="/articles" element={<Articles />} />
         <Route path="/articles/:id" element={<ArticleDetail />} />
+        <Route path="/videos" element={<Videos />} />
         <Route path="/douas" element={<Douas />} />
         <Route path="/forum" element={<Forum />} />
         <Route path="/forum/:id" element={<ForumPostPage />} />

@@ -148,10 +148,6 @@ function HeroBanner({ article }: { article: Article }) {
         </p>
         <div className="mt-4 flex items-center gap-4 text-xs text-white/70 sm:text-sm">
           <span>{formatDate(article.date)}</span>
-          <span className="opacity-50">|</span>
-          <span className="flex items-center gap-1">
-            <Clock size={14} /> {article.readTime} min
-          </span>
         </div>
       </div>
     </Link>
@@ -176,10 +172,6 @@ function LargeCard({ article }: { article: Article }) {
         </p>
         <div className="mt-4 flex items-center gap-3 text-xs text-text-secondary">
           <span>{formatDate(article.date)}</span>
-          <span className="opacity-40">|</span>
-          <span className="flex items-center gap-1">
-            <Clock size={12} /> {article.readTime} min
-          </span>
         </div>
       </div>
     </Link>
@@ -202,11 +194,6 @@ function SmallCard({ article }: { article: Article }) {
         <p className="mt-1.5 line-clamp-2 flex-1 text-sm text-text-secondary">
           {article.excerpt}
         </p>
-        <div className="mt-3 flex items-center gap-2 text-xs text-text-secondary">
-          <span className="flex items-center gap-1">
-            <Clock size={12} /> {article.readTime} min
-          </span>
-        </div>
       </div>
     </Link>
   );
@@ -235,9 +222,6 @@ function PopularArticles({ articles }: { articles: Article[] }) {
               <p className="line-clamp-2 text-sm font-semibold text-text-primary group-hover:text-green-islamic">
                 {a.title}
               </p>
-              <span className="mt-1 flex items-center gap-1 text-xs text-text-secondary">
-                <Clock size={10} /> {a.readTime} min
-              </span>
             </div>
           </Link>
         ))}
