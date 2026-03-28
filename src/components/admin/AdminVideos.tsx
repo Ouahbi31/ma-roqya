@@ -69,7 +69,8 @@ export default function AdminVideos() {
     });
 
     if (insertError) {
-      setError(insertError.message);
+      console.error('Insert error:', insertError);
+      setError(insertError.message || 'Erreur lors de l\'ajout. Déconnectez-vous et reconnectez-vous.');
     } else {
       setSuccess('Vidéo ajoutée avec succès.');
       setUrl('');
