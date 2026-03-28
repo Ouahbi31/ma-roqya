@@ -364,7 +364,11 @@ interface ArticleOverride {
 export default function Articles() {
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [page, setPage] = useState(1);
+  const [page, setPageRaw] = useState(1);
+  const setPage = (v: number | ((p: number) => number)) => {
+    setPageRaw(v);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   const tabsRef = useRef<HTMLDivElement>(null);
   const [overrides, setOverrides] = useState<ArticleOverride[]>([]);
 
