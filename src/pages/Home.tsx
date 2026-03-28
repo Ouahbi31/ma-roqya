@@ -7,10 +7,24 @@ import {
   ClipboardList,
   BarChart3,
   Users,
+  BookOpen,
+  Heart,
+  Play,
+  ClipboardCheck,
+  Calendar,
 } from 'lucide-react';
 import SEO from '../components/SEO';
 
 const featureIcons = [Book, MessageCircle, Video, ClipboardList, BarChart3, Users];
+
+const resourceCards = [
+  { icon: BookOpen, label: 'Articles', desc: 'Comprendre la roqya', to: '/articles' },
+  { icon: Heart, label: 'Douas', desc: 'Invocations de protection', to: '/douas' },
+  { icon: MessageCircle, label: 'Forum', desc: 'Échangez avec la communauté', to: '/forum' },
+  { icon: Play, label: 'Vidéos', desc: 'Contenus éducatifs', to: '/articles' },
+  { icon: ClipboardCheck, label: 'Quiz', desc: 'Évaluez votre situation', to: '/quiz' },
+  { icon: Calendar, label: 'Programme', desc: 'Votre parcours de guérison', to: '/programme' },
+];
 
 export default function Home() {
   const { t } = useTranslation();
@@ -47,12 +61,12 @@ export default function Home() {
           </div>
 
           <div className="mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row px-2 sm:px-0">
-            <Link
-              to="/quiz"
-              className="w-full sm:w-auto inline-block rounded-xl bg-green-islamic px-6 sm:px-8 py-3.5 sm:py-3 font-semibold text-white text-base sm:text-base transition hover:opacity-90 active:scale-[0.98]"
+            <a
+              href="#ressources"
+              className="w-full sm:w-auto inline-block rounded-xl bg-green-islamic px-6 sm:px-8 py-3.5 sm:py-3 font-semibold text-white text-base sm:text-base transition hover:opacity-90 active:scale-[0.98] text-center"
             >
               {t('home.cta_free')}
-            </Link>
+            </a>
             <Link
               to="/tarifs"
               className="w-full sm:w-auto inline-block rounded-xl border-2 border-green-islamic px-6 sm:px-8 py-3.5 sm:py-3 font-semibold text-green-islamic text-base sm:text-base transition hover:bg-green-islamic hover:text-white active:scale-[0.98]"
@@ -65,6 +79,39 @@ export default function Home() {
             >
               Réserver une séance individuelle
             </Link>
+          </div>
+        </div>
+      </section>
+
+      <div className="arabesque-separator mx-auto max-w-lg" />
+
+      {/* Resources Section */}
+      <section id="ressources" className="py-10 sm:py-16 md:py-24 scroll-mt-8">
+        <div className="mx-auto max-w-6xl px-5 sm:px-4">
+          <h2 className="font-heading text-center text-2xl sm:text-3xl font-bold text-green-islamic md:text-4xl">
+            Découvrez nos ressources
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-center text-text-secondary">
+            Tout ce dont vous avez besoin pour votre parcours de guérison spirituelle
+          </p>
+          <div className="mt-8 sm:mt-12 grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3">
+            {resourceCards.map((card) => (
+              <Link
+                key={card.label}
+                to={card.to}
+                className="card-islamic flex flex-col items-center gap-2 p-5 sm:p-6 text-center transition-transform hover:-translate-y-0.5"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gold/10">
+                  <card.icon className="h-6 w-6 text-gold" />
+                </div>
+                <h3 className="font-heading text-base font-bold text-text-primary">
+                  {card.label}
+                </h3>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  {card.desc}
+                </p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

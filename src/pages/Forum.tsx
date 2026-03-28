@@ -5,6 +5,7 @@ import { MessageCircle, Plus, Info, Loader2 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { supabase } from '../lib/supabase';
 import SEO from '../components/SEO';
+import AuthModal from '../components/auth/AuthModal';
 
 interface ForumPost {
   id: string;
@@ -54,6 +55,7 @@ export default function Forum() {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const fetchPosts = useCallback(async () => {
     const { data } = await supabase
@@ -170,9 +172,12 @@ export default function Forum() {
               <Plus size={16} /> {t('forum.new_post')}
             </button>
           ) : (
-            <Link to="/login" className="text-sm font-medium text-green-islamic hover:text-gold">
-              {t('forum.login_to_post')}
-            </Link>
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="btn-primary flex items-center gap-2 text-sm"
+            >
+              <Plus size={16} /> {t('forum.new_post')}
+            </button>
           )}
         </div>
 
@@ -251,6 +256,12 @@ export default function Forum() {
           </div>
         )}
       </div>
+
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        action="participer à la discussion"
+      />
     </div>
   );
 }
