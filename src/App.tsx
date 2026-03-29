@@ -7,18 +7,17 @@ import ScrollToTop from './components/ScrollToTop';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import AdminRoute from './components/auth/AdminRoute';
 
-// ─── Pages principales : chargées directement (pas de lazy)
-// Évite le problème Service Worker / chunk hash périmé après déploiement
+// ─── Page principale : chargée directement (landing page doit être instantanée)
 import Home from './pages/Home';
-import Programme from './pages/Programme';
-import Articles from './pages/Articles';
-import Forum from './pages/Forum';
-import Douas from './pages/Douas';
-import Videos from './pages/Videos';
-import Quiz from './pages/Quiz';
-import Tarifs from './pages/Tarifs';
 
 // ─── Pages secondaires : lazy (visitées moins souvent)
+const Programme = lazy(() => import('./pages/Programme'));
+const Articles = lazy(() => import('./pages/Articles'));
+const Forum = lazy(() => import('./pages/Forum'));
+const Douas = lazy(() => import('./pages/Douas'));
+const Videos = lazy(() => import('./pages/Videos'));
+const Quiz = lazy(() => import('./pages/Quiz'));
+const Tarifs = lazy(() => import('./pages/Tarifs'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));

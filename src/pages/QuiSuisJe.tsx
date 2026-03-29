@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Heart, BookOpen, Shield, MessageCircle, Award, Users } from 'lucide-react';
+import SEO from '../components/SEO';
 
 export default function QuiSuisJe() {
   return (
     <div className="min-h-screen bg-cream">
+      <SEO title="Qui suis-je — MaRoqya" description="Découvrez le praticien derrière MaRoqya : formation, approche de la roqya shar'iyya et engagement pour votre accompagnement spirituel." />
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-green-islamic/5 to-cream pb-12 pt-8">
         <div className="mx-auto max-w-4xl px-4">

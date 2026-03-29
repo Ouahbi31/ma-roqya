@@ -4,6 +4,7 @@ import { Shield, AlertTriangle, Heart, ArrowLeft, BookOpen, UserPlus } from 'luc
 import { sampleArticles } from '../data/articles';
 import { sampleDouas } from '../data/douas';
 import { useAuthStore } from '../store/authStore';
+import SEO from '../components/SEO';
 
 export default function QuizResultat() {
   const { t } = useTranslation();
@@ -40,6 +41,7 @@ export default function QuizResultat() {
 
   return (
     <div className="min-h-screen bg-cream px-4 py-8 sm:px-6 lg:px-8">
+      <SEO title="Résultat de votre quiz — MaRoqya" description="Découvrez votre résultat d'auto-évaluation spirituelle et les recommandations personnalisées." />
       <div className="mx-auto max-w-2xl">
         <Link to="/quiz" className="mb-6 inline-flex items-center gap-2 text-sm text-green-islamic hover:text-gold">
           <ArrowLeft size={16} /> {t('common.back')}
