@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import {
   Eye, Shield, Flame, MessageCircle, Play, Lock, Crown,
   ChevronLeft, ChevronRight, Sun, Moon, Star, CheckCircle2,
-  Circle, BookOpen, AlertTriangle, Info, Sparkles
+  Circle, BookOpen, AlertTriangle, Sparkles
 } from 'lucide-react';
 import SymptomTracker, { shouldShowWeeklyCheck } from '../components/programme/SymptomTracker';
 import SymptomChart from '../components/programme/SymptomChart';
 import GuidedJournal from '../components/programme/GuidedJournal';
-import { PhaseBanner, getCurrentPhase } from '../components/programme/PhaseSystem';
+// PhaseSystem kept for future use
+// import { PhaseBanner, getCurrentPhase } from '../components/programme/PhaseSystem';
 import { useAuthStore } from '../store/authStore';
 import AuthModal from '../components/auth/AuthModal';
 import SEO from '../components/SEO';
@@ -789,12 +790,7 @@ const TYPE_LABELS: Record<AffectionType, { label: string; color: string; bg: str
   waswas: { label: 'Waswas — Obsessions', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', Icon: MessageCircle },
 };
 
-const PROFILE_LABELS: Record<DiagnosticProfile, { label: string; color: string; bg: string }> = {
-  occult: { label: 'Profil Spirituel', color: 'text-green-700', bg: 'bg-green-50 border-green-200' },
-  psycho: { label: 'Profil Psychologique', color: 'text-blue-700', bg: 'bg-blue-50 border-blue-200' },
-  hybrid: { label: 'Double Cause', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200' },
-  medical: { label: 'Urgence Médicale', color: 'text-orange-700', bg: 'bg-orange-50 border-orange-200' },
-};
+// PROFILE_LABELS kept for potential future use
 
 // ═══════════════════════════════════════════════════════
 // SUB-COMPONENTS
@@ -1277,156 +1273,106 @@ export default function Programme() {
 
   function renderResult() {
     if (!diagnosis) return null;
-    const typeInfo = TYPE_LABELS[diagnosis.affectionType];
-    const profileInfo = PROFILE_LABELS[diagnosis.profile];
     const config = PROGRAM_CONFIG[diagnosis.affectionType];
     const IconComp = config.icon;
-    const showPsychoModule = diagnosis.profile === 'hybrid' || diagnosis.profile === 'psycho';
+
+    // Explication en langage simple selon le type
+    const plainExplanations: Record<AffectionType, string> = {
+      ayn: "D'après vos réponses, vous présentez des signes compatibles avec le Mauvais Œil ('Ayn). Ce programme de 7 jours vous guide chaque matin et soir avec les adhkar et pratiques du Prophète ﷺ pour vous en protéger et vous en guérir.",
+      sihr: "Vos réponses indiquent des symptômes pouvant correspondre à un envoûtement (Sihr). Ce programme de 30 jours en 3 phases vous accompagne progressivement : purification, traitement, consolidation.",
+      mass: "Vos réponses — notamment votre réaction au Coran et vos troubles du sommeil — peuvent indiquer la présence d'un djinn (Mass). Ce programme de 21 jours vous accompagne quotidiennement.",
+      waswas: "Vous présentez des pensées obsessionnelles que l'Islam appelle Waswas. Ce programme de 14 jours basé sur Ibn Taymiyya vous aide à les vaincre par le dhikr et l'indifférence volontaire.",
+    };
+
+    // Niveau d'urgence
+    const urgency: Record<string, { label: string; color: string; bg: string; icon: string }> = {
+      occult_ayn:    { label: 'Traitable à domicile',            color: 'text-green-700',  bg: 'bg-green-50 border-green-200',  icon: '✓' },
+      occult_waswas: { label: 'Traitable à domicile',            color: 'text-green-700',  bg: 'bg-green-50 border-green-200',  icon: '✓' },
+      occult_sihr:   { label: 'Séance conseillée en parallèle',  color: 'text-amber-700',  bg: 'bg-amber-50 border-amber-200',  icon: '!' },
+      occult_mass:   { label: 'Séance directe recommandée',      color: 'text-red-700',    bg: 'bg-red-50 border-red-200',      icon: '!' },
+      psycho:        { label: 'Accompagnement doux recommandé',  color: 'text-blue-700',   bg: 'bg-blue-50 border-blue-200',    icon: 'ℹ' },
+      hybrid:        { label: 'Approche combinée conseillée',    color: 'text-blue-700',   bg: 'bg-blue-50 border-blue-200',    icon: 'ℹ' },
+      medical:       { label: 'Consultez un médecin d\'abord',   color: 'text-orange-700', bg: 'bg-orange-50 border-orange-200', icon: '⚠' },
+    };
+    const urgencyKey = diagnosis.profile !== 'occult'
+      ? diagnosis.profile
+      : `occult_${diagnosis.affectionType}`;
+    const urg = urgency[urgencyKey] ?? urgency['occult_ayn'];
 
     return (
       <div className="min-h-screen bg-cream pb-20">
-        <div className="max-w-lg mx-auto px-4 pt-8 space-y-5">
+        <div className="max-w-lg mx-auto px-4 pt-8 space-y-4">
+
+          {/* Titre */}
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-text-primary">Votre diagnostic</h1>
-            <p className="mt-1 text-sm text-text-secondary">Basé sur vos réponses</p>
+            <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-green-islamic/10 mb-3">
+              <IconComp className="h-7 w-7 text-green-islamic" />
+            </div>
+            <h1 className="text-xl font-bold text-text-primary">{config.title}</h1>
+            <p className="mt-1 text-xs text-text-secondary">{config.duration} jours · programme personnalisé</p>
           </div>
 
-          {/* Badges + scores */}
+          {/* Explication simple */}
           <div className="card-islamic p-5">
-            <div className="flex flex-wrap gap-2 mb-4">
-              <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-semibold ${typeInfo.bg} ${typeInfo.color}`}>
-                <typeInfo.Icon className="h-4 w-4" />
-                {typeInfo.label}
-              </span>
-              <span className={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium ${profileInfo.bg} ${profileInfo.color}`}>
-                {profileInfo.label}
-              </span>
-            </div>
-            <div className="space-y-3">
-              <div>
-                <div className="flex justify-between text-xs text-text-secondary mb-1">
-                  <span>Score spirituel ({diagnosis.affectionType})</span>
-                  <span className="font-semibold">{diagnosis.dominantScore}/15</span>
-                </div>
-                <div className="h-2.5 bg-bg-cream-dark rounded-full overflow-hidden">
-                  <div className="h-full bg-green-islamic rounded-full" style={{ width: `${Math.min((diagnosis.dominantScore / 15) * 100, 100)}%` }} />
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-xs text-text-secondary mb-1">
-                  <span>Score psychologique</span>
-                  <span className="font-semibold">{diagnosis.psychoScore}/15</span>
-                </div>
-                <div className="h-2.5 bg-bg-cream-dark rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-500 rounded-full" style={{ width: `${Math.min((diagnosis.psychoScore / 15) * 100, 100)}%` }} />
-                </div>
-              </div>
-            </div>
+            <p className="text-sm text-text-primary leading-relaxed">
+              {plainExplanations[diagnosis.affectionType]}
+            </p>
           </div>
 
-          {/* Medical warning */}
-          {diagnosis.profile === 'medical' && (
+          {/* Niveau d'urgence */}
+          <div className={`rounded-xl border p-3 flex items-center gap-3 ${urg.bg}`}>
+            <span className={`text-lg font-bold ${urg.color}`}>{urg.icon}</span>
+            <p className={`text-sm font-medium ${urg.color}`}>{urg.label}</p>
+          </div>
+
+          {/* Avertissement médical */}
+          {diagnosis.hasMedicalFlag && (
             <div className="rounded-xl border border-orange-200 bg-orange-50 p-4 flex gap-3">
               <AlertTriangle className="h-5 w-5 text-orange-600 shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-orange-800">Consultation médicale recommandée avant de commencer</p>
-                <p className="mt-1 text-xs text-orange-700">Certains de vos symptômes peuvent avoir une origine médicale. Consultez un médecin en priorité. La roqya et la médecine sont complémentaires.</p>
-              </div>
+              <p className="text-sm text-orange-800">
+                Vous n'avez pas encore consulté de médecin. Avant de commencer, une visite médicale est recommandée pour écarter toute cause physique.
+              </p>
             </div>
           )}
 
-          {/* Psycho info */}
-          {showPsychoModule && (
-            <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 flex gap-3">
-              <Info className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-blue-800">Triangle Psycho-Roqya</p>
-                <p className="mt-1 text-xs text-blue-700">
-                  L'occulte peut exploiter les blessures psychologiques non guéries, et la psychologie peut être fragilisée par l'occulte. Une approche intégrative combinant roqya et accompagnement émotionnel vous donnera les meilleurs résultats.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Program card */}
+          {/* Ce que contient le programme — minimaliste */}
           <div className="card-islamic p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-islamic/10">
-                <IconComp className="h-5 w-5 text-green-islamic" />
-              </div>
-              <div>
-                <h3 className="font-bold text-text-primary text-sm">{config.title}</h3>
-                <p className="text-xs text-text-secondary">{config.duration} jours</p>
-              </div>
-            </div>
-            <p className="text-sm text-text-secondary">{config.description}</p>
-            <ul className="mt-3 space-y-1.5">
+            <h3 className="text-sm font-semibold text-text-primary mb-3">Ce que vous ferez chaque jour</h3>
+            <div className="space-y-2.5">
               {[
-                'Checklist quotidienne matin et soir',
-                'Vidéos tutorielles guidées (bientôt disponibles)',
-                'Suivi des symptômes hebdomadaire',
-                'Notes des savants (Ibn Qayyim, Ibn Taymiyya, Ibn Baz)',
-              ].map(item => (
-                <li key={item} className="flex items-center gap-2 text-xs text-text-secondary">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-green-islamic shrink-0" />
-                  {item}
-                </li>
+                { icon: '🌅', text: 'Adhkar du matin — récitations guidées avec répétitions' },
+                { icon: '🌙', text: 'Adhkar du soir — protection avant le coucher' },
+                { icon: '🎬', text: 'Vidéo tuto du jour — "fais avec moi" à chaque étape clé' },
+                { icon: '✅', text: 'Checklist à cocher — pour ne rien oublier' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <span className="text-base">{item.icon}</span>
+                  <p className="text-sm text-text-secondary">{item.text}</p>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
 
-          {/* Psycho module videos */}
-          {showPsychoModule && (
-            <div className="card-islamic p-5">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100">
-                  <BookOpen className="h-4 w-4 text-purple-600" />
-                </div>
-                <h3 className="font-bold text-text-primary text-sm">Module Psycho-Roqya (inclus)</h3>
-              </div>
-              <p className="text-xs text-text-secondary mb-3">6 vidéos thérapeutiques spéciales pour traiter la dimension psychologique de votre condition</p>
-              <div className="grid grid-cols-2 gap-2">
-                {[ALL_VIDEOS.v_psycho_1, ALL_VIDEOS.v_psycho_2, ALL_VIDEOS.v_psycho_3, ALL_VIDEOS.v_psycho_4, ALL_VIDEOS.v_psycho_5, ALL_VIDEOS.v_psycho_6].map(v => (
-                  <div key={v.id} className="rounded-lg border border-purple-100 bg-purple-50 p-2">
-                    <p className="text-xs font-medium text-purple-800 line-clamp-2">{v.title}</p>
-                    <p className="text-xs text-purple-600 mt-0.5">{v.duration}</p>
-                  </div>
-                ))}
-              </div>
+          {/* CTA séance — simple, discret */}
+          {(diagnosis.affectionType === 'mass' || diagnosis.affectionType === 'sihr') && (
+            <div className="text-center">
+              <p className="text-xs text-text-secondary mb-2">{diagnosis.ctaMessage}</p>
+              <Link
+                to="/tarifs"
+                className="inline-block text-sm font-semibold text-gold underline"
+              >
+                {diagnosis.ctaButtonLabel} →
+              </Link>
             </div>
           )}
 
-          {/* CTA */}
-          <div className="rounded-2xl border-2 border-gold bg-amber-50 p-5">
-            <h3 className="font-bold text-text-primary">{diagnosis.ctaTitle}</h3>
-            <p className="mt-2 text-sm text-text-secondary">{diagnosis.ctaMessage}</p>
-            <Link
-              to="/tarifs"
-              className="mt-4 inline-block bg-gold text-white rounded-full px-5 py-2.5 text-sm font-semibold hover:bg-gold/90 transition-colors"
-            >
-              {diagnosis.ctaButtonLabel}
-            </Link>
-          </div>
-
-          {/* Start button */}
+          {/* Bouton principal */}
           <button
             onClick={handleStartProgram}
-            className="w-full bg-green-islamic text-white rounded-2xl py-4 font-bold text-base hover:bg-green-islamic/90 transition-colors shadow-lg"
+            className="w-full bg-green-islamic text-white rounded-2xl py-4 font-bold text-base hover:bg-green-islamic/90 transition-colors shadow-lg shadow-green-islamic/20"
           >
-            {user
-              ? (isPremium ? 'Commencer mon programme' : 'Commencer (jours 1-3 gratuits)')
-              : 'Commencer mon programme'
-            }
+            Commencer le programme
           </button>
-
-          {programState && (
-            <button
-              onClick={() => setView('tracker')}
-              className="w-full border-2 border-green-islamic text-green-islamic rounded-2xl py-3.5 font-semibold text-sm hover:bg-green-islamic/5 transition-colors"
-            >
-              Reprendre mon programme en cours →
-            </button>
-          )}
 
           <div className="text-center">
             <button
@@ -1435,7 +1381,7 @@ export default function Programme() {
                 setCurrentQuestionId('q_duration');
                 setQuestionPath(['q_duration']);
               }}
-              className="text-xs text-text-secondary underline hover:text-text-primary"
+              className="text-xs text-text-secondary underline"
             >
               Refaire le questionnaire
             </button>
@@ -1475,60 +1421,41 @@ export default function Programme() {
     const progressPct = ((currentDay - 1) / totalDays) * 100;
     const showPsychoModule = diagProfile === 'hybrid' || diagProfile === 'psycho';
 
-    const phaseType = (affectionType === 'sihr' || affectionType === 'mass') ? 'intensive' : 'light';
-    const currentPhase = getCurrentPhase(phaseType, viewingDay);
     const showWeeklyCheck = shouldShowWeeklyCheck(startDate);
+    // Sections optionnelles affichées à la demande
+    const [showEvolution, setShowEvolution] = React.useState(false);
 
     return (
       <div className="min-h-screen bg-cream pb-24">
         <div className="max-w-lg mx-auto px-4 pt-6 space-y-4">
-          {/* Program header */}
-          <div className="card-islamic p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-islamic/10">
-                  <IconComp className="h-5 w-5 text-green-islamic" />
-                </div>
-                <div>
-                  <h2 className="font-bold text-text-primary text-sm">{config.title}</h2>
-                  <p className="text-xs text-text-secondary">Depuis le {new Date(startDate).toLocaleDateString('fr-FR')}</p>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="text-lg font-bold text-green-islamic">J{currentDay}</p>
-                <p className="text-xs text-text-secondary">/{totalDays}</p>
-              </div>
+
+          {/* En-tête compact */}
+          <div className="flex items-center justify-between px-1">
+            <div className="flex items-center gap-2">
+              <IconComp className="h-5 w-5 text-green-islamic" />
+              <span className="text-sm font-semibold text-text-primary">{config.title}</span>
             </div>
-            <div className="mt-3">
-              <div className="flex justify-between text-xs text-text-secondary mb-1">
-                <span>Progression globale</span>
-                <span>{Math.round(progressPct)}%</span>
-              </div>
-              <div className="h-2 bg-bg-cream-dark rounded-full overflow-hidden">
-                <div className="h-full bg-green-islamic rounded-full" style={{ width: `${progressPct}%` }} />
-              </div>
-            </div>
+            <span className="text-sm font-bold text-green-islamic">
+              Jour {currentDay} <span className="font-normal text-text-secondary">/ {totalDays}</span>
+            </span>
           </div>
 
-          {/* Phase banner for sihr */}
-          {affectionType === 'sihr' && (
-            <PhaseBanner programType={phaseType} currentDay={viewingDay} />
-          )}
+          {/* Barre de progression */}
+          <div className="h-1.5 bg-cream-dark rounded-full overflow-hidden">
+            <div className="h-full bg-green-islamic rounded-full transition-all duration-500" style={{ width: `${progressPct}%` }} />
+          </div>
 
-          {/* Day navigation */}
+          {/* Navigation entre les jours */}
           <div className="flex items-center justify-between">
             <button
               onClick={() => setViewingDay(d => Math.max(1, d - 1))}
               disabled={viewingDay <= 1}
-              className="flex items-center gap-1 text-sm text-text-secondary disabled:opacity-40 hover:text-text-primary transition-colors"
+              className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-text-secondary disabled:opacity-30 hover:bg-cream-dark transition-colors"
             >
               <ChevronLeft className="h-4 w-4" />
-              Jour précédent
+              Précédent
             </button>
-            <div className="text-center">
-              <span className="text-sm font-bold text-text-primary">Jour {viewingDay}</span>
-              <span className="text-xs text-text-secondary ml-1">/ {totalDays}</span>
-            </div>
+            <span className="text-sm font-bold text-text-primary">Jour {viewingDay}</span>
             <button
               onClick={() => {
                 const nextDay = Math.min(totalDays, viewingDay + 1);
@@ -1540,30 +1467,26 @@ export default function Programme() {
                 }
               }}
               disabled={viewingDay >= totalDays}
-              className="flex items-center gap-1 text-sm text-text-secondary disabled:opacity-40 hover:text-text-primary transition-colors"
+              className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-text-secondary disabled:opacity-30 hover:bg-cream-dark transition-colors"
             >
-              Jour suivant
+              Suivant
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>
 
-          {/* Day content */}
+          {/* Carte du jour */}
           <div className="card-islamic p-5">
-            <div className="mb-4">
-              <h3 className="font-bold text-text-primary">{dayContent.theme}</h3>
+            {/* Thème du jour */}
+            <div className="mb-4 pb-4 border-b border-cream-dark">
+              <p className="text-xs text-text-secondary uppercase tracking-wide">Jour {viewingDay}</p>
+              <h3 className="mt-1 text-base font-bold text-text-primary">{dayContent.theme}</h3>
               <p className="text-sm text-text-secondary mt-0.5">{dayContent.focus}</p>
             </div>
 
+            {/* Vidéo du jour */}
             {dayContent.video && !isLocked && (
               <div className="mb-4">
                 <VideoCard video={dayContent.video} />
-              </div>
-            )}
-
-            {currentPhase && affectionType !== 'sihr' && (
-              <div className="mb-4 flex items-center gap-2 rounded-xl bg-bg-cream p-3">
-                <div className="h-2.5 w-2.5 rounded-full bg-green-islamic/30" />
-                <span className="text-xs font-medium text-text-secondary">{currentPhase.title} — {currentPhase.subtitle}</span>
               </div>
             )}
 
@@ -1572,28 +1495,28 @@ export default function Programme() {
             ) : (
               <>
                 <ChecklistSection
-                  title="Adhkar du matin"
+                  title="Matin"
                   items={dayContent.morning}
                   completedIds={dayProgress.morning}
                   onToggle={(id) => handleToggleChecklist(viewingDay, 'morning', id)}
                   icon={<Sun className="h-4 w-4 text-gold" />}
                 />
                 <ChecklistSection
-                  title="Adhkar du soir"
+                  title="Soir"
                   items={dayContent.evening}
                   completedIds={dayProgress.evening}
                   onToggle={(id) => handleToggleChecklist(viewingDay, 'evening', id)}
                   icon={<Moon className="h-4 w-4 text-green-islamic" />}
                 />
                 <ChecklistSection
-                  title="Actions du jour"
+                  title="À faire aussi"
                   items={dayContent.bonus}
                   completedIds={dayProgress.bonus}
                   onToggle={(id) => handleToggleChecklist(viewingDay, 'bonus', id)}
                   icon={<Star className="h-4 w-4 text-gold" />}
                 />
                 {dayContent.scholarNote && (
-                  <div className="mt-4 rounded-xl border border-gold/30 bg-amber-50 p-4">
+                  <div className="mt-4 rounded-xl border border-gold/30 bg-amber-50 p-3">
                     <div className="flex items-start gap-2">
                       <BookOpen className="h-4 w-4 text-gold shrink-0 mt-0.5" />
                       <p className="text-xs text-amber-800 italic">{dayContent.scholarNote}</p>
@@ -1604,35 +1527,35 @@ export default function Programme() {
             )}
           </div>
 
-          {/* Weekly check */}
-          {showWeeklyCheck && (
+          {/* Bilan hebdomadaire — seulement quand c'est le moment */}
+          {showWeeklyCheck && !isLocked && (
             <div className="card-islamic p-4">
-              <h3 className="font-semibold text-text-primary mb-3 text-sm">Bilan hebdomadaire</h3>
+              <h3 className="font-semibold text-text-primary text-sm mb-3">📋 Bilan de la semaine</h3>
               <SymptomTracker startDate={startDate} onComplete={() => {}} />
             </div>
           )}
 
-          {/* Symptom chart */}
-          <div className="card-islamic p-4">
-            <h3 className="font-semibold text-text-primary mb-3 text-sm">Évolution des symptômes</h3>
-            <SymptomChart />
-          </div>
-
-          {/* Psycho module */}
-          {showPsychoModule && (
+          {/* Bouton "Voir mon évolution" — discret, optionnel */}
+          {!isLocked && (
+            <button
+              onClick={() => setShowEvolution(v => !v)}
+              className="w-full text-sm text-text-secondary text-center py-2 hover:text-text-primary transition-colors"
+            >
+              {showEvolution ? '▲ Masquer l\'évolution' : '📊 Voir mon évolution'}
+            </button>
+          )}
+          {showEvolution && !isLocked && (
             <div className="card-islamic p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <BookOpen className="h-4 w-4 text-purple-600" />
-                <h3 className="font-semibold text-text-primary text-sm">Module Psycho-Roqya</h3>
-              </div>
-              {isLocked ? <PremiumGate /> : <GuidedJournal currentDay={viewingDay} />}
+              <SymptomChart />
+              {showPsychoModule && <GuidedJournal currentDay={viewingDay} />}
             </div>
           )}
 
-          <div className="text-center pt-4">
+          {/* Reset — très discret en bas */}
+          <div className="text-center pt-2">
             <button
               onClick={handleResetProgram}
-              className="text-xs text-red-400 underline hover:text-red-600 transition-colors"
+              className="text-xs text-text-secondary/50 hover:text-red-400 transition-colors"
             >
               Réinitialiser le programme
             </button>
