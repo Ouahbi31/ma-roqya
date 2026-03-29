@@ -1,143 +1,62 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ChevronRight,
-  ChevronLeft,
-  Check,
-  CheckCircle2,
-  Circle,
-  Calendar,
-  Shield,
-  Heart,
-  Flame,
-  RotateCcw,
-  Sparkles,
-  Sun,
-  Moon,
-  Star,
-  BookOpen,
-  Droplets,
-  Play,
-  BarChart3,
-  Bell,
-  Lock,
-  Crown,
-  ArrowLeft,
-  MessageCircle,
+  Eye, Shield, Flame, MessageCircle, Play, Lock, Crown,
+  ChevronLeft, ChevronRight, Sun, Moon, Star, CheckCircle2,
+  Circle, BookOpen, AlertTriangle, Info, Sparkles
 } from 'lucide-react';
-import SEO from '../components/SEO';
 import SymptomTracker, { shouldShowWeeklyCheck } from '../components/programme/SymptomTracker';
 import SymptomChart from '../components/programme/SymptomChart';
 import GuidedJournal from '../components/programme/GuidedJournal';
 import { PhaseBanner, getCurrentPhase } from '../components/programme/PhaseSystem';
 import { useAuthStore } from '../store/authStore';
 import AuthModal from '../components/auth/AuthModal';
+import SEO from '../components/SEO';
+
+// Suppress unused import warning for Eye (used in type label map)
+const _eye = Eye;
 
 // ═══════════════════════════════════════════════════════
 // TYPES
 // ═══════════════════════════════════════════════════════
 
+type AffectionType = 'ayn' | 'sihr' | 'mass' | 'waswas';
+type DiagnosticProfile = 'occult' | 'psycho' | 'hybrid' | 'medical';
 type View = 'questionnaire' | 'result' | 'tracker';
-type ProgramType = 'prevention' | 'light' | 'intensive';
-type Severity = 'leger' | 'modere' | 'severe';
 
-interface QuestionnaireAnswers {
+interface Scores {
+  ayn: number;
+  sihr: number;
+  mass: number;
+  waswas: number;
+  psycho: number;
+}
+
+interface TreeOption {
+  id: string;
+  label: string;
+  scores: Partial<Scores>;
+  next: string | null;
+  flag?: 'medical';
+}
+
+interface TreeQuestion {
+  id: string;
+  text: string;
+  subtitle?: string;
+  type: 'single' | 'multi';
+  options: TreeOption[];
+  defaultNext?: string;
+}
+
+interface VideoSlot {
+  id: string;
+  title: string;
+  description: string;
   duration: string;
-  previousRuqya: string;
-  prayer: string;
-  quran: string;
-  physicalSymptoms: string[];
-  psychologicalSymptoms: string[];
-  specificSymptoms: string[];
-  suspectedCause: string;
-  consultedDoctor: string;
+  url: null;
+  thumbnail: string;
 }
-
-interface DiagnosisDetails {
-  score: number;
-  totalSymptoms: number;
-  gravityFactors: string[];
-  advice: string[];
-}
-
-interface DayProgress {
-  morning: string[];
-  evening: string[];
-  bonus: string[];
-}
-
-interface ProgramState {
-  type: ProgramType;
-  severity: Severity;
-  startDate: string;
-  currentDay: number;
-  totalDays: number;
-  dailyProgress: Record<number, DayProgress>;
-}
-
-// ═══════════════════════════════════════════════════════
-// CONSTANTS
-// ═══════════════════════════════════════════════════════
-
-const PHYSICAL_SYMPTOMS = [
-  'Maux de tête fréquents et inexpliqués',
-  'Douleurs dans le corps sans cause apparente',
-  'Fatigue chronique et manque d\'énergie',
-  'Troubles du sommeil (insomnie, cauchemars récurrents)',
-  'Sensation de lourdeur dans le corps',
-  'Palpitations cardiaques sans raison',
-  'Sensation d\'étouffement ou de pression sur la poitrine',
-  'Nausées ou douleurs abdominales inexpliquées',
-];
-
-const PSYCHOLOGICAL_SYMPTOMS = [
-  'Anxiété ou angoisse permanente',
-  'Tristesse profonde sans raison apparente',
-  'Pensées obsessionnelles ou intrusives',
-  'Éloignement de la prière et du Coran',
-  'Irritabilité ou colère excessive',
-  'Envie de s\'isoler des gens',
-  'Difficultés de concentration',
-  'Waswas (chuchotements/doutes) fréquents',
-];
-
-const SPECIFIC_SYMPTOMS = [
-  'Cauchemars avec serpents, chiens, ou chutes',
-  'Réaction forte à l\'écoute du Coran (pleurs, tremblements, douleurs)',
-  'Blocages dans la vie (mariage, travail, projets)',
-  'Sensation de présence autour de vous',
-  'Changement soudain de comportement',
-  'Problèmes relationnels récurrents (couple, famille)',
-  'Malchance répétée et échecs inexpliqués',
-  'Aversion pour certains lieux ou personnes',
-];
-
-const MOTIVATIONAL_QUOTES = [
-  {
-    arabic: '\u0648\u064E\u0646\u064F\u0646\u064E\u0632\u0651\u0650\u0644\u064F \u0645\u0650\u0646\u064E \u0627\u0644\u0642\u064F\u0631\u0652\u0622\u0646\u0650 \u0645\u0627 \u0647\u064F\u0648\u064E \u0634\u0650\u0641\u0627\u0621\u064C \u0648\u064E\u0631\u064E\u062D\u0652\u0645\u064E\u0629\u064C \u0644\u0650\u0644\u0652\u0645\u064F\u0624\u0652\u0645\u0650\u0646\u064A\u0646\u064E',
-    french: 'Nous faisons descendre du Coran ce qui est guérison et miséricorde pour les croyants.',
-    source: 'Sourate Al-Isra, 17:82',
-  },
-  {
-    arabic: '\u0623\u064E\u0644\u0627 \u0628\u0650\u0630\u0650\u0643\u0652\u0631\u0650 \u0627\u0644\u0644\u0651\u064E\u0647\u0650 \u062A\u064E\u0637\u0652\u0645\u064E\u0626\u0650\u0646\u0651\u064F \u0627\u0644\u0642\u064F\u0644\u064F\u0648\u0628\u064F',
-    french: 'N\'est-ce point par l\'évocation d\'Allah que se tranquillisent les coeurs ?',
-    source: 'Sourate Ar-Ra\'d, 13:28',
-  },
-  {
-    arabic: '\u0648\u064E\u0625\u0650\u0630\u064E\u0627 \u0645\u064E\u0631\u0650\u0636\u0652\u062A\u064F \u0641\u064E\u0647\u064F\u0648\u064E \u064A\u064E\u0634\u0652\u0641\u0650\u064A\u0646\u0650',
-    french: 'Et quand je suis malade, c\'est Lui qui me guérit.',
-    source: 'Sourate Ash-Shu\'ara, 26:80',
-  },
-  {
-    arabic: '\u062D\u064E\u0633\u0652\u0628\u064F\u0646\u064E\u0627 \u0627\u0644\u0644\u0651\u064E\u0647\u064F \u0648\u064E\u0646\u0650\u0639\u0652\u0645\u064E \u0627\u0644\u0648\u064E\u0643\u0650\u064A\u0644\u064F',
-    french: 'Allah nous suffit, Il est notre meilleur Garant.',
-    source: 'Sourate Al-Imran, 3:173',
-  },
-];
-
-// ═══════════════════════════════════════════════════════
-// PROGRAM DATA
-// ═══════════════════════════════════════════════════════
 
 interface ChecklistItem {
   id: string;
@@ -146,360 +65,851 @@ interface ChecklistItem {
   repetitions?: string;
 }
 
-function getMorningRoutine(type: ProgramType, phaseId?: string): ChecklistItem[] {
-  const base: ChecklistItem[] = [
-    { id: 'fatiha', label: 'Al-Fatiha', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0627\u062A\u062D\u0629', repetitions: type === 'intensive' && phaseId === 'traitement' ? '7x' : '3x' },
-    { id: 'kursi', label: 'Ayat Al-Kursi', arabic: '\u0622\u064A\u0629 \u0627\u0644\u0643\u0631\u0633\u064A', repetitions: phaseId === 'purification' ? '1x' : '3x' },
-    { id: 'ikhlas', label: 'Sourate Al-Ikhlas', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0625\u062E\u0644\u0627\u0635', repetitions: '3x' },
-    { id: 'falaq', label: 'Sourate Al-Falaq', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0644\u0642', repetitions: '3x' },
-    { id: 'nas', label: 'Sourate An-Nas', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u0627\u0633', repetitions: '3x' },
-    { id: 'adhkar-matin', label: 'Adhkar du matin', arabic: '\u0623\u0630\u0643\u0627\u0631 \u0627\u0644\u0635\u0628\u0627\u062D' },
-  ];
-
-  // Phase purification : ajouter istighfar et tawba
-  if (phaseId === 'purification') {
-    base.unshift(
-      { id: 'istighfar', label: 'Istighfar (demande de pardon)', arabic: '\u0623\u064E\u0633\u0652\u062A\u064E\u063A\u0652\u0641\u0650\u0631\u064F \u0627\u0644\u0644\u0651\u064E\u0647\u064E', repetitions: '100x' },
-    );
-  }
-
-  // Phase traitement : ajouter versets intensifs
-  if (phaseId === 'traitement' && type !== 'prevention') {
-    base.splice(2, 0, {
-      id: 'baqara-end',
-      label: 'Sourate Al-Baqara v. 285-286',
-      arabic: '\u062E\u0648\u0627\u062A\u064A\u0645 \u0633\u0648\u0631\u0629 \u0627\u0644\u0628\u0642\u0631\u0629',
-      repetitions: '1x',
-    });
-  }
-
-  if (phaseId === 'traitement' && type === 'intensive') {
-    base.push(
-      { id: 'ruqya-verses', label: 'Versets de roqya spécifiques', arabic: '\u0622\u064A\u0627\u062A \u0627\u0644\u0631\u0642\u064A\u0629', repetitions: '3x' },
-      { id: 'dua-protection', label: 'Doua de protection du matin', arabic: '\u0628\u0650\u0633\u0652\u0645\u0650 \u0627\u0644\u0644\u0651\u064E\u0647\u0650 \u0627\u0644\u0651\u064E\u0630\u0650\u064A \u0644\u0627 \u064A\u064E\u0636\u064F\u0631\u0651\u064F \u0645\u064E\u0639\u064E \u0627\u0633\u0652\u0645\u0650\u0647\u0650 \u0634\u064E\u064A\u0652\u0621\u064C', repetitions: '3x' }
-    );
-  }
-
-  // Phase consolidation : routine allégée + rappel protection
-  if (phaseId === 'consolidation') {
-    base.push(
-      { id: 'dua-protection', label: 'Doua de protection du matin', arabic: '\u0628\u0650\u0633\u0652\u0645\u0650 \u0627\u0644\u0644\u0651\u064E\u0647\u0650 \u0627\u0644\u0651\u064E\u0630\u0650\u064A \u0644\u0627 \u064A\u064E\u0636\u064F\u0631\u0651\u064F \u0645\u064E\u0639\u064E \u0627\u0633\u0652\u0645\u0650\u0647\u0650 \u0634\u064E\u064A\u0652\u0621\u064C', repetitions: '3x' }
-    );
-  }
-
-  return base;
+interface DayContent {
+  theme: string;
+  focus: string;
+  morning: ChecklistItem[];
+  evening: ChecklistItem[];
+  bonus: ChecklistItem[];
+  video?: VideoSlot;
+  scholarNote?: string;
+  isPsychoDay?: boolean;
 }
 
-function getEveningRoutine(type: ProgramType, phaseId?: string): ChecklistItem[] {
-  const base: ChecklistItem[] = [
-    { id: 'kursi-soir', label: 'Ayat Al-Kursi avant de dormir', arabic: '\u0622\u064A\u0629 \u0627\u0644\u0643\u0631\u0633\u064A', repetitions: '1x' },
-    { id: 'mulk', label: 'Sourate Al-Mulk', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0644\u0643', repetitions: '1x' },
-    { id: '3qul', label: 'Les 3 Qul (souffler dans les mains)', arabic: '\u0627\u0644\u0645\u0639\u0648\u0630\u0627\u062A', repetitions: '3x' },
-    { id: 'adhkar-soir', label: 'Adhkar du soir', arabic: '\u0623\u0630\u0643\u0627\u0631 \u0627\u0644\u0645\u0633\u0627\u0621' },
-  ];
-
-  // Phase purification : ajouter istighfar du soir
-  if (phaseId === 'purification') {
-    base.push(
-      { id: 'istighfar-soir', label: 'Istighfar avant le sommeil', arabic: '\u0623\u064E\u0633\u0652\u062A\u064E\u063A\u0652\u0641\u0650\u0631\u064F \u0627\u0644\u0644\u0651\u064E\u0647\u064E', repetitions: '33x' },
-    );
-  }
-
-  // Phase traitement : douas intensives
-  if (phaseId === 'traitement' && type !== 'prevention') {
-    base.push({
-      id: 'dua-ruqya',
-      label: 'Douas spécifiques de roqya',
-      arabic: '\u0623\u064E\u0639\u064F\u0648\u0630\u064F \u0628\u0650\u0643\u064E\u0644\u0650\u0645\u064E\u0627\u062A\u0650 \u0627\u0644\u0644\u0651\u064E\u0647\u0650 \u0627\u0644\u062A\u0651\u064E\u0627\u0645\u0651\u064E\u0627\u062A\u0650 \u0645\u0650\u0646\u0652 \u0634\u064E\u0631\u0651\u0650 \u0645\u064E\u0627 \u062E\u064E\u0644\u064E\u0642\u064E',
-    });
-  }
-
-  if (phaseId === 'traitement' && type === 'intensive') {
-    base.push(
-      { id: 'sajda', label: 'Sourate As-Sajda', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0633\u062C\u062F\u0629', repetitions: '1x' },
-    );
-  }
-
-  // Toujours la doua du sommeil
-  base.push(
-    { id: 'dua-sleep', label: 'Doua avant le sommeil', arabic: '\u0628\u0627\u0633\u0645\u0643 \u0627\u0644\u0644\u0647\u0645 \u0623\u0645\u0648\u062A \u0648\u0623\u062D\u064A\u0627' }
-  );
-
-  return base;
+interface DiagnosisResult {
+  affectionType: AffectionType;
+  profile: DiagnosticProfile;
+  scores: Scores;
+  dominantScore: number;
+  psychoScore: number;
+  totalDays: number;
+  hasMedicalFlag: boolean;
+  ctaTitle: string;
+  ctaMessage: string;
+  ctaButtonLabel: string;
 }
 
-function getBonusActions(type: ProgramType, phaseId?: string): ChecklistItem[] {
-  const items: ChecklistItem[] = [];
-
-  // Purification : focus nettoyage
-  if (phaseId === 'purification') {
-    items.push(
-      { id: 'bonus-sidr', label: 'Bain avec eau de Sidr (feuilles de jujubier)', arabic: '\u0645\u0627\u0621 \u0627\u0644\u0633\u062F\u0631' },
-      { id: 'bonus-eau', label: 'Boire de l\'eau coranisée', arabic: '\u0645\u0627\u0621 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064A\u0647' },
-      { id: 'bonus-tawba', label: 'Faire une doua de repentance sincère', arabic: '\u062A\u0648\u0628\u0629' },
-      { id: 'bonus-sadaqa', label: 'Faire une sadaqa (aumône)', arabic: '\u0635\u062F\u0642\u0629' },
-    );
-    return items;
-  }
-
-  // Traitement : intensif
-  if (phaseId === 'traitement') {
-    items.push(
-      { id: 'bonus-baqara', label: type === 'intensive' ? 'Lire/écouter Sourate Al-Baqara en entier' : 'Écouter Sourate Al-Baqara', arabic: type === 'intensive' ? '\u0633\u0648\u0631\u0629 \u0627\u0644\u0628\u0642\u0631\u0629 \u0643\u0627\u0645\u0644\u0629' : '\u0633\u0648\u0631\u0629 \u0627\u0644\u0628\u0642\u0631\u0629' },
-      { id: 'bonus-eau', label: 'Boire de l\'eau coranisée', arabic: '\u0645\u0627\u0621 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064A\u0647' },
-      { id: 'bonus-huile', label: 'Se masser avec huile d\'olive coranisée', arabic: '\u0632\u064A\u062A \u0632\u064A\u062A\u0648\u0646 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064A\u0647' },
-    );
-    if (type === 'intensive') {
-      items.push(
-        { id: 'bonus-miel', label: 'Prendre du miel pur le matin à jeun', arabic: '\u0639\u0633\u0644' },
-        { id: 'bonus-sidr', label: 'Bain avec eau de Sidr (feuilles de jujubier)', arabic: '\u0645\u0627\u0621 \u0627\u0644\u0633\u062F\u0631' },
-      );
-    }
-    items.push({ id: 'bonus-sadaqa', label: 'Faire une sadaqa (aumône)', arabic: '\u0635\u062F\u0642\u0629' });
-    return items;
-  }
-
-  // Consolidation : maintien + prévention
-  items.push(
-    { id: 'bonus-dhikr', label: 'Dhikr supplémentaire (100x SubhanAllah, Alhamdulillah, Allahu Akbar)', arabic: '\u0630\u0643\u0631' },
-    { id: 'bonus-eau', label: 'Boire de l\'eau coranisée', arabic: '\u0645\u0627\u0621 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064A\u0647' },
-    { id: 'bonus-sadaqa', label: 'Faire une sadaqa (aumône)', arabic: '\u0635\u062F\u0642\u0629' },
-    { id: 'bonus-quran', label: 'Lire 1 page du Coran', arabic: '\u062A\u0644\u0627\u0648\u0629 \u0627\u0644\u0642\u0631\u0622\u0646' },
-  );
-  return items;
+interface ProgramState {
+  affectionType: AffectionType;
+  profile: DiagnosticProfile;
+  startDate: string;
+  currentDay: number;
+  totalDays: number;
+  dailyProgress: Record<number, { morning: string[]; evening: string[]; bonus: string[] }>;
 }
 
-const PROGRAM_INFO: Record<ProgramType, { title: string; duration: number; description: string; icon: typeof Shield }> = {
-  prevention: {
-    title: 'Programme Prévention',
-    duration: 7,
-    description: 'Un programme de 7 jours pour renforcer votre protection spirituelle quotidienne et prévenir les afflictions.',
-    icon: Shield,
-  },
-  light: {
-    title: 'Programme Guérison Légère',
-    duration: 15,
-    description: 'Un programme de 15 jours adapté aux symptômes modérés, avec des pratiques ciblées pour le mauvais oeil et les afflictions légères.',
-    icon: Heart,
-  },
-  intensive: {
-    title: 'Programme Guérison Intensive',
-    duration: 30,
-    description: 'Un programme complet de 30 jours pour les cas plus sévères, avec des pratiques intensives de roqya shar\'iyya.',
-    icon: Flame,
-  },
-};
+// ═══════════════════════════════════════════════════════
+// DECISION TREE
+// ═══════════════════════════════════════════════════════
 
-const SEVERITY_LABELS: Record<Severity, { label: string; color: string; bg: string }> = {
-  leger: { label: 'Léger', color: 'text-green-islamic', bg: 'bg-green-islamic/10' },
-  modere: { label: 'Modéré', color: 'text-gold', bg: 'bg-gold/10' },
-  severe: { label: 'Sévère', color: 'text-red-700', bg: 'bg-red-50' },
-};
-
-const COMPLETION_MESSAGES = [
-  'MashaAllah ! Continuez ainsi.',
-  'Qu\'Allah vous accorde la guérison.',
-  'Chaque effort compte auprès d\'Allah.',
-  'La constance est la clé de la réussite.',
-  'Qu\'Allah vous facilite ce chemin.',
-  'BarakAllahu fikum, persévérez.',
+const QUESTIONS: TreeQuestion[] = [
+  {
+    id: 'q_duration',
+    text: 'Depuis combien de temps ressentez-vous ces difficultés ?',
+    type: 'single',
+    options: [
+      { id: 'q_duration_1', label: 'Quelques jours à quelques semaines', scores: { ayn: 3 }, next: 'q_reaction_coran' },
+      { id: 'q_duration_2', label: '1 à 6 mois', scores: { sihr: 1, mass: 1 }, next: 'q_blocages' },
+      { id: 'q_duration_3', label: '6 mois à 1 an', scores: { sihr: 2, mass: 2 }, next: 'q_blocages' },
+      { id: 'q_duration_4', label: "Plus d'un an", scores: { sihr: 3, mass: 3 }, next: 'q_blocages' },
+    ],
+  },
+  {
+    id: 'q_reaction_coran',
+    text: 'Avez-vous déjà ressenti une réaction forte (agitation, douleurs, pleurs involontaires) en écoutant le Coran ?',
+    subtitle: 'Ceci est un signe important pour orienter votre accompagnement',
+    type: 'single',
+    options: [
+      { id: 'q_reaction_coran_1', label: 'Oui, fortement — agitation, douleurs, vomissements', scores: { mass: 4, sihr: 2 }, next: 'q_sleep' },
+      { id: 'q_reaction_coran_2', label: 'Oui, légère gêne ou malaise', scores: { mass: 2 }, next: 'q_sleep' },
+      { id: 'q_reaction_coran_3', label: 'Non, aucune réaction particulière', scores: { ayn: 1, psycho: 1 }, next: 'q_sleep' },
+      { id: 'q_reaction_coran_4', label: "Je ne sais pas / n'ai pas essayé", scores: {}, next: 'q_sleep' },
+    ],
+  },
+  {
+    id: 'q_sleep',
+    text: 'Comment se passe votre sommeil ?',
+    type: 'single',
+    options: [
+      { id: 'q_sleep_1', label: 'Cauchemars récurrents (serpents, chutes, personnes étranges)', scores: { mass: 3, sihr: 2 }, next: 'q_physique' },
+      { id: 'q_sleep_2', label: 'Insomnie ou terreurs nocturnes fréquentes', scores: { ayn: 2, sihr: 1, psycho: 2 }, next: 'q_physique' },
+      { id: 'q_sleep_3', label: 'Réveils brusques avec sensation de présence', scores: { mass: 4, sihr: 1 }, next: 'q_physique' },
+      { id: 'q_sleep_4', label: 'Sommeil perturbé mais sans cauchemars précis', scores: { psycho: 2 }, next: 'q_physique' },
+      { id: 'q_sleep_5', label: 'Sommeil normal', scores: {}, next: 'q_physique' },
+    ],
+  },
+  {
+    id: 'q_physique',
+    text: 'Quels symptômes physiques ressentez-vous ? (plusieurs choix possibles)',
+    type: 'multi',
+    defaultNext: 'q_psychologique',
+    options: [
+      { id: 'q_physique_1', label: 'Maux de tête fréquents et inexpliqués', scores: { ayn: 2, psycho: 1 }, next: null },
+      { id: 'q_physique_2', label: 'Douleurs dans le corps sans cause médicale', scores: { mass: 2, sihr: 1 }, next: null },
+      { id: 'q_physique_3', label: 'Fatigue chronique profonde même après repos', scores: { sihr: 2, psycho: 2 }, next: null },
+      { id: 'q_physique_4', label: 'Sensation de lourdeur ou pression sur la poitrine', scores: { mass: 3 }, next: null },
+      { id: 'q_physique_5', label: 'Palpitations cardiaques sans cause cardiaque', scores: { ayn: 1, mass: 1, psycho: 2 }, next: null },
+      { id: 'q_physique_6', label: 'Nausées ou douleurs abdominales inexpliquées', scores: { sihr: 1, mass: 1 }, next: null },
+      { id: 'q_physique_7', label: 'Aucun symptôme physique notable', scores: {}, next: null },
+    ],
+  },
+  {
+    id: 'q_psychologique',
+    text: 'Sur le plan émotionnel, vous reconnaissez-vous dans... ?',
+    type: 'multi',
+    defaultNext: 'q_waswas',
+    options: [
+      { id: 'q_psychologique_1', label: 'Tristesse profonde ou pleurs fréquents sans raison apparente', scores: { sihr: 2, psycho: 3 }, next: null },
+      { id: 'q_psychologique_2', label: 'Anxiété permanente, peur ou angoisse inexpliquée', scores: { ayn: 1, psycho: 3 }, next: null },
+      { id: 'q_psychologique_3', label: 'Pensées intrusives, idées répétitives indésirables', scores: { waswas: 3, psycho: 2 }, next: null },
+      { id: 'q_psychologique_4', label: 'Irritabilité, accès de colère inexpliqués', scores: { mass: 2, psycho: 2 }, next: null },
+      { id: 'q_psychologique_5', label: "Envie de s'isoler, de fuir les gens", scores: { sihr: 2, psycho: 2 }, next: null },
+      { id: 'q_psychologique_6', label: "Difficultés de concentration, esprit embrumé", scores: { ayn: 1, waswas: 2 }, next: null },
+      { id: 'q_psychologique_7', label: 'Aucun de ces éléments', scores: {}, next: null },
+    ],
+  },
+  {
+    id: 'q_waswas',
+    text: 'Avez-vous des doutes ou pensées obsessionnelles concernant votre religion, votre pureté, ou des pensées mauvaises répétitives ?',
+    subtitle: 'Ibn Taymiyya (r.a.) a traité ce sujet spécifiquement dans sa Risalat al-Waswas',
+    type: 'single',
+    options: [
+      { id: 'q_waswas_1', label: 'Oui souvent — je remets en question mes ablutions, mes prières', scores: { waswas: 4 }, next: 'q_blocages' },
+      { id: 'q_waswas_2', label: "Oui parfois — des pensées s'imposent contre ma volonté", scores: { waswas: 2, psycho: 1 }, next: 'q_blocages' },
+      { id: 'q_waswas_3', label: 'Non, pas de ce type de pensées', scores: {}, next: 'q_blocages' },
+    ],
+  },
+  {
+    id: 'q_blocages',
+    text: 'Avez-vous des blocages persistants dans un ou plusieurs domaines de votre vie ?',
+    subtitle: "Mariage différé, emploi bloqué, projets qui n'aboutissent jamais...",
+    type: 'single',
+    options: [
+      { id: 'q_blocages_1', label: 'Oui, plusieurs domaines bloqués depuis longtemps', scores: { sihr: 3 }, next: 'q_regard' },
+      { id: 'q_blocages_2', label: 'Oui, un domaine spécifique', scores: { sihr: 1 }, next: 'q_regard' },
+      { id: 'q_blocages_3', label: 'Non, pas de blocages particuliers', scores: {}, next: 'q_regard' },
+    ],
+  },
+  {
+    id: 'q_regard',
+    text: "Avez-vous récemment été exposé(e) à de l'admiration, de la jalousie, ou un regard envieux ?",
+    subtitle: "Le Prophète ﷺ a dit : 'L'œil (ayn) est une réalité' — Bukhari & Muslim",
+    type: 'single',
+    options: [
+      { id: 'q_regard_1', label: "Oui, d'une personne précise que je soupçonne", scores: { ayn: 4 }, next: 'q_pratique' },
+      { id: 'q_regard_2', label: 'Probablement, dans mon entourage il y a de la jalousie', scores: { ayn: 2 }, next: 'q_pratique' },
+      { id: 'q_regard_3', label: 'Non ou je ne sais pas', scores: {}, next: 'q_pratique' },
+    ],
+  },
+  {
+    id: 'q_pratique',
+    text: 'Quelle est votre pratique spirituelle actuelle ?',
+    type: 'single',
+    options: [
+      { id: 'q_pratique_1', label: 'Je prie 5 fois/jour + adhkar matin et soir régulièrement', scores: { psycho: -1 }, next: 'q_trauma' },
+      { id: 'q_pratique_2', label: 'Je prie parfois, irrégulièrement', scores: { psycho: 1, ayn: 1, sihr: 1 }, next: 'q_trauma' },
+      { id: 'q_pratique_3', label: 'Je prie rarement', scores: { psycho: 2, mass: 1 }, next: 'q_trauma' },
+      { id: 'q_pratique_4', label: 'Je ne fais pas la prière actuellement', scores: { psycho: 3, mass: 2 }, next: 'q_trauma' },
+    ],
+  },
+  {
+    id: 'q_trauma',
+    text: 'Avez-vous vécu des événements douloureux non résolus ? (deuil, trahison, choc émotionnel, abus...)',
+    subtitle: "L'occulte peut exploiter les blessures psychologiques non guéries",
+    type: 'single',
+    options: [
+      { id: 'q_trauma_1', label: "Oui, un trauma récent que je n'ai pas surmonté", scores: { psycho: 4 }, next: 'q_medical' },
+      { id: 'q_trauma_2', label: "Oui, des blessures du passé que je porte encore", scores: { psycho: 3 }, next: 'q_medical' },
+      { id: 'q_trauma_3', label: "Oui, mais j'ai travaillé dessus et je m'en suis largement remis", scores: { psycho: 1 }, next: 'q_medical' },
+      { id: 'q_trauma_4', label: 'Non, pas de trauma particulier', scores: {}, next: 'q_medical' },
+    ],
+  },
+  {
+    id: 'q_medical',
+    text: 'Avez-vous consulté un médecin pour ces symptômes ?',
+    subtitle: 'La roqya ne remplace pas le suivi médical',
+    type: 'single',
+    options: [
+      { id: 'q_medical_1', label: 'Oui, tout est normal médicalement', scores: {}, next: null },
+      { id: 'q_medical_2', label: 'Oui, certains symptômes ont une explication médicale', scores: { psycho: 2 }, flag: 'medical', next: null },
+      { id: 'q_medical_3', label: "Non, je n'ai pas encore consulté", scores: {}, flag: 'medical', next: null },
+      { id: 'q_medical_4', label: 'Ce sont clairement des symptômes spirituels, la médecine ne peut rien', scores: {}, next: null },
+    ],
+  },
 ];
 
 // ═══════════════════════════════════════════════════════
-// STORAGE HELPERS
+// VIDEO CATALOG
 // ═══════════════════════════════════════════════════════
 
-const STORAGE_KEYS = {
-  answers: 'ruqya_questionnaire_answers',
-  program: 'ruqya_program_state',
+const GOLD_THUMB = 'linear-gradient(135deg, #D4880A, #F5A623)';
+const DARK_BLUE_THUMB = 'linear-gradient(135deg, #1A2942, #2E6AB8)';
+const GREY_BLUE_THUMB = 'linear-gradient(135deg, #5A6B82, #2E6AB8)';
+const GOLD_DARK_THUMB = 'linear-gradient(135deg, #D4880A, #1A2942)';
+const PSYCHO_THUMB = 'linear-gradient(135deg, #2E6AB8, #D4880A)';
+const INTRO_THUMB = 'linear-gradient(135deg, #2E6AB8, #4A90D9)';
+
+const ALL_VIDEOS: Record<string, VideoSlot> = {
+  v_intro: { id: 'v_intro', title: "Introduction : Votre guide d'accompagnement", description: "Comment utiliser ce programme étape par étape : navigation, objectifs, méthode de suivi", duration: '8 min', url: null, thumbnail: INTRO_THUMB },
+
+  v_ayn_1: { id: 'v_ayn_1', title: "Comprendre le 'Ayn : réalité et portée", description: "Tutoriel pratique : reconnaître les symptômes du 'Ayn selon la Sunna et les signes concrets", duration: '12 min', url: null, thumbnail: GOLD_THUMB },
+  v_ayn_2: { id: 'v_ayn_2', title: "Préparer l'eau coranisée contre le 'Ayn", description: "Démonstration : position, intention, quelles sourates réciter et comment souffler sur l'eau", duration: '10 min', url: null, thumbnail: GOLD_THUMB },
+  v_ayn_3: { id: 'v_ayn_3', title: "Technique de récitation sur soi : fais avec moi", description: "Séance guidée complète : Al-Fatiha 7x, Ayat Al-Kursi, Mu'awwidhat — position et souffle corrects", duration: '15 min', url: null, thumbnail: GOLD_THUMB },
+  v_ayn_4: { id: 'v_ayn_4', title: "Le Ghusl purificateur : protocole étape par étape", description: "Tutoriel complet du bain avec eau récitée : intention, ordre des étapes, doua finales", duration: '12 min', url: null, thumbnail: GOLD_THUMB },
+  v_ayn_5: { id: 'v_ayn_5', title: "Identifier la source du 'Ayn et se protéger", description: "Méthode pratique pour identifier d'où vient le 'Ayn et établir une protection durable", duration: '10 min', url: null, thumbnail: GOLD_THUMB },
+  v_ayn_6: { id: 'v_ayn_6', title: "Adhkar de protection quotidiens : récite avec moi", description: "Session d'adhkar matin et soir complets — récitation guidée, prononciation et sens", duration: '20 min', url: null, thumbnail: GOLD_THUMB },
+
+  v_sihr_p1_1: { id: 'v_sihr_p1_1', title: "Le Sihr : comprendre sans angoisser", description: "Tutoriel : types de sihr, comment il agit, pourquoi la roqya est efficace — basé sur Ibn Qayyim (Zad al-Ma'ad)", duration: '15 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p1_2: { id: 'v_sihr_p1_2', title: "Préparer votre eau coranisée anti-sihr", description: "Démonstration : Al-Fatiha + Kursi + Mu'awwidhat + versets de sihr (7:117) soufflés sur l'eau", duration: '12 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p1_3: { id: 'v_sihr_p1_3', title: "Le bain au Sidr : protocole Ibn Qayyim", description: "Tutoriel étape par étape : préparer les feuilles, réciter dessus, effectuer le bain rituel", duration: '15 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p1_4: { id: 'v_sihr_p1_4', title: "Préparer l'huile d'olive coranisée", description: "Démonstration complète : récitation sur l'huile, application sur le corps, interne vs externe", duration: '10 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p1_5: { id: 'v_sihr_p1_5', title: "Tawba sincère : rituel guidé de repentance", description: "Séance guidée : comment faire une tawba profonde — étapes, douas, attitude intérieure", duration: '18 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p2_1: { id: 'v_sihr_p2_1', title: "Écouter Sourate Al-Baqara activement", description: "Comment écouter Al-Baqara en thérapeutique : posture, concentration, que ressentir, journal de réactions", duration: '20 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p2_2: { id: 'v_sihr_p2_2', title: "Les versets anti-sihr : récitation guidée", description: "Récitation guidée des sourates 7:117-122, 10:79-82, 20:65-70 — prononciation et intentions", duration: '20 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p2_3: { id: 'v_sihr_p2_3', title: "Le trio thérapeutique : eau + miel + huile", description: "Protocole complet : comment préparer et utiliser quotidiennement les 3 remèdes prophétiques", duration: '12 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p2_4: { id: 'v_sihr_p2_4', title: "Reconnaître les réactions pendant le traitement", description: "Tutoriel : quelles réactions sont normales (douleurs, rêves, émotions), que faire si c'est intense", duration: '15 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p2_5: { id: 'v_sihr_p2_5', title: "Journal de suivi : noter ses rêves et réactions", description: "Guide pratique du journal de suivi : comment noter, quoi observer, interpréter ses progrès", duration: '10 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p2_6: { id: 'v_sihr_p2_6', title: "Intensifier votre routine de mi-parcours", description: "Bilan de mi-parcours et ajustements : ajouter les adhkar supplémentaires recommandés par Ibn Baz", duration: '12 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p3_1: { id: 'v_sihr_p3_1', title: "Pérenniser sa guérison : la protection durable", description: "Comment établir une routine de protection après la guérison — maintenir les acquis, prévenir les rechutes", duration: '15 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p3_2: { id: 'v_sihr_p3_2', title: "Réciter les adhkar de protection : session complète", description: "Session guidée complète : récite avec moi tous les adhkar de protection selon la Sunna", duration: '25 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p3_3: { id: 'v_sihr_p3_3', title: "Bilan final et plan de maintenance", description: "Comment évaluer sa guérison, que faire si certains symptômes persistent, quand consulter un raqi", duration: '12 min', url: null, thumbnail: DARK_BLUE_THUMB },
+  v_sihr_p3_4: { id: 'v_sihr_p3_4', title: "Fortifier sa maison avec le Coran", description: "Tutoriel pratique : écouter Al-Baqara à la maison, purifier chaque pièce, protéger l'espace familial", duration: '15 min', url: null, thumbnail: DARK_BLUE_THUMB },
+
+  v_mass_1: { id: 'v_mass_1', title: "Le Mass et les djinns : comprendre sans panique", description: "Tutoriel : types de mass, signaux diagnostiques (réaction au Coran), différence mass vs sihr vs psycho", duration: '15 min', url: null, thumbnail: GREY_BLUE_THUMB },
+  v_mass_2: { id: 'v_mass_2', title: "Préparer votre séance de roqya audio à domicile", description: "Setup pratique : quelle récitation choisir, volume, position du corps, durée, que faire après", duration: '12 min', url: null, thumbnail: GREY_BLUE_THUMB },
+  v_mass_3: { id: 'v_mass_3', title: "Réactions pendant la roqya : guide pratique", description: "Tutoriel : quelles réactions sont normales, lesquelles signalent une intensification, que faire dans chaque cas", duration: '15 min', url: null, thumbnail: GREY_BLUE_THUMB },
+  v_mass_4: { id: 'v_mass_4', title: "Réciter sur eau et huile contre le Mass", description: "Démonstration complète : sourates + douas pour l'eau et l'huile spécifiques au mass djinni", duration: '15 min', url: null, thumbnail: GREY_BLUE_THUMB },
+  v_mass_5: { id: 'v_mass_5', title: "Le bain Sidr contre le mass : protocole complet", description: "Tutoriel Ibn Qayyim adapté au mass : feuilles, récitations, intention, enchaînement des étapes", duration: '18 min', url: null, thumbnail: GREY_BLUE_THUMB },
+  v_mass_6: { id: 'v_mass_6', title: "Maintenir les 5 prières : stratégies pratiques", description: "La prière comme bouclier contre le djinn : conseils pratiques pour maintenir la régularité même quand c'est difficile", duration: '12 min', url: null, thumbnail: GREY_BLUE_THUMB },
+  v_mass_7: { id: 'v_mass_7', title: "Identifier les déclencheurs spirituels dans ta vie", description: "Méthode d'identification : quelles situations, personnes, lieux déclenchent les symptômes — garder un journal", duration: '10 min', url: null, thumbnail: GREY_BLUE_THUMB },
+  v_mass_8: { id: 'v_mass_8', title: "Prières spéciales du soir pour la guérison", description: "Session guidée du soir : Al-Mulk + Mu'awwidhat + Ayat Al-Kursi + doua spéciale mass — récite avec moi", duration: '22 min', url: null, thumbnail: GREY_BLUE_THUMB },
+  v_mass_9: { id: 'v_mass_9', title: "Évaluation de progression : mi-parcours", description: "Comment mesurer ta progression au jour 10 : checklist, critères d'amélioration, quand intensifier", duration: '10 min', url: null, thumbnail: GREY_BLUE_THUMB },
+  v_mass_10: { id: 'v_mass_10', title: "Consolidation et protection finale", description: "Bilan final du programme mass : étapes de clôture, routine de protection longue durée, signaux d'alerte", duration: '15 min', url: null, thumbnail: GREY_BLUE_THUMB },
+
+  v_waswas_1: { id: 'v_waswas_1', title: "Comprendre les waswas selon Ibn Taymiyya", description: "Tutoriel basé sur la Risalat al-Waswas : qu'est-ce que les waswas, d'où ils viennent, pourquoi c'est un test", duration: '15 min', url: null, thumbnail: GOLD_DARK_THUMB },
+  v_waswas_2: { id: 'v_waswas_2', title: "La règle d'or : NE PAS répondre aux waswas", description: "Tutoriel pratique : pourquoi répondre renforce les waswas, la technique de l'indifférence islamique", duration: '12 min', url: null, thumbnail: GOLD_DARK_THUMB },
+  v_waswas_3: { id: 'v_waswas_3', title: "Ta'awwudh en pratique : moment, méthode, intention", description: "Démonstration : quand et comment dire Ta'awwudh efficacement — les erreurs à éviter", duration: '10 min', url: null, thumbnail: GOLD_DARK_THUMB },
+  v_waswas_4: { id: 'v_waswas_4', title: "Distinguer waswas spirituels vs trouble obsessionnel clinique", description: "Tutoriel critique : les différences importantes, quand consulter un médecin ou psychologue, les deux peuvent coexister", duration: '15 min', url: null, thumbnail: GOLD_DARK_THUMB },
+  v_waswas_5: { id: 'v_waswas_5', title: "Technique de distraction intentionnelle islamique", description: "Méthode pratique : comment occuper l'esprit avec dhikr actif pour couper les waswas — exercices guidés", duration: '12 min', url: null, thumbnail: GOLD_DARK_THUMB },
+  v_waswas_6: { id: 'v_waswas_6', title: "Journal des waswas : observer sans y répondre", description: "Tutoriel du journal de suivi spécial waswas : noter pour désamorcer, analyse hebdomadaire", duration: '10 min', url: null, thumbnail: GOLD_DARK_THUMB },
+  v_waswas_7: { id: 'v_waswas_7', title: "Ayat Al-Kursi après chaque prière : pourquoi et comment", description: "Explication + démonstration : la protection post-prière quotidienne comme bouclier contre les waswas", duration: '8 min', url: null, thumbnail: GOLD_DARK_THUMB },
+  v_waswas_8: { id: 'v_waswas_8', title: "Consolidation : récapitulatif et plan longue durée", description: "Session finale : ce que tu as accompli, les 5 habitudes à garder à vie, célébration de la victoire sur les waswas", duration: '15 min', url: null, thumbnail: GOLD_DARK_THUMB },
+
+  v_psycho_1: { id: 'v_psycho_1', title: "Triangle Psycho-Roqya : le lien corps-âme-spirituel", description: "Tutoriel fondamental : comment le trauma fragilise, comment l'occulte exploite la psychologie, comment traiter les deux ensemble", duration: '20 min', url: null, thumbnail: PSYCHO_THUMB },
+  v_psycho_2: { id: 'v_psycho_2', title: "Journal thérapeutique guidé : séance 1", description: "Séance d'écriture guidée : identifier et nommer ses blessures émotionnelles, libérer ce qui est bloqué intérieurement", duration: '25 min', url: null, thumbnail: PSYCHO_THUMB },
+  v_psycho_3: { id: 'v_psycho_3', title: "Respiration ancrée dans le dhikr", description: "Technique de régulation émotionnelle islamique : inspiration/expiration avec SubhanAllah/Alhamdulillah — pratique guidée", duration: '15 min', url: null, thumbnail: PSYCHO_THUMB },
+  v_psycho_4: { id: 'v_psycho_4', title: "Pardonner pour guérir : doua du pardon guidée", description: "Session de pardon guidée : pourquoi pardonner libère l'esprit des attaques, doua prophétique du pardon", duration: '20 min', url: null, thumbnail: PSYCHO_THUMB },
+  v_psycho_5: { id: 'v_psycho_5', title: "Identifier les blessures qui fragilisent spirituellement", description: "Tutoriel d'auto-analyse : quel trauma ouvre une vulnérabilité, méthode islamique de reconstruction identitaire", duration: '18 min', url: null, thumbnail: PSYCHO_THUMB },
+  v_psycho_6: { id: 'v_psycho_6', title: "Reconstruction de l'identité spirituelle après trauma", description: "Session guidée de reconnexion à Allah : dépasser la honte, restaurer la confiance en soi et en Allah", duration: '22 min', url: null, thumbnail: PSYCHO_THUMB },
 };
 
-function loadFromStorage<T>(key: string): T | null {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
+// ═══════════════════════════════════════════════════════
+// BASE CHECKLISTS
+// ═══════════════════════════════════════════════════════
+
+const BASE_MORNING: ChecklistItem[] = [
+  { id: 'm_fatiha', label: 'Sourate Al-Fatiha', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0627\u062a\u062d\u0629', repetitions: '7x' },
+  { id: 'm_kursi', label: 'Ayat Al-Kursi', arabic: '\u0622\u064a\u0629 \u0627\u0644\u0643\u0631\u0633\u064a', repetitions: '3x' },
+  { id: 'm_ikhlas', label: 'Sourate Al-Ikhlas', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0625\u062e\u0644\u0627\u0635', repetitions: '3x' },
+  { id: 'm_falaq', label: 'Sourate Al-Falaq', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0644\u0642', repetitions: '3x' },
+  { id: 'm_nas', label: 'Sourate An-Nas', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u0627\u0633', repetitions: '3x' },
+  { id: 'm_adhkar', label: 'Adhkar du matin', arabic: '\u0623\u0630\u0643\u0627\u0631 \u0627\u0644\u0635\u0628\u0627\u062d' },
+];
+
+const BASE_EVENING: ChecklistItem[] = [
+  { id: 'e_kursi', label: 'Ayat Al-Kursi', arabic: '\u0622\u064a\u0629 \u0627\u0644\u0643\u0631\u0633\u064a', repetitions: '1x' },
+  { id: 'e_mulk', label: 'Sourate Al-Mulk', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0644\u0643' },
+  { id: 'e_3qul', label: '3 Qul soufflés sur les mains', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0625\u062e\u0644\u0627\u0635\u060c \u0627\u0644\u0641\u0644\u0642\u060c \u0627\u0644\u0646\u0627\u0633', repetitions: '3x' },
+  { id: 'e_adhkar', label: 'Adhkar du soir', arabic: '\u0623\u0630\u0643\u0627\u0631 \u0627\u0644\u0645\u0633\u0627\u0621' },
+];
+
+// ═══════════════════════════════════════════════════════
+// PROGRAM CONTENT FUNCTIONS
+// ═══════════════════════════════════════════════════════
+
+function getAynDayContent(day: number): DayContent {
+  const morning: ChecklistItem[] = [...BASE_MORNING];
+  const evening: ChecklistItem[] = [...BASE_EVENING];
+
+  if (day === 2 || day === 4 || day === 6) {
+    morning.push({ id: 'm_dua_prot', label: 'Dua de protection', repetitions: '3x' });
+  }
+  if (day === 4) {
+    morning.push({ id: 'm_istighfar', label: 'Istighfar', arabic: '\u0623\u0633\u062a\u063a\u0641\u0631 \u0627\u0644\u0644\u0647', repetitions: '33x' });
+  }
+  if (day === 6) {
+    morning.push({ id: 'm_bismillah', label: 'Bismillahi alladhi la yadurru...', repetitions: '3x' });
+  }
+
+  const dayMap: Record<number, Partial<DayContent>> = {
+    1: {
+      theme: 'Comprendre et se préparer',
+      focus: 'Poser les bases de votre guérison',
+      bonus: [
+        { id: 'b1_1', label: "Boire de l'eau coranisée", arabic: '\u0645\u0627\u0621 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064a\u0647' },
+        { id: 'b1_2', label: 'Sadaqa (aumône)', arabic: '\u0635\u062f\u0642\u0629' },
+      ],
+      video: ALL_VIDEOS.v_ayn_1,
+      scholarNote: "Ibn Qayyim (Zad al-Ma'ad) : 'L'œil est un trait lancé depuis l'âme envieuse vers la personne enviée'",
+    },
+    2: {
+      theme: "Préparation de l'eau coranisée",
+      focus: 'Apprendre à préparer votre outil de guérison',
+      bonus: [
+        { id: 'b2_1', label: "Préparer l'eau coranisée (Al-Fatiha 7x soufflée)", arabic: '\u0645\u0627\u0621 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064a\u0647' },
+        { id: 'b2_2', label: 'Ghusl recommandé' },
+      ],
+      video: ALL_VIDEOS.v_ayn_2,
+      scholarNote: "Le Prophète ﷺ a prescrit d'utiliser l'eau récitée pour le traitement du 'Ayn",
+    },
+    3: {
+      theme: 'Technique de récitation sur soi',
+      focus: 'Apprendre à se faire la roqya soi-même',
+      bonus: [
+        { id: 'b3_1', label: 'Se réciter Al-Fatiha 7x en soufflant sur ses mains', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0627\u062a\u062d\u0629' },
+        { id: 'b3_2', label: 'Passer les mains sur tout le corps après récitation' },
+      ],
+      video: ALL_VIDEOS.v_ayn_3,
+      scholarNote: 'Ibn Baz (r.a.) : La ruqya sur soi-même est autorisée et recommandée',
+    },
+    4: {
+      theme: 'Le Ghusl purificateur',
+      focus: 'Effectuer le bain purifiant avec eau coranisée',
+      bonus: [
+        { id: 'b4_1', label: 'Ghusl complet avec eau récitée selon la méthode prophétique' },
+        { id: 'b4_2', label: 'Sadaqa', arabic: '\u0635\u062f\u0642\u0629' },
+      ],
+      video: ALL_VIDEOS.v_ayn_4,
+      scholarNote: "Al-Bukhari rapporte que le Prophète ﷺ ordonnait au fautif de faire ses ablutions pour le blessé",
+    },
+    5: {
+      theme: 'Renforcement de la protection',
+      focus: 'Consolider votre bouclier spirituel',
+      bonus: [
+        { id: 'b5_1', label: 'Miel le matin à jeun', arabic: '\u0639\u0633\u0644' },
+        { id: 'b5_2', label: "Récitation sur huile d'olive", arabic: '\u0632\u064a\u062a \u0632\u064a\u062a\u0648\u0646 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064a\u0647' },
+      ],
+      video: ALL_VIDEOS.v_ayn_5,
+    },
+    6: {
+      theme: 'Adhkar intensifs de protection',
+      focus: 'Renforcer vos adhkar quotidiens',
+      bonus: [
+        { id: 'b6_1', label: 'Lire ou écouter Sourate Al-Baqara' },
+        { id: 'b6_2', label: 'Dua Bismillah', repetitions: '3x' },
+      ],
+      video: ALL_VIDEOS.v_ayn_6,
+    },
+    7: {
+      theme: 'Bilan et protection durable',
+      focus: 'Évaluer votre progression et planifier la suite',
+      bonus: [
+        { id: 'b7_1', label: "Évaluer les symptômes et noter l'évolution" },
+        { id: 'b7_2', label: 'Décider si une séance de suivi est nécessaire' },
+        { id: 'b7_3', label: 'Sadaqa', arabic: '\u0635\u062f\u0642\u0629' },
+      ],
+      scholarNote: 'Ibn Qayyim : Si les symptômes persistent après ce programme, un raqi expérimenté peut être utile',
+    },
+  };
+
+  const config = dayMap[day] ?? dayMap[7];
+  return {
+    theme: config.theme ?? `Jour ${day} — Roqya quotidienne`,
+    focus: config.focus ?? 'Maintenir la routine de guérison',
+    morning,
+    evening,
+    bonus: config.bonus ?? [],
+    video: config.video,
+    scholarNote: config.scholarNote,
+  };
+}
+
+function getSihrDayContent(day: number): DayContent {
+  const phase = day <= 7 ? 1 : day <= 21 ? 2 : 3;
+  const morning: ChecklistItem[] = [...BASE_MORNING];
+  const evening: ChecklistItem[] = [...BASE_EVENING];
+
+  if (phase === 1) {
+    morning.push({ id: 'm_istighfar', label: 'Istighfar', arabic: '\u0623\u0633\u062a\u063a\u0641\u0631 \u0627\u0644\u0644\u0647', repetitions: '100x' });
+    evening.push({ id: 'e_istighfar', label: 'Istighfar', arabic: '\u0623\u0633\u062a\u063a\u0641\u0631 \u0627\u0644\u0644\u0647', repetitions: '33x' });
+    evening.push({ id: 'e_doua_sommeil', label: 'Doua du sommeil', arabic: '\u0628\u0627\u0633\u0645\u0643 \u0627\u0644\u0644\u0647\u0645 \u0623\u0645\u0648\u062a \u0648\u0623\u062d\u064a\u0627' });
+  } else if (phase === 2) {
+    morning.push({ id: 'm_baqara', label: 'Al-Baqara v285-286' });
+    morning.push({ id: 'm_versets_sihr', label: 'Versets anti-sihr (7:117, 10:79, 20:65)' });
+    evening.push({ id: 'e_sajda', label: 'Sourate As-Sajda' });
+    evening.push({ id: 'e_istighfar', label: 'Istighfar', arabic: '\u0623\u0633\u062a\u063a\u0641\u0631 \u0627\u0644\u0644\u0647', repetitions: '33x' });
+    evening.push({ id: 'e_doua_sommeil', label: 'Doua du sommeil', arabic: '\u0628\u0627\u0633\u0645\u0643 \u0627\u0644\u0644\u0647\u0645 \u0623\u0645\u0648\u062a \u0648\u0623\u062d\u064a\u0627' });
+  } else {
+    morning.push({ id: 'm_dua_prot', label: 'Dua de protection', repetitions: '3x' });
+    evening.push({ id: 'e_istighfar', label: 'Istighfar', arabic: '\u0623\u0633\u062a\u063a\u0641\u0631 \u0627\u0644\u0644\u0647', repetitions: '33x' });
+    evening.push({ id: 'e_doua_sommeil', label: 'Doua du sommeil', arabic: '\u0628\u0627\u0633\u0645\u0643 \u0627\u0644\u0644\u0647\u0645 \u0623\u0645\u0648\u062a \u0648\u0623\u062d\u064a\u0627' });
+  }
+
+  const bonusP1: ChecklistItem[] = [
+    { id: 'b_bain_sidr', label: 'Bain Sidr (1 fois/semaine minimum)', arabic: '\u0645\u0627\u0621 \u0627\u0644\u0633\u062f\u0631' },
+    { id: 'b_eau', label: 'Eau coranisée quotidienne', arabic: '\u0645\u0627\u0621 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064a\u0647' },
+    { id: 'b_tawba', label: 'Tawba sincère', arabic: '\u062a\u0648\u0628\u0629' },
+    { id: 'b_sadaqa', label: 'Sadaqa', arabic: '\u0635\u062f\u0642\u0629' },
+  ];
+  const bonusP2: ChecklistItem[] = [
+    { id: 'b_baqara_full', label: 'Sourate Al-Baqara complète (écoute)' },
+    { id: 'b_trio', label: "Trio : eau + miel + huile d'olive", arabic: '\u0645\u0627\u0621 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064a\u0647\u060c \u0639\u0633\u0644\u060c \u0632\u064a\u062a \u0632\u064a\u062a\u0648\u0646 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064a\u0647' },
+    { id: 'b_sadaqa', label: 'Sadaqa', arabic: '\u0635\u062f\u0642\u0629' },
+  ];
+  const bonusP3: ChecklistItem[] = [
+    { id: 'b_dhikr', label: 'Dhikr intensif', repetitions: '100x' },
+    { id: 'b_eau', label: 'Eau coranisée quotidienne', arabic: '\u0645\u0627\u0621 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064a\u0647' },
+    { id: 'b_sadaqa', label: 'Sadaqa', arabic: '\u0635\u062f\u0642\u0629' },
+    { id: 'b_quran', label: 'Lire une page de Coran' },
+  ];
+
+  const videoMap: Record<number, VideoSlot> = {
+    1: ALL_VIDEOS.v_sihr_p1_1,
+    2: ALL_VIDEOS.v_sihr_p1_2,
+    3: ALL_VIDEOS.v_sihr_p1_3,
+    4: ALL_VIDEOS.v_sihr_p1_4,
+    5: ALL_VIDEOS.v_sihr_p1_5,
+    8: ALL_VIDEOS.v_sihr_p2_1,
+    9: ALL_VIDEOS.v_sihr_p2_2,
+    10: ALL_VIDEOS.v_sihr_p2_3,
+    12: ALL_VIDEOS.v_sihr_p2_4,
+    14: ALL_VIDEOS.v_sihr_p2_5,
+    21: ALL_VIDEOS.v_sihr_p2_6,
+    22: ALL_VIDEOS.v_sihr_p3_1,
+    25: ALL_VIDEOS.v_sihr_p3_2,
+    27: ALL_VIDEOS.v_sihr_p3_4,
+    30: ALL_VIDEOS.v_sihr_p3_3,
+  };
+
+  const themeMap: Record<number, string> = {
+    1: 'Phase 1 : Purification — Comprendre le sihr',
+    2: "Préparer l'eau coranisée",
+    3: 'Le bain au Sidr',
+    4: "L'huile d'olive coranisée",
+    5: 'La Tawba purificatrice',
+    6: 'Renforcement de la base spirituelle',
+    7: 'Bilan de purification',
+    8: 'Phase 2 : Traitement — Écouter Al-Baqara',
+    9: 'Les versets anti-sihr',
+    10: 'Le trio thérapeutique',
+    11: 'Consolidation du traitement',
+    12: 'Reconnaître les réactions de traitement',
+    13: 'Consolidation du traitement',
+    14: 'Première évaluation et journal',
+    21: 'Mi-parcours : intensification',
+    22: 'Phase 3 : Consolidation — Pérenniser la guérison',
+    25: 'Adhkar complets de protection',
+    27: 'Fortifier votre maison',
+    30: 'Bilan final et plan de maintenance',
+  };
+
+  return {
+    theme: themeMap[day] ?? `Phase ${phase} — Jour ${day} : Maintien du traitement intensif`,
+    focus: phase === 1 ? 'Purification spirituelle quotidienne' : phase === 2 ? 'Traitement intensif par la roqya' : 'Consolidation et protection durable',
+    morning,
+    evening,
+    bonus: phase === 1 ? bonusP1 : phase === 2 ? bonusP2 : bonusP3,
+    video: videoMap[day],
+  };
+}
+
+function getMassDayContent(day: number): DayContent {
+  const morning: ChecklistItem[] = [
+    ...BASE_MORNING,
+    { id: 'm_versets_roqya', label: 'Versets de roqya', repetitions: '3x' },
+    { id: 'm_dua_prot', label: 'Dua de protection' },
+  ];
+  const evening: ChecklistItem[] = [
+    ...BASE_EVENING,
+    { id: 'e_dua_mass', label: 'Dua spécifique mass' },
+    { id: 'e_doua_sommeil', label: 'Doua du sommeil', arabic: '\u0628\u0627\u0633\u0645\u0643 \u0627\u0644\u0644\u0647\u0645 \u0623\u0645\u0648\u062a \u0648\u0623\u062d\u064a\u0627' },
+  ];
+  const bonus: ChecklistItem[] = [
+    { id: 'b_bain_sidr', label: 'Bain Sidr (hebdomadaire)', arabic: '\u0645\u0627\u0621 \u0627\u0644\u0633\u062f\u0631' },
+    { id: 'b_eau', label: 'Eau coranisée quotidienne', arabic: '\u0645\u0627\u0621 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064a\u0647' },
+    { id: 'b_huile', label: "Huile d'olive récitée (application)", arabic: '\u0632\u064a\u062a \u0632\u064a\u062a\u0648\u0646 \u0645\u0642\u0631\u0648\u0621 \u0639\u0644\u064a\u0647' },
+    { id: 'b_roqya_audio', label: 'Session de roqya audio (30 min minimum)' },
+  ];
+
+  const videoMap: Record<number, VideoSlot> = {
+    1: ALL_VIDEOS.v_mass_1,
+    2: ALL_VIDEOS.v_mass_2,
+    3: ALL_VIDEOS.v_mass_3,
+    4: ALL_VIDEOS.v_mass_4,
+    7: ALL_VIDEOS.v_mass_5,
+    10: ALL_VIDEOS.v_mass_9,
+    14: ALL_VIDEOS.v_mass_7,
+    17: ALL_VIDEOS.v_mass_8,
+    21: ALL_VIDEOS.v_mass_10,
+  };
+
+  const themeMap: Record<number, string> = {
+    1: 'Comprendre le mass et se préparer',
+    2: 'Préparer la roqya audio à domicile',
+    3: 'Comprendre les réactions de la roqya',
+    4: "L'eau et l'huile coranisées",
+    5: 'Renforcement de la routine',
+    6: 'Intensification du traitement',
+    7: 'Le bain Sidr',
+    8: 'Maintien et régularité',
+    9: 'Approfondissement de la roqya',
+    10: 'Bilan de progression + identifier déclencheurs',
+    14: 'Journal et déclencheurs spirituels',
+    17: 'Prières spéciales du soir',
+    21: 'Bilan final',
+  };
+
+  return {
+    theme: themeMap[day] ?? `Jour ${day} — Traitement du mass`,
+    focus: day <= 7 ? 'Établir la routine de traitement' : day <= 14 ? 'Intensification et suivi' : 'Consolidation et protection',
+    morning,
+    evening,
+    bonus,
+    video: videoMap[day],
+  };
+}
+
+function getWaswasDayContent(day: number): DayContent {
+  const morning: ChecklistItem[] = [
+    { id: 'm_tawwudh', label: "Ta'awwudh", arabic: '\u0623\u0639\u0648\u0630 \u0628\u0627\u0644\u0644\u0647 \u0645\u0646 \u0627\u0644\u0634\u064a\u0637\u0627\u0646 \u0627\u0644\u0631\u062c\u064a\u0645' },
+    { id: 'm_fatiha', label: 'Sourate Al-Fatiha', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0627\u062a\u062d\u0629', repetitions: '3x' },
+    { id: 'm_kursi', label: 'Ayat Al-Kursi', arabic: '\u0622\u064a\u0629 \u0627\u0644\u0643\u0631\u0633\u064a', repetitions: '3x' },
+    { id: 'm_ikhlas', label: 'Sourate Al-Ikhlas', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0625\u062e\u0644\u0627\u0635', repetitions: '3x' },
+    { id: 'm_falaq', label: 'Sourate Al-Falaq', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0644\u0642', repetitions: '3x' },
+    { id: 'm_nas', label: 'Sourate An-Nas', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0646\u0627\u0633', repetitions: '3x' },
+    { id: 'm_adhkar', label: 'Adhkar du matin', arabic: '\u0623\u0630\u0643\u0627\u0631 \u0627\u0644\u0635\u0628\u0627\u062d' },
+    { id: 'm_istighfar', label: 'Istighfar', arabic: '\u0623\u0633\u062a\u063a\u0641\u0631 \u0627\u0644\u0644\u0647', repetitions: '100x' },
+  ];
+  const evening: ChecklistItem[] = [
+    { id: 'e_kursi_priere', label: 'Ayat Al-Kursi après chaque prière', arabic: '\u0622\u064a\u0629 \u0627\u0644\u0643\u0631\u0633\u064a' },
+    { id: 'e_mulk', label: 'Sourate Al-Mulk', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0645\u0644\u0643' },
+    { id: 'e_3qul', label: '3 Qul', arabic: '\u0633\u0648\u0631\u0629 \u0627\u0644\u0625\u062e\u0644\u0627\u0635\u060c \u0627\u0644\u0641\u0644\u0642\u060c \u0627\u0644\u0646\u0627\u0633', repetitions: '3x' },
+    { id: 'e_adhkar', label: 'Adhkar du soir', arabic: '\u0623\u0630\u0643\u0627\u0631 \u0627\u0644\u0645\u0633\u0627\u0621' },
+    { id: 'e_istighfar', label: 'Istighfar', arabic: '\u0623\u0633\u062a\u063a\u0641\u0631 \u0627\u0644\u0644\u0647', repetitions: '33x' },
+    { id: 'e_doua_sommeil', label: 'Doua du sommeil', arabic: '\u0628\u0627\u0633\u0645\u0643 \u0627\u0644\u0644\u0647\u0645 \u0623\u0645\u0648\u062a \u0648\u0623\u062d\u064a\u0627' },
+  ];
+  const bonus: ChecklistItem[] = [
+    { id: 'b_ignore', label: 'Ignorer consciemment 1 waswas (noter dans journal)' },
+    { id: 'b_quran', label: 'Lire 1 page de Coran' },
+    { id: 'b_tawwudh_waswas', label: "Ta'awwudh à chaque waswas ressenti", arabic: '\u0623\u0639\u0648\u0630 \u0628\u0627\u0644\u0644\u0647 \u0645\u0646 \u0627\u0644\u0634\u064a\u0637\u0627\u0646 \u0627\u0644\u0631\u062c\u064a\u0645' },
+  ];
+
+  const videoMap: Record<number, VideoSlot> = {
+    1: ALL_VIDEOS.v_waswas_1,
+    2: ALL_VIDEOS.v_waswas_2,
+    3: ALL_VIDEOS.v_waswas_3,
+    4: ALL_VIDEOS.v_waswas_4,
+    5: ALL_VIDEOS.v_waswas_5,
+    7: ALL_VIDEOS.v_waswas_6,
+    8: ALL_VIDEOS.v_waswas_7,
+    14: ALL_VIDEOS.v_waswas_8,
+  };
+
+  const themeMap: Record<number, string> = {
+    1: 'Comprendre les waswas — la vérité libératrice',
+    2: "La règle d'or : ne pas répondre",
+    3: "Ta'awwudh en pratique",
+    4: 'Waswas spirituels vs trouble clinique',
+    5: 'La distraction intentionnelle',
+    6: "Pratique de l'indifférence islamique",
+    7: 'Journal des waswas — observer sans répondre',
+    8: 'Ayat Al-Kursi après chaque prière',
+    14: 'Consolidation — félicitations pour votre victoire',
+  };
+
+  return {
+    theme: themeMap[day] ?? `Jour ${day} — Maintien de la résistance`,
+    focus: day <= 7 ? 'Apprendre à ignorer les waswas' : 'Consolider la victoire spirituelle',
+    morning,
+    evening,
+    bonus,
+    video: videoMap[day],
+  };
+}
+
+function getDayContent(type: AffectionType, day: number): DayContent {
+  switch (type) {
+    case 'ayn': return getAynDayContent(day);
+    case 'sihr': return getSihrDayContent(day);
+    case 'mass': return getMassDayContent(day);
+    case 'waswas': return getWaswasDayContent(day);
   }
 }
 
-function saveToStorage<T>(key: string, value: T): void {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    // silently ignore
-  }
-}
+// ═══════════════════════════════════════════════════════
+// PROGRAM CONFIG
+// ═══════════════════════════════════════════════════════
+
+const PROGRAM_CONFIG = {
+  ayn: { title: "Programme 'Ayn (Mauvais Œil)", duration: 7, icon: Star, color: 'gold', description: "7 jours de roqya ciblée contre le mauvais œil selon la Sunna prophétique" },
+  sihr: { title: 'Programme Sihr (Envoûtement)', duration: 30, icon: Flame, color: 'red-dark', description: '30 jours en 3 phases : purification, traitement intensif, consolidation — selon Ibn Qayyim' },
+  mass: { title: 'Programme Mass (Djinn)', duration: 21, icon: Shield, color: 'blue-dark', description: '21 jours de roqya intensive avec suivi quotidien — basé sur la méthode des savants' },
+  waswas: { title: 'Programme Waswas (Obsessions)', duration: 14, icon: MessageCircle, color: 'gold', description: '14 jours pour vaincre les waswas selon Ibn Taymiyya (Risalat al-Waswas)' },
+} as const;
 
 // ═══════════════════════════════════════════════════════
 // DIAGNOSIS ENGINE
 // ═══════════════════════════════════════════════════════
 
-function diagnose(answers: QuestionnaireAnswers): { type: ProgramType; severity: Severity; details: DiagnosisDetails } {
-  const totalPhysical = answers.physicalSymptoms.length;
-  const totalPsych = answers.psychologicalSymptoms.length;
-  const totalSpecific = answers.specificSymptoms.length;
-  const totalSymptoms = totalPhysical + totalPsych + totalSpecific;
-
-  // ── Score par gravité (pas par quantité) ──
-  let score = 0;
-  const gravityFactors: string[] = [];
-
-  // Facteurs LOURDS — pèsent fortement
-  if (answers.duration === '>1an') { score += 4; gravityFactors.push('Symptômes présents depuis plus d\'un an'); }
-  else if (answers.duration === '6-12') { score += 2; gravityFactors.push('Symptômes présents depuis 6 à 12 mois'); }
-  else if (answers.duration === '1-6') { score += 1; }
-
-  if (answers.prayer === 'rarement') { score += 3; gravityFactors.push('Prière irrégulière — un facteur de vulnérabilité spirituelle'); }
-  else if (answers.prayer === 'parfois') { score += 1; }
-
-  if (answers.quran === 'jamais') { score += 3; gravityFactors.push('Pas de lecture du Coran — renforcer cette pratique est essentiel'); }
-  else if (answers.quran === 'rarement') { score += 1; }
-
-  // Symptômes spécifiques GRAVES (poids élevé)
-  const heavySpecific = [
-    'Réaction forte à l\'écoute du Coran (pleurs, tremblements, douleurs)',
-    'Blocages dans la vie (mariage, travail, projets)',
-    'Changement soudain de comportement',
-    'Sensation de présence autour de vous',
-  ];
-  heavySpecific.forEach((s) => {
-    if (answers.specificSymptoms.includes(s)) {
-      score += 3;
-      gravityFactors.push(s);
+function computeScores(answersMap: Record<string, string[]>): Scores {
+  const scores: Scores = { ayn: 0, sihr: 0, mass: 0, waswas: 0, psycho: 0 };
+  for (const question of QUESTIONS) {
+    const selectedIds = answersMap[question.id] ?? [];
+    for (const optionId of selectedIds) {
+      const option = question.options.find(o => o.id === optionId);
+      if (option) {
+        const s = option.scores;
+        if (s.ayn !== undefined) scores.ayn += s.ayn;
+        if (s.sihr !== undefined) scores.sihr += s.sihr;
+        if (s.mass !== undefined) scores.mass += s.mass;
+        if (s.waswas !== undefined) scores.waswas += s.waswas;
+        if (s.psycho !== undefined) scores.psycho += s.psycho;
+      }
     }
-  });
+  }
+  scores.ayn = Math.max(0, scores.ayn);
+  scores.sihr = Math.max(0, scores.sihr);
+  scores.mass = Math.max(0, scores.mass);
+  scores.waswas = Math.max(0, scores.waswas);
+  scores.psycho = Math.max(0, scores.psycho);
+  return scores;
+}
 
-  // Symptômes spécifiques MOYENS
-  const mediumSpecific = [
-    'Cauchemars avec serpents, chiens, ou chutes',
-    'Problèmes relationnels récurrents (couple, famille)',
-    'Malchance répétée et échecs inexpliqués',
-    'Aversion pour certains lieux ou personnes',
+function buildDiagnosis(scores: Scores, medicalFlag: boolean): DiagnosisResult {
+  const afflictionEntries: [AffectionType, number][] = [
+    ['ayn', scores.ayn],
+    ['sihr', scores.sihr],
+    ['mass', scores.mass],
+    ['waswas', scores.waswas],
   ];
-  mediumSpecific.forEach((s) => {
-    if (answers.specificSymptoms.includes(s)) score += 1.5;
-  });
 
-  // Symptômes psychologiques GRAVES
-  const heavyPsych = [
-    'Éloignement de la prière et du Coran',
-    'Pensées obsessionnelles ou intrusives',
-    'Waswas (chuchotements/doutes) fréquents',
-  ];
-  heavyPsych.forEach((s) => {
-    if (answers.psychologicalSymptoms.includes(s)) {
-      score += 2;
-      if (!gravityFactors.includes(s)) gravityFactors.push(s);
-    }
-  });
-
-  // Symptômes psychologiques LÉGERS
-  const lightPsych = ['Anxiété ou angoisse permanente', 'Tristesse profonde sans raison apparente', 'Irritabilité ou colère excessive', 'Envie de s\'isoler des gens', 'Difficultés de concentration'];
-  lightPsych.forEach((s) => {
-    if (answers.psychologicalSymptoms.includes(s)) score += 0.5;
-  });
-
-  // Symptômes physiques — poids léger (souvent du stress)
-  score += totalPhysical * 0.3;
-
-  // ── Conseils personnalisés selon le niveau ──
-  let advice: string[];
-  let type: ProgramType;
-  let severity: Severity;
-
-  if (answers.suspectedCause === 'prevention' || (totalSymptoms <= 2 && score < 5)) {
-    type = 'prevention';
-    severity = 'leger';
-    advice = [
-      'Maintenir les 5 prières quotidiennes',
-      'Réciter les adhkar du matin et du soir chaque jour',
-      'Écouter le Coran régulièrement',
-      'Faire des douas de protection (Ayat Al-Kursi, les 3 Qul)',
-      'Vos symptômes sont légers. Ces pratiques vous protégeront in sha\'Allah.',
-    ];
-  } else if (score < 12) {
-    type = 'light';
-    severity = 'modere';
-    advice = [
-      'Renforcer votre routine d\'adhkar matin et soir',
-      'Écouter Sourate Al-Baqara au moins 1 fois par semaine',
-      'Boire de l\'eau coranisée quotidiennement',
-      'Renforcez vos pratiques et observez l\'évolution sur 15 jours',
-    ];
-    if (answers.consultedDoctor === 'non') {
-      advice.push('Nous vous recommandons aussi de consulter un médecin pour écarter les causes médicales.');
-    }
-  } else {
-    type = 'intensive';
-    severity = 'severe';
-    advice = [
-      'Écouter une roqya audio quotidiennement',
-      'Boire de l\'eau coranisée et se masser avec de l\'huile d\'olive coranisée',
-      'Prendre un bain avec eau de Sidr (feuilles de jujubier)',
-      'Lire ou écouter Sourate Al-Baqara en entier régulièrement',
-      'Consulter un raqi de confiance pour un accompagnement personnalisé',
-      'Ne restez pas seul(e). Un accompagnement plus poussé est recommandé.',
-    ];
-    if (answers.consultedDoctor === 'non') {
-      advice.push('Consultez également un médecin pour écarter toute cause médicale.');
+  let dominantType: AffectionType = 'ayn';
+  let dominantScore = 0;
+  for (const [type, score] of afflictionEntries) {
+    if (score > dominantScore) {
+      dominantScore = score;
+      dominantType = type;
     }
   }
 
+  const psychoScore = scores.psycho;
+  let profile: DiagnosticProfile;
+  if (medicalFlag && dominantScore < 3) {
+    profile = 'medical';
+  } else if (psychoScore >= 6 && dominantScore < 4) {
+    profile = 'psycho';
+  } else if (psychoScore >= 4 && dominantScore >= 4) {
+    profile = 'hybrid';
+  } else {
+    profile = 'occult';
+  }
+
+  const totalDays = PROGRAM_CONFIG[dominantType].duration;
+
+  const ctaByType: Record<AffectionType, { ctaTitle: string; ctaMessage: string; ctaButtonLabel: string }> = {
+    ayn: {
+      ctaTitle: 'Un suivi personnalisé peut accélérer votre guérison',
+      ctaMessage: "Si les symptômes du 'Ayn persistent après ce programme, une séance avec un raqi peut dissoudre ce qui reste plus rapidement.",
+      ctaButtonLabel: "Réserver une consultation 'Ayn",
+    },
+    sihr: {
+      ctaTitle: 'Le sihr nécessite parfois un accompagnement direct',
+      ctaMessage: "Pour les cas de sihr complexes ou anciens, une séance avec un raqi spécialisé peut déverrouiller des blocages profonds que la roqya à domicile ne suffit pas à résoudre.",
+      ctaButtonLabel: 'Réserver une séance anti-sihr',
+    },
+    mass: {
+      ctaTitle: 'Une séance directe est fortement recommandée',
+      ctaMessage: "Le mass djinni bénéficie grandement d'une séance de roqya avec contact direct ou audio intensif par un raqi expérimenté. Ne restez pas seul(e) dans ce combat.",
+      ctaButtonLabel: 'Réserver une séance de roqya',
+    },
+    waswas: {
+      ctaTitle: 'Accompagnement dual recommandé',
+      ctaMessage: "Les waswas sévères bénéficient d'un double accompagnement : roqya spirituelle ET soutien psychologique. Un raqi formé peut vous orienter.",
+      ctaButtonLabel: 'Réserver un accompagnement waswas',
+    },
+  };
+
+  let { ctaTitle, ctaMessage, ctaButtonLabel } = ctaByType[dominantType];
+
+  if (profile === 'psycho') {
+    ctaTitle = 'Accompagnement psychologique recommandé';
+    ctaMessage = "Vos difficultés semblent principalement liées à des blessures émotionnelles. Un accompagnement avec un professionnel de santé mentale et un suivi spirituel doux est conseillé.";
+    ctaButtonLabel = 'Prendre rendez-vous';
+  } else if (profile === 'hybrid') {
+    ctaTitle = 'Approche intégrative nécessaire';
+    ctaMessage = "Votre profil combine des dimensions spirituelles ET psychologiques. Une approche duale — roqya ET accompagnement émotionnel — donnera les meilleurs résultats.";
+    ctaButtonLabel = 'Réserver une séance intégrative';
+  } else if (profile === 'medical') {
+    ctaTitle = 'Consultez un médecin en priorité';
+    ctaMessage = "Avant toute chose, une consultation médicale complète est nécessaire pour éliminer les causes physiques. La roqya et la médecine sont complémentaires.";
+    ctaButtonLabel = 'En savoir plus sur notre approche';
+  }
+
   return {
-    type,
-    severity,
-    details: { score, totalSymptoms, gravityFactors, advice },
+    affectionType: dominantType,
+    profile,
+    scores,
+    dominantScore,
+    psychoScore,
+    totalDays,
+    hasMedicalFlag: medicalFlag,
+    ctaTitle,
+    ctaMessage,
+    ctaButtonLabel,
   };
 }
 
 // ═══════════════════════════════════════════════════════
-// COMPONENTS
+// STORAGE
 // ═══════════════════════════════════════════════════════
 
-function StepProgressBar({ current, total }: { current: number; total: number }) {
+const STORAGE_KEY = 'ruqya_v2_program_state';
+const STORAGE_KEY_Q = 'ruqya_v2_questionnaire';
+
+function loadProgramState(): ProgramState | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as ProgramState;
+  } catch {
+    return null;
+  }
+}
+
+function saveProgramState(state: ProgramState) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+// ═══════════════════════════════════════════════════════
+// TYPE / PROFILE LABELS
+// ═══════════════════════════════════════════════════════
+
+const TYPE_LABELS: Record<AffectionType, { label: string; color: string; bg: string; Icon: React.ElementType }> = {
+  ayn: { label: "'Ayn — Mauvais Œil", color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200', Icon: Star },
+  sihr: { label: 'Sihr — Envoûtement', color: 'text-red-700', bg: 'bg-red-50 border-red-200', Icon: Flame },
+  mass: { label: 'Mass — Djinn', color: 'text-blue-700', bg: 'bg-blue-50 border-blue-200', Icon: Shield },
+  waswas: { label: 'Waswas — Obsessions', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', Icon: MessageCircle },
+};
+
+const PROFILE_LABELS: Record<DiagnosticProfile, { label: string; color: string; bg: string }> = {
+  occult: { label: 'Profil Spirituel', color: 'text-green-700', bg: 'bg-green-50 border-green-200' },
+  psycho: { label: 'Profil Psychologique', color: 'text-blue-700', bg: 'bg-blue-50 border-blue-200' },
+  hybrid: { label: 'Double Cause', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200' },
+  medical: { label: 'Urgence Médicale', color: 'text-orange-700', bg: 'bg-orange-50 border-orange-200' },
+};
+
+// ═══════════════════════════════════════════════════════
+// SUB-COMPONENTS
+// ═══════════════════════════════════════════════════════
+
+function VideoCard({ video }: { video: VideoSlot }) {
   return (
-    <div className="mb-8">
-      <div className="flex items-center justify-between mb-2">
-        {Array.from({ length: total }, (_, i) => (
-          <div key={i} className="flex items-center flex-1 last:flex-none">
-            <div
-              className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-all duration-300 ${
-                i < current
-                  ? 'bg-green-islamic text-white'
-                  : i === current
-                    ? 'bg-gold text-white ring-4 ring-gold/20'
-                    : 'bg-cream-dark text-text-secondary'
-              }`}
-            >
-              {i < current ? <Check className="h-4 w-4" /> : i + 1}
-            </div>
-            {i < total - 1 && (
-              <div className="flex-1 mx-2">
-                <div className="h-0.5 w-full rounded bg-cream-dark">
-                  <div
-                    className="h-full rounded bg-green-islamic transition-all duration-500"
-                    style={{ width: i < current ? '100%' : '0%' }}
-                  />
-                </div>
-              </div>
-            )}
+    <div className="card-islamic overflow-hidden">
+      <div style={{ background: video.thumbnail }} className="relative h-32 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+            <Play className="h-6 w-6 text-white ml-1" />
           </div>
-        ))}
+        </div>
+        <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-0.5 rounded">
+          {video.duration}
+        </div>
+      </div>
+      <div className="p-3">
+        <p className="text-xs font-semibold text-text-primary">{video.title}</p>
+        <p className="mt-1 text-xs text-text-secondary">{video.description}</p>
+        <div className="mt-2 flex items-center gap-1">
+          <div className="h-1.5 w-1.5 rounded-full bg-gold" />
+          <span className="text-xs text-gold">Vidéo disponible bientôt</span>
+        </div>
       </div>
     </div>
   );
 }
 
-function QuoteCard({ index }: { index: number }) {
-  const quote = MOTIVATIONAL_QUOTES[index % MOTIVATIONAL_QUOTES.length];
+interface ChecklistSectionProps {
+  title: string;
+  items: ChecklistItem[];
+  completedIds: string[];
+  onToggle: (id: string) => void;
+  icon: React.ReactNode;
+}
+
+function ChecklistSection({ title, items, completedIds, onToggle, icon }: ChecklistSectionProps) {
   return (
-    <div className="my-8 rounded-2xl border border-green-islamic/10 bg-green-islamic/5 p-6 text-center">
-      <p className="text-xl leading-loose text-green-islamic" style={{ fontFamily: "'Amiri', 'Times New Roman', serif" }} dir="rtl">
-        {quote.arabic}
-      </p>
-      <p className="mt-3 text-sm italic text-text-secondary">{quote.french}</p>
-      <p className="mt-1 text-xs font-medium text-gold">{quote.source}</p>
+    <div className="mt-4">
+      <div className="flex items-center gap-2 mb-2">
+        {icon}
+        <h4 className="text-sm font-semibold text-text-primary">{title}</h4>
+      </div>
+      <div className="space-y-2">
+        {items.map(item => {
+          const done = completedIds.includes(item.id);
+          return (
+            <button
+              key={item.id}
+              onClick={() => onToggle(item.id)}
+              className={`w-full flex items-start gap-3 rounded-xl p-3 text-left transition-all ${
+                done ? 'bg-green-50 border border-green-200' : 'bg-white border border-gray-100 hover:border-green-islamic/30'
+              }`}
+            >
+              <div className="mt-0.5 shrink-0">
+                {done
+                  ? <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  : <Circle className="h-4 w-4 text-gray-300" />
+                }
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className={`text-sm ${done ? 'line-through text-text-secondary' : 'text-text-primary'}`}>
+                  {item.label}
+                </span>
+                {item.arabic && (
+                  <p className="text-xs text-text-secondary mt-0.5" dir="rtl">{item.arabic}</p>
+                )}
+              </div>
+              {item.repetitions && (
+                <span className={`shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full ${
+                  done ? 'bg-green-100 text-green-700' : 'bg-gold/10 text-gold'
+                }`}>
+                  {item.repetitions}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function PremiumGate() {
+  return (
+    <div className="relative rounded-xl overflow-hidden">
+      <div className="pointer-events-none select-none blur-sm opacity-40 p-4 space-y-2">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-3">
+            <Circle className="h-4 w-4 text-gray-300 shrink-0" />
+            <div className="flex-1">
+              <div className="h-3 bg-gray-200 rounded w-3/4" />
+              <div className="h-2 bg-gray-100 rounded w-1/2 mt-1" />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 rounded-xl">
+        <Crown className="h-5 w-5 text-gold absolute top-3 right-3" />
+        <Lock className="h-8 w-8 text-gold mb-3" />
+        <p className="text-sm font-bold text-text-primary">Contenu Premium</p>
+        <p className="mt-1 text-xs text-text-secondary text-center px-4">
+          Les jours 4 et suivants sont accessibles avec un abonnement Premium
+        </p>
+        <Link
+          to="/tarifs"
+          className="mt-3 rounded-full bg-gold px-4 py-2 text-sm font-semibold text-white hover:bg-gold/90 transition-colors"
+        >
+          Débloquer — 9,99€/mois
+        </Link>
+      </div>
     </div>
   );
 }
@@ -509,1412 +919,682 @@ function QuoteCard({ index }: { index: number }) {
 // ═══════════════════════════════════════════════════════
 
 export default function Programme() {
-  const user = useAuthStore((s) => s.user);
-  const profile = useAuthStore((s) => s.profile);
-  const isPremium = profile?.is_premium === true;
+  const { user, profile } = useAuthStore();
+  const isPremium = profile?.is_premium ?? false;
+
+  const [view, setView] = useState<View>('questionnaire');
+  const [currentQuestionId, setCurrentQuestionId] = useState('q_duration');
+  const [questionPath, setQuestionPath] = useState<string[]>(['q_duration']);
+  const [answers, setAnswers] = useState<Record<string, string[]>>({});
+  const [medicalFlag, setMedicalFlag] = useState(false);
+  const [diagnosis, setDiagnosis] = useState<DiagnosisResult | null>(null);
+  const [programState, setProgramState] = useState<ProgramState | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [viewingDay, setViewingDay] = useState(1);
 
-  // Determine initial view from localStorage
-  const [view, setView] = useState<View>(() => {
-    const program = loadFromStorage<ProgramState>(STORAGE_KEYS.program);
-    if (program && program.startDate) return 'tracker';
-    const answers = loadFromStorage<QuestionnaireAnswers>(STORAGE_KEYS.answers);
-    if (answers && answers.suspectedCause) return 'result';
-    return 'questionnaire';
-  });
-
-  const [step, setStep] = useState(0);
-  const [completionMsg, setCompletionMsg] = useState<string | null>(null);
-  const [trackerTab, setTrackerTab] = useState<'programme' | 'evolution'>('programme');
-  const [showBilan, setShowBilan] = useState(false);
-
-  const [answers, setAnswers] = useState<QuestionnaireAnswers>(() => {
-    const saved = loadFromStorage<QuestionnaireAnswers>(STORAGE_KEYS.answers);
-    return saved || {
-      duration: '',
-      previousRuqya: '',
-      prayer: '',
-      quran: '',
-      physicalSymptoms: [],
-      psychologicalSymptoms: [],
-      specificSymptoms: [],
-      suspectedCause: '',
-      consultedDoctor: '',
-    };
-  });
-
-  const [program, setProgram] = useState<ProgramState>(() => {
-    const saved = loadFromStorage<ProgramState>(STORAGE_KEYS.program);
-    return saved || {
-      type: 'prevention',
-      severity: 'leger',
-      startDate: '',
-      currentDay: 1,
-      totalDays: 7,
-      dailyProgress: {},
-    };
-  });
-
-  // Save answers when they change
   useEffect(() => {
-    saveToStorage(STORAGE_KEYS.answers, answers);
-  }, [answers]);
-
-  // Save program when it changes
-  useEffect(() => {
-    saveToStorage(STORAGE_KEYS.program, program);
-  }, [program]);
-
-  // Calculate current day from start date
-  useEffect(() => {
-    if (program.startDate) {
-      const start = new Date(program.startDate);
-      const today = new Date();
-      start.setHours(0, 0, 0, 0);
-      today.setHours(0, 0, 0, 0);
-      const diff = Math.floor((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-      const currentDay = Math.max(1, Math.min(diff, program.totalDays));
-      if (currentDay !== program.currentDay) {
-        setProgram((prev) => ({ ...prev, currentDay }));
+    const saved = loadProgramState();
+    if (saved) {
+      setProgramState(saved);
+      setViewingDay(saved.currentDay);
+    }
+    const savedQ = localStorage.getItem(STORAGE_KEY_Q);
+    if (savedQ) {
+      try {
+        const parsed = JSON.parse(savedQ) as { answers?: Record<string, string[]> };
+        if (parsed.answers) setAnswers(parsed.answers);
+      } catch {
+        // ignore
       }
     }
-  }, [program.startDate, program.totalDays, program.currentDay]);
-
-  // ═══ QUESTIONNAIRE HANDLERS ═══
-
-  const updateAnswer = useCallback(<K extends keyof QuestionnaireAnswers>(key: K, value: QuestionnaireAnswers[K]) => {
-    setAnswers((prev) => ({ ...prev, [key]: value }));
   }, []);
 
-  const toggleSymptom = useCallback((key: 'physicalSymptoms' | 'psychologicalSymptoms' | 'specificSymptoms', symptom: string) => {
-    setAnswers((prev) => {
-      const arr = prev[key];
-      return {
-        ...prev,
-        [key]: arr.includes(symptom) ? arr.filter((s) => s !== symptom) : [...arr, symptom],
-      };
+  const currentQuestion = QUESTIONS.find(q => q.id === currentQuestionId);
+  const currentIndex = questionPath.indexOf(currentQuestionId);
+
+  function handleSingleAnswer(optionId: string) {
+    if (!currentQuestion) return;
+    const option = currentQuestion.options.find(o => o.id === optionId);
+    if (!option) return;
+
+    const newAnswers = { ...answers, [currentQuestionId]: [optionId] };
+    setAnswers(newAnswers);
+    localStorage.setItem(STORAGE_KEY_Q, JSON.stringify({ answers: newAnswers }));
+
+    const willSetMedical = option.flag === 'medical';
+    const nextMedicalFlag = medicalFlag || willSetMedical;
+    if (willSetMedical) setMedicalFlag(true);
+
+    if (option.next === null) {
+      const finalScores = computeScores(newAnswers);
+      const diag = buildDiagnosis(finalScores, nextMedicalFlag);
+      setDiagnosis(diag);
+      setView('result');
+    } else {
+      const nextId = option.next;
+      setQuestionPath(prev => {
+        const idx = prev.indexOf(currentQuestionId);
+        const newPath = prev.slice(0, idx + 1);
+        if (!newPath.includes(nextId)) newPath.push(nextId);
+        return newPath;
+      });
+      setCurrentQuestionId(nextId);
+    }
+  }
+
+  function handleMultiToggle(optionId: string) {
+    const current = answers[currentQuestionId] ?? [];
+    const newSelected = current.includes(optionId)
+      ? current.filter(id => id !== optionId)
+      : [...current, optionId];
+    const newAnswers = { ...answers, [currentQuestionId]: newSelected };
+    setAnswers(newAnswers);
+    localStorage.setItem(STORAGE_KEY_Q, JSON.stringify({ answers: newAnswers }));
+  }
+
+  function handleMultiContinue() {
+    if (!currentQuestion?.defaultNext) return;
+    const nextId = currentQuestion.defaultNext;
+    setQuestionPath(prev => {
+      const idx = prev.indexOf(currentQuestionId);
+      const newPath = prev.slice(0, idx + 1);
+      if (!newPath.includes(nextId)) newPath.push(nextId);
+      return newPath;
     });
-  }, []);
+    setCurrentQuestionId(nextId);
+  }
 
-  const canGoNext = (): boolean => {
-    if (step === 0) return !!(answers.duration && answers.previousRuqya && answers.prayer && answers.quran);
-    if (step === 1) return true; // checkboxes are optional
-    if (step === 2) return true;
-    if (step === 3) return true;
-    if (step === 4) return !!(answers.suspectedCause && answers.consultedDoctor);
-    return false;
-  };
+  function handleBack() {
+    if (currentIndex <= 0) return;
+    setCurrentQuestionId(questionPath[currentIndex - 1]);
+  }
 
-  const [diagnosisDetails, setDiagnosisDetails] = useState<DiagnosisDetails | null>(null);
-
-  const handleFinishQuestionnaire = () => {
-    const { type, severity, details } = diagnose(answers);
-    const info = PROGRAM_INFO[type];
-    setDiagnosisDetails(details);
-    // Override totalDays: modere gets 7-day program instead of default 15
-    const totalDays = severity === 'modere' ? 7 : info.duration;
-    setProgram({
-      type,
-      severity,
-      startDate: '',
+  function handleStartProgram() {
+    if (!diagnosis) return;
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    const state: ProgramState = {
+      affectionType: diagnosis.affectionType,
+      profile: diagnosis.profile,
+      startDate: new Date().toISOString().split('T')[0],
       currentDay: 1,
-      totalDays,
+      totalDays: diagnosis.totalDays,
       dailyProgress: {},
-    });
-    setView('result');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleStartProgram = () => {
-    const today = new Date().toISOString().split('T')[0];
-    setProgram((prev) => ({ ...prev, startDate: today, currentDay: 1 }));
+    };
+    setProgramState(state);
+    setViewingDay(1);
+    saveProgramState(state);
     setView('tracker');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }
 
-  const handleRestart = () => {
-    localStorage.removeItem(STORAGE_KEYS.answers);
-    localStorage.removeItem(STORAGE_KEYS.program);
-    setAnswers({
-      duration: '',
-      previousRuqya: '',
-      prayer: '',
-      quran: '',
-      physicalSymptoms: [],
-      psychologicalSymptoms: [],
-      specificSymptoms: [],
-      suspectedCause: '',
-      consultedDoctor: '',
-    });
-    setProgram({
-      type: 'prevention',
-      severity: 'leger',
-      startDate: '',
-      currentDay: 1,
-      totalDays: 7,
-      dailyProgress: {},
-    });
-    setStep(0);
+  function handleToggleChecklist(day: number, section: 'morning' | 'evening' | 'bonus', itemId: string) {
+    if (!programState) return;
+    const dayProgress = programState.dailyProgress[day] ?? { morning: [], evening: [], bonus: [] };
+    const current = dayProgress[section] ?? [];
+    const updated = current.includes(itemId)
+      ? current.filter(id => id !== itemId)
+      : [...current, itemId];
+    const newState: ProgramState = {
+      ...programState,
+      dailyProgress: {
+        ...programState.dailyProgress,
+        [day]: { ...dayProgress, [section]: updated },
+      },
+    };
+    setProgramState(newState);
+    saveProgramState(newState);
+  }
+
+  function handleResetProgram() {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY_Q);
+    setProgramState(null);
+    setDiagnosis(null);
+    setAnswers({});
+    setMedicalFlag(false);
+    setCurrentQuestionId('q_duration');
+    setQuestionPath(['q_duration']);
     setView('questionnaire');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }
 
-  // ═══ TRACKER HANDLERS ═══
+  // ══════════════════════════════════════════
+  // QUESTIONNAIRE VIEW
+  // ══════════════════════════════════════════
 
-  const toggleChecklist = (category: 'morning' | 'evening' | 'bonus', itemId: string) => {
-    const day = program.currentDay;
-    setProgram((prev) => {
-      const dayProgress = prev.dailyProgress[day] || { morning: [], evening: [], bonus: [] };
-      const current = dayProgress[category];
-      const updated = current.includes(itemId)
-        ? current.filter((id) => id !== itemId)
-        : [...current, itemId];
+  function renderQuestionnaire() {
+    if (!currentQuestion) return null;
+    const selectedIds = answers[currentQuestionId] ?? [];
+    const totalSteps = Math.max(questionPath.length, 11);
+    const progress = (currentIndex / totalSteps) * 100;
 
-      if (!current.includes(itemId)) {
-        setCompletionMsg(COMPLETION_MESSAGES[Math.floor(Math.random() * COMPLETION_MESSAGES.length)]);
-        setTimeout(() => setCompletionMsg(null), 2500);
-      }
-
-      return {
-        ...prev,
-        dailyProgress: {
-          ...prev.dailyProgress,
-          [day]: { ...dayProgress, [category]: updated },
-        },
-      };
-    });
-  };
-
-  const getDayProgress = (day: number): DayProgress => {
-    return program.dailyProgress[day] || { morning: [], evening: [], bonus: [] };
-  };
-
-  const getDayCompletionPercent = (day: number): number => {
-    const progress = getDayProgress(day);
-    const morningItems = getMorningRoutine(program.type);
-    const eveningItems = getEveningRoutine(program.type);
-    const bonusItems = getBonusActions(program.type);
-    const total = morningItems.length + eveningItems.length + bonusItems.length;
-    if (total === 0) return 0;
-    const done = progress.morning.length + progress.evening.length + progress.bonus.length;
-    return Math.round((done / total) * 100);
-  };
-
-  const getOverallProgress = (): number => {
-    let totalDone = 0;
-    let totalItems = 0;
-    const morningItems = getMorningRoutine(program.type);
-    const eveningItems = getEveningRoutine(program.type);
-    const bonusItems = getBonusActions(program.type);
-    const perDay = morningItems.length + eveningItems.length + bonusItems.length;
-
-    for (let d = 1; d <= program.totalDays; d++) {
-      totalItems += perDay;
-      const progress = getDayProgress(d);
-      totalDone += progress.morning.length + progress.evening.length + progress.bonus.length;
-    }
-    if (totalItems === 0) return 0;
-    return Math.round((totalDone / totalItems) * 100);
-  };
-
-  // ═══════════════════════════════════════════════════════
-  // RENDER: QUESTIONNAIRE
-  // ═══════════════════════════════════════════════════════
-
-  const STEP_TITLES = [
-    { title: 'Informations générales', subtitle: 'Aidez-nous à mieux comprendre votre situation actuelle.' },
-    { title: 'Symptômes physiques', subtitle: 'Cochez les symptômes physiques que vous ressentez.' },
-    { title: 'Symptômes psychologiques', subtitle: 'Cochez les symptômes émotionnels ou psychologiques ressentis.' },
-    { title: 'Symptômes spécifiques', subtitle: 'Certains signes peuvent orienter vers un type d\'affliction.' },
-    { title: 'Contexte', subtitle: 'Quelques informations complémentaires pour affiner l\'orientation.' },
-  ];
-
-  function RadioOption({ name, value, checked, label, onChange }: {
-    name: string; value: string; checked: boolean; label: string; onChange: () => void;
-  }) {
     return (
-      <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-cream-dark bg-white/70 px-4 py-3.5 transition-all hover:border-green-islamic/30 hover:bg-white has-[:checked]:border-green-islamic has-[:checked]:bg-green-islamic/5 has-[:checked]:ring-1 has-[:checked]:ring-green-islamic/20">
-        <input
-          type="radio"
-          name={name}
-          value={value}
-          checked={checked}
-          onChange={onChange}
-          className="h-4 w-4 accent-green-islamic"
-        />
-        <span className="text-sm font-medium text-text-primary">{label}</span>
-      </label>
-    );
-  }
-
-  function CheckboxOption({ checked, label, onChange }: {
-    checked: boolean; label: string; onChange: () => void;
-  }) {
-    return (
-      <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-cream-dark bg-white/70 px-4 py-3.5 transition-all hover:border-green-islamic/30 hover:bg-white has-[:checked]:border-green-islamic has-[:checked]:bg-green-islamic/5 has-[:checked]:ring-1 has-[:checked]:ring-green-islamic/20">
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={onChange}
-          className="h-4 w-4 shrink-0 rounded accent-green-islamic"
-        />
-        <span className="text-sm font-medium text-text-primary">{label}</span>
-      </label>
-    );
-  }
-
-  function renderStep() {
-    switch (step) {
-      case 0:
-        return (
-          <div className="space-y-6">
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-text-primary">
-                Depuis combien de temps ressentez-vous ces symptômes ?
-              </label>
-              <div className="grid gap-2 sm:grid-cols-2">
-                {[
-                  { v: '<1mois', l: 'Moins d\'un mois' },
-                  { v: '1-6', l: '1 à 6 mois' },
-                  { v: '6-12', l: '6 à 12 mois' },
-                  { v: '>1an', l: 'Plus d\'un an' },
-                ].map((opt) => (
-                  <RadioOption
-                    key={opt.v}
-                    name="duration"
-                    value={opt.v}
-                    checked={answers.duration === opt.v}
-                    label={opt.l}
-                    onChange={() => updateAnswer('duration', opt.v)}
-                  />
-                ))}
-              </div>
+      <div className="min-h-screen bg-cream pb-20">
+        <div className="max-w-lg mx-auto px-4 pt-8">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center gap-2 bg-green-islamic/10 text-green-islamic rounded-full px-4 py-1.5 text-sm font-medium mb-3">
+              <Sparkles className="h-4 w-4" />
+              Diagnostic personnalisé
             </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-text-primary">
-                Avez-vous déjà fait une roqya auparavant ?
-              </label>
-              <div className="grid gap-2 sm:grid-cols-2">
-                <RadioOption name="previousRuqya" value="oui" checked={answers.previousRuqya === 'oui'} label="Oui" onChange={() => updateAnswer('previousRuqya', 'oui')} />
-                <RadioOption name="previousRuqya" value="non" checked={answers.previousRuqya === 'non'} label="Non" onChange={() => updateAnswer('previousRuqya', 'non')} />
-              </div>
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-text-primary">
-                Pratiquez-vous vos 5 prières quotidiennes ?
-              </label>
-              <div className="grid gap-2 sm:grid-cols-2">
-                {[
-                  { v: 'toujours', l: 'Toujours' },
-                  { v: 'souvent', l: 'Souvent' },
-                  { v: 'parfois', l: 'Parfois' },
-                  { v: 'rarement', l: 'Rarement' },
-                ].map((opt) => (
-                  <RadioOption
-                    key={opt.v}
-                    name="prayer"
-                    value={opt.v}
-                    checked={answers.prayer === opt.v}
-                    label={opt.l}
-                    onChange={() => updateAnswer('prayer', opt.v)}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-text-primary">
-                Lisez-vous le Coran régulièrement ?
-              </label>
-              <div className="grid gap-2 sm:grid-cols-2">
-                {[
-                  { v: 'quotidiennement', l: 'Quotidiennement' },
-                  { v: 'hebdomadaire', l: 'Hebdomadaire' },
-                  { v: 'rarement', l: 'Rarement' },
-                  { v: 'jamais', l: 'Jamais' },
-                ].map((opt) => (
-                  <RadioOption
-                    key={opt.v}
-                    name="quran"
-                    value={opt.v}
-                    checked={answers.quran === opt.v}
-                    label={opt.l}
-                    onChange={() => updateAnswer('quran', opt.v)}
-                  />
-                ))}
-              </div>
-            </div>
+            <h1 className="text-2xl font-bold text-text-primary">Votre programme sur mesure</h1>
+            <p className="mt-1 text-sm text-text-secondary">Répondez honnêtement pour un diagnostic précis</p>
           </div>
-        );
 
-      case 1:
-        return (
-          <div className="space-y-2">
-            <p className="mb-3 text-xs italic text-text-secondary/80 rounded-lg bg-gold/5 border border-gold/15 px-3 py-2">
-              ⚠️ Ces symptômes sont des indications basées sur l'expérience des praticiens de roqya. Ce ne sont que des hypothèses qui orientent — chacun de ces signes peut avoir une cause totalement différente. Ne vous enfermez pas dans un diagnostic.
-            </p>
-            {PHYSICAL_SYMPTOMS.map((s) => (
-              <CheckboxOption
-                key={s}
-                checked={answers.physicalSymptoms.includes(s)}
-                label={s}
-                onChange={() => toggleSymptom('physicalSymptoms', s)}
+          <div className="mb-6">
+            <div className="flex justify-between text-xs text-text-secondary mb-1.5">
+              <span>Question {currentIndex + 1}</span>
+              <span>{Math.round(progress)}% complété</span>
+            </div>
+            <div className="h-2 bg-bg-cream-dark rounded-full overflow-hidden">
+              <div
+                className="h-full bg-green-islamic rounded-full transition-all duration-500"
+                style={{ width: `${progress}%` }}
               />
-            ))}
-          </div>
-        );
-
-      case 2:
-        return (
-          <div className="space-y-2">
-            <p className="mb-3 text-xs italic text-text-secondary/80 rounded-lg bg-gold/5 border border-gold/15 px-3 py-2">
-              ⚠️ Ces symptômes peuvent avoir des causes parfaitement naturelles (stress, fatigue, épreuves de la vie...). Cochez ce qui vous concerne, le programme s'adaptera à votre situation.
-            </p>
-            {PSYCHOLOGICAL_SYMPTOMS.map((s) => (
-              <CheckboxOption
-                key={s}
-                checked={answers.psychologicalSymptoms.includes(s)}
-                label={s}
-                onChange={() => toggleSymptom('psychologicalSymptoms', s)}
-              />
-            ))}
-          </div>
-        );
-
-      case 3:
-        return (
-          <div className="space-y-2">
-            <p className="mb-3 text-xs italic text-text-secondary/80 rounded-lg bg-gold/5 border border-gold/15 px-3 py-2">
-              ⚠️ Rappel : aucun de ces signes ne constitue une preuve d'atteinte occulte. Ce sont des indications qui nous orientent, rien de plus. La roqya est bénéfique dans tous les cas, que l'on soit atteint ou non.
-            </p>
-            {SPECIFIC_SYMPTOMS.map((s) => (
-              <CheckboxOption
-                key={s}
-                checked={answers.specificSymptoms.includes(s)}
-                label={s}
-                onChange={() => toggleSymptom('specificSymptoms', s)}
-              />
-            ))}
-          </div>
-        );
-
-      case 4:
-        return (
-          <div className="space-y-6">
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-text-primary">
-                Quel est votre objectif principal ?
-              </label>
-              <div className="grid gap-2 sm:grid-cols-2">
-                {[
-                  { v: 'guerison', l: 'Je cherche la guérison' },
-                  { v: 'prevention', l: 'Prévention et protection' },
-                  { v: 'renforcement', l: 'Renforcer ma pratique spirituelle' },
-                  { v: 'unknown', l: 'Je ne sais pas encore' },
-                ].map((opt) => (
-                  <RadioOption
-                    key={opt.v}
-                    name="suspectedCause"
-                    value={opt.v}
-                    checked={answers.suspectedCause === opt.v}
-                    label={opt.l}
-                    onChange={() => updateAnswer('suspectedCause', opt.v)}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-text-primary">
-                Avez-vous consulté un médecin pour ces symptômes ?
-              </label>
-              <div className="grid gap-2 sm:grid-cols-2">
-                <RadioOption name="consultedDoctor" value="oui" checked={answers.consultedDoctor === 'oui'} label="Oui" onChange={() => updateAnswer('consultedDoctor', 'oui')} />
-                <RadioOption name="consultedDoctor" value="non" checked={answers.consultedDoctor === 'non'} label="Non" onChange={() => updateAnswer('consultedDoctor', 'non')} />
-              </div>
             </div>
           </div>
-        );
 
-      default:
-        return null;
-    }
-  }
+          <div className="card-islamic p-6">
+            <h2 className="text-lg font-bold text-text-primary leading-snug">{currentQuestion.text}</h2>
+            {currentQuestion.subtitle && (
+              <p className="mt-2 text-sm italic text-green-islamic">{currentQuestion.subtitle}</p>
+            )}
 
-  // ═══════════════════════════════════════════════════════
-  // RENDER: RESULT
-  // ═══════════════════════════════════════════════════════
+            <div className="mt-5 space-y-2.5">
+              {currentQuestion.type === 'single'
+                ? currentQuestion.options.map(option => (
+                  <button
+                    key={option.id}
+                    onClick={() => handleSingleAnswer(option.id)}
+                    className={`w-full text-left rounded-xl border-2 p-4 transition-all hover:border-green-islamic/50 hover:bg-green-islamic/5 ${
+                      selectedIds.includes(option.id)
+                        ? 'border-green-islamic bg-green-islamic/10 text-green-islamic font-medium'
+                        : 'border-gray-100 bg-white text-text-primary'
+                    }`}
+                  >
+                    <span className="text-sm">{option.label}</span>
+                  </button>
+                ))
+                : currentQuestion.options.map(option => {
+                  const isSelected = selectedIds.includes(option.id);
+                  return (
+                    <button
+                      key={option.id}
+                      onClick={() => handleMultiToggle(option.id)}
+                      className={`w-full text-left rounded-xl border-2 p-4 transition-all ${
+                        isSelected
+                          ? 'border-green-islamic bg-green-islamic/10'
+                          : 'border-gray-100 bg-white hover:border-green-islamic/40'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`h-5 w-5 rounded border-2 flex items-center justify-center shrink-0 ${
+                          isSelected ? 'border-green-islamic bg-green-islamic' : 'border-gray-300'
+                        }`}>
+                          {isSelected && <CheckCircle2 className="h-3.5 w-3.5 text-white" />}
+                        </div>
+                        <span className={`text-sm ${isSelected ? 'text-green-islamic font-medium' : 'text-text-primary'}`}>
+                          {option.label}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })
+              }
+            </div>
 
-  function renderResult() {
-    const info = PROGRAM_INFO[program.type];
-    const sev = SEVERITY_LABELS[program.severity];
-
-    // ── Consultation CTA (shared across all levels) ──
-    const renderConsultationCTA = (variant: 'soft' | 'visible') => (
-      <div className={`mt-6 rounded-2xl border px-5 py-5 ${
-        variant === 'visible'
-          ? 'border-green-islamic/20 bg-green-islamic/5'
-          : 'border-cream-dark bg-[#F5F9FF]'
-      }`}>
-        <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-islamic/10">
-            <MessageCircle className="h-5 w-5 text-green-islamic" />
+            {currentQuestion.type === 'multi' && (
+              <button
+                onClick={handleMultiContinue}
+                className="mt-5 w-full bg-green-islamic text-white rounded-xl py-3.5 font-semibold text-sm hover:bg-green-islamic/90 transition-colors"
+              >
+                Continuer →
+              </button>
+            )}
           </div>
-          <div className="flex-1">
-            <p className="text-sm leading-relaxed text-text-primary">
-              {variant === 'visible'
-                ? 'Un accompagnement personnalisé peut faire toute la différence dans votre parcours de guérison. Si vous le souhaitez, je suis disponible pour vous écouter et vous guider.'
-                : 'Si vous ressentez le besoin d\'être écouté(e) ou accompagné(e), n\'hésitez pas. Je suis là pour vous.'}
-            </p>
-            <Link
-              to="/tarifs?booking=1"
-              className={`mt-3 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-medium transition ${
-                variant === 'visible'
-                  ? 'bg-green-islamic text-white shadow-sm hover:bg-gold'
-                  : 'border border-green-islamic/30 text-green-islamic hover:bg-green-islamic/10'
-              }`}
+
+          {currentIndex > 0 && (
+            <button
+              onClick={handleBack}
+              className="mt-4 flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors"
             >
-              {variant === 'visible' ? 'Prendre rendez-vous' : 'Échanger avec Dr Frère Muz'}
-            </Link>
+              <ChevronLeft className="h-4 w-4" />
+              Question précédente
+            </button>
+          )}
+
+          <div className="mt-8 text-center">
+            <p className="text-base text-green-islamic" dir="rtl">وَنُنَزِّلُ مِنَ الْقُرْآنِ مَا هُوَ شِفَاءٌ وَرَحْمَةٌ لِلْمُؤْمِنِينَ</p>
+            <p className="mt-1 text-xs text-text-secondary italic">
+              "Nous faisons descendre du Coran ce qui est une guérison et une miséricorde pour les croyants" — 17:82
+            </p>
           </div>
         </div>
       </div>
     );
+  }
 
-    // ═══════════════════════════════════════════════════
-    // FAIBLE — Preventive advice (no program)
-    // ═══════════════════════════════════════════════════
-    if (program.severity === 'leger') {
-      const preventiveAdvice = [
-        'Maintenir les 5 prières quotidiennes',
-        'Faire les adhkar du matin et du soir avec régularité',
-        'Lire le Coran régulièrement, même quelques versets par jour',
-        'Dire Bismillah avant chaque action, MashaAllah devant ce qui vous plaît',
-        'Multiplier les invocations de protection (Ayat Al-Kursi, les 3 dernières sourates)',
-        'Préserver les liens familiaux et éviter la médisance',
-      ];
+  // ══════════════════════════════════════════
+  // RESULT VIEW
+  // ══════════════════════════════════════════
 
-      return (
-        <div className="mx-auto max-w-2xl">
+  function renderResult() {
+    if (!diagnosis) return null;
+    const typeInfo = TYPE_LABELS[diagnosis.affectionType];
+    const profileInfo = PROFILE_LABELS[diagnosis.profile];
+    const config = PROGRAM_CONFIG[diagnosis.affectionType];
+    const IconComp = config.icon;
+    const showPsychoModule = diagnosis.profile === 'hybrid' || diagnosis.profile === 'psycho';
+
+    return (
+      <div className="min-h-screen bg-cream pb-20">
+        <div className="max-w-lg mx-auto px-4 pt-8 space-y-5">
           <div className="text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-islamic/10">
-              <Shield className="h-8 w-8 text-green-islamic" />
+            <h1 className="text-2xl font-bold text-text-primary">Votre diagnostic</h1>
+            <p className="mt-1 text-sm text-text-secondary">Basé sur vos réponses</p>
+          </div>
+
+          {/* Badges + scores */}
+          <div className="card-islamic p-5">
+            <div className="flex flex-wrap gap-2 mb-4">
+              <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-semibold ${typeInfo.bg} ${typeInfo.color}`}>
+                <typeInfo.Icon className="h-4 w-4" />
+                {typeInfo.label}
+              </span>
+              <span className={`inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium ${profileInfo.bg} ${profileInfo.color}`}>
+                {profileInfo.label}
+              </span>
             </div>
-            <h1 className="font-heading text-3xl font-bold text-green-islamic md:text-4xl">
-              Al hamdoulillah, rien de préoccupant
-            </h1>
-            <p className="mt-3 text-text-secondary leading-relaxed">
-              Vos réponses ne révèlent pas de signes particuliers. Voici quelques conseils pour maintenir votre bien-être spirituel.
-            </p>
-          </div>
-
-          <QuoteCard index={1} />
-
-          {/* Preventive advice cards */}
-          <div className="mt-6 space-y-2.5">
-            {preventiveAdvice.map((advice, i) => (
-              <div key={i} className="flex items-start gap-3 rounded-xl border border-cream-dark bg-white/80 px-4 py-3.5 shadow-sm">
-                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-islamic" />
-                <span className="text-sm leading-relaxed text-text-primary">{advice}</span>
+            <div className="space-y-3">
+              <div>
+                <div className="flex justify-between text-xs text-text-secondary mb-1">
+                  <span>Score spirituel ({diagnosis.affectionType})</span>
+                  <span className="font-semibold">{diagnosis.dominantScore}/15</span>
+                </div>
+                <div className="h-2.5 bg-bg-cream-dark rounded-full overflow-hidden">
+                  <div className="h-full bg-green-islamic rounded-full" style={{ width: `${Math.min((diagnosis.dominantScore / 15) * 100, 100)}%` }} />
+                </div>
               </div>
-            ))}
+              <div>
+                <div className="flex justify-between text-xs text-text-secondary mb-1">
+                  <span>Score psychologique</span>
+                  <span className="font-semibold">{diagnosis.psychoScore}/15</span>
+                </div>
+                <div className="h-2.5 bg-bg-cream-dark rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-500 rounded-full" style={{ width: `${Math.min((diagnosis.psychoScore / 15) * 100, 100)}%` }} />
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Link to douas */}
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          {/* Medical warning */}
+          {diagnosis.profile === 'medical' && (
+            <div className="rounded-xl border border-orange-200 bg-orange-50 p-4 flex gap-3">
+              <AlertTriangle className="h-5 w-5 text-orange-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-semibold text-orange-800">Consultation médicale recommandée avant de commencer</p>
+                <p className="mt-1 text-xs text-orange-700">Certains de vos symptômes peuvent avoir une origine médicale. Consultez un médecin en priorité. La roqya et la médecine sont complémentaires.</p>
+              </div>
+            </div>
+          )}
+
+          {/* Psycho info */}
+          {showPsychoModule && (
+            <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 flex gap-3">
+              <Info className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-semibold text-blue-800">Triangle Psycho-Roqya</p>
+                <p className="mt-1 text-xs text-blue-700">
+                  L'occulte peut exploiter les blessures psychologiques non guéries, et la psychologie peut être fragilisée par l'occulte. Une approche intégrative combinant roqya et accompagnement émotionnel vous donnera les meilleurs résultats.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Program card */}
+          <div className="card-islamic p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-islamic/10">
+                <IconComp className="h-5 w-5 text-green-islamic" />
+              </div>
+              <div>
+                <h3 className="font-bold text-text-primary text-sm">{config.title}</h3>
+                <p className="text-xs text-text-secondary">{config.duration} jours</p>
+              </div>
+            </div>
+            <p className="text-sm text-text-secondary">{config.description}</p>
+            <ul className="mt-3 space-y-1.5">
+              {[
+                'Checklist quotidienne matin et soir',
+                'Vidéos tutorielles guidées (bientôt disponibles)',
+                'Suivi des symptômes hebdomadaire',
+                'Notes des savants (Ibn Qayyim, Ibn Taymiyya, Ibn Baz)',
+              ].map(item => (
+                <li key={item} className="flex items-center gap-2 text-xs text-text-secondary">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-green-islamic shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Psycho module videos */}
+          {showPsychoModule && (
+            <div className="card-islamic p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100">
+                  <BookOpen className="h-4 w-4 text-purple-600" />
+                </div>
+                <h3 className="font-bold text-text-primary text-sm">Module Psycho-Roqya (inclus)</h3>
+              </div>
+              <p className="text-xs text-text-secondary mb-3">6 vidéos thérapeutiques spéciales pour traiter la dimension psychologique de votre condition</p>
+              <div className="grid grid-cols-2 gap-2">
+                {[ALL_VIDEOS.v_psycho_1, ALL_VIDEOS.v_psycho_2, ALL_VIDEOS.v_psycho_3, ALL_VIDEOS.v_psycho_4, ALL_VIDEOS.v_psycho_5, ALL_VIDEOS.v_psycho_6].map(v => (
+                  <div key={v.id} className="rounded-lg border border-purple-100 bg-purple-50 p-2">
+                    <p className="text-xs font-medium text-purple-800 line-clamp-2">{v.title}</p>
+                    <p className="text-xs text-purple-600 mt-0.5">{v.duration}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* CTA */}
+          <div className="rounded-2xl border-2 border-gold bg-amber-50 p-5">
+            <h3 className="font-bold text-text-primary">{diagnosis.ctaTitle}</h3>
+            <p className="mt-2 text-sm text-text-secondary">{diagnosis.ctaMessage}</p>
             <Link
-              to="/douas"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-islamic px-8 py-3.5 font-semibold text-white shadow-md transition hover:bg-gold"
+              to="/tarifs"
+              className="mt-4 inline-block bg-gold text-white rounded-full px-5 py-2.5 text-sm font-semibold hover:bg-gold/90 transition-colors"
             >
-              <BookOpen className="h-5 w-5" />
-              Découvrir les douas de protection
+              {diagnosis.ctaButtonLabel}
             </Link>
+          </div>
+
+          {/* Start button */}
+          <button
+            onClick={handleStartProgram}
+            className="w-full bg-green-islamic text-white rounded-2xl py-4 font-bold text-base hover:bg-green-islamic/90 transition-colors shadow-lg"
+          >
+            {user
+              ? (isPremium ? 'Commencer mon programme' : 'Commencer (jours 1-3 gratuits)')
+              : 'Commencer mon programme'
+            }
+          </button>
+
+          {programState && (
             <button
-              onClick={handleRestart}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-cream-dark px-6 py-3 text-sm font-medium text-text-secondary transition hover:border-green-islamic hover:text-green-islamic"
+              onClick={() => setView('tracker')}
+              className="w-full border-2 border-green-islamic text-green-islamic rounded-2xl py-3.5 font-semibold text-sm hover:bg-green-islamic/5 transition-colors"
             >
-              <RotateCcw className="h-4 w-4" />
+              Reprendre mon programme en cours →
+            </button>
+          )}
+
+          <div className="text-center">
+            <button
+              onClick={() => {
+                setView('questionnaire');
+                setCurrentQuestionId('q_duration');
+                setQuestionPath(['q_duration']);
+              }}
+              className="text-xs text-text-secondary underline hover:text-text-primary"
+            >
               Refaire le questionnaire
             </button>
           </div>
+        </div>
+      </div>
+    );
+  }
 
-          {/* Soft consultation CTA */}
-          {renderConsultationCTA('soft')}
+  // ══════════════════════════════════════════
+  // TRACKER VIEW
+  // ══════════════════════════════════════════
 
-          {/* Disclaimer */}
-          <p className="mt-8 text-center text-xs text-text-secondary/70">
-            Ce questionnaire est un outil d'orientation et ne constitue pas un diagnostic certifié.
-          </p>
+  function renderTracker() {
+    if (!programState) {
+      return (
+        <div className="min-h-screen bg-cream flex items-center justify-center">
+          <div className="text-center p-8">
+            <p className="text-text-secondary mb-4">Aucun programme actif.</p>
+            <button
+              onClick={() => setView('questionnaire')}
+              className="bg-green-islamic text-white rounded-xl px-6 py-3 font-semibold"
+            >
+              Commencer le diagnostic
+            </button>
+          </div>
         </div>
       );
     }
 
-    // ═══════════════════════════════════════════════════
-    // MODÉRÉ — 7-day light program
-    // ═══════════════════════════════════════════════════
-    if (program.severity === 'modere') {
-      const modereDays = 7;
+    const { affectionType, profile: diagProfile, startDate, currentDay, totalDays, dailyProgress } = programState;
+    const config = PROGRAM_CONFIG[affectionType];
+    const IconComp = config.icon;
+    const dayContent = getDayContent(affectionType, viewingDay);
+    const dayProgress = dailyProgress[viewingDay] ?? { morning: [], evening: [], bonus: [] };
+    const isLocked = !isPremium && viewingDay >= 4;
+    const progressPct = ((currentDay - 1) / totalDays) * 100;
+    const showPsychoModule = diagProfile === 'hybrid' || diagProfile === 'psycho';
 
-      return (
-        <div className="mx-auto max-w-2xl">
-          <div className="text-center">
-            <h1 className="font-heading text-3xl font-bold text-green-islamic md:text-4xl">
-              Quelques points d'attention identifiés
-            </h1>
-            <p className="mt-3 text-text-secondary">
-              Basé sur vos réponses, voici nos recommandations et un programme adapté.
-            </p>
-          </div>
+    const phaseType = (affectionType === 'sihr' || affectionType === 'mass') ? 'intensive' : 'light';
+    const currentPhase = getCurrentPhase(phaseType, viewingDay);
+    const showWeeklyCheck = shouldShowWeeklyCheck(startDate);
 
-          <QuoteCard index={1} />
-
-          {/* Diagnosis summary */}
-          <div className="mt-6 rounded-2xl border border-cream-dark bg-white/80 p-6 shadow-sm">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/10">
-                <Heart className="h-6 w-6 text-gold" />
-              </div>
-              <div>
-                <h2 className="font-heading text-xl font-bold text-text-primary">Programme adapté — {modereDays} jours</h2>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className={`inline-block rounded-full px-3 py-0.5 text-xs font-semibold ${sev.color} ${sev.bg}`}>
-                    {sev.label}
-                  </span>
-                  <span className="text-sm text-text-secondary">{modereDays} jours</span>
+    return (
+      <div className="min-h-screen bg-cream pb-24">
+        <div className="max-w-lg mx-auto px-4 pt-6 space-y-4">
+          {/* Program header */}
+          <div className="card-islamic p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-islamic/10">
+                  <IconComp className="h-5 w-5 text-green-islamic" />
                 </div>
+                <div>
+                  <h2 className="font-bold text-text-primary text-sm">{config.title}</h2>
+                  <p className="text-xs text-text-secondary">Depuis le {new Date(startDate).toLocaleDateString('fr-FR')}</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-lg font-bold text-green-islamic">J{currentDay}</p>
+                <p className="text-xs text-text-secondary">/{totalDays}</p>
               </div>
             </div>
+            <div className="mt-3">
+              <div className="flex justify-between text-xs text-text-secondary mb-1">
+                <span>Progression globale</span>
+                <span>{Math.round(progressPct)}%</span>
+              </div>
+              <div className="h-2 bg-bg-cream-dark rounded-full overflow-hidden">
+                <div className="h-full bg-green-islamic rounded-full" style={{ width: `${progressPct}%` }} />
+              </div>
+            </div>
+          </div>
 
-            <p className="text-sm leading-relaxed text-text-secondary">
-              Un programme de {modereDays} jours avec des pratiques ciblées pour renforcer votre protection spirituelle.
-            </p>
+          {/* Phase banner for sihr */}
+          {affectionType === 'sihr' && (
+            <PhaseBanner programType={phaseType} currentDay={viewingDay} />
+          )}
 
-            {/* Analyse détaillée */}
-            {diagnosisDetails && (
-              <div className="mt-5 rounded-xl border border-cream-dark bg-cream p-4">
-                <h3 className="mb-3 text-sm font-semibold text-text-primary">Analyse de vos réponses</h3>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-lg bg-white/70 px-3 py-2.5 text-center">
-                    <div className="text-2xl font-bold text-green-islamic">{diagnosisDetails.totalSymptoms}</div>
-                    <div className="text-[11px] text-text-secondary">symptômes identifiés</div>
-                  </div>
-                  <div className="rounded-lg bg-white/70 px-3 py-2.5 text-center">
-                    <div className="text-2xl font-bold text-gold">
-                      {answers.duration === '>1an' ? '+1 an' : answers.duration === '6-12' ? '6-12 mois' : answers.duration === '1-6' ? '1-6 mois' : '<1 mois'}
-                    </div>
-                    <div className="text-[11px] text-text-secondary">durée des symptômes</div>
-                  </div>
-                </div>
+          {/* Day navigation */}
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setViewingDay(d => Math.max(1, d - 1))}
+              disabled={viewingDay <= 1}
+              className="flex items-center gap-1 text-sm text-text-secondary disabled:opacity-40 hover:text-text-primary transition-colors"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Jour précédent
+            </button>
+            <div className="text-center">
+              <span className="text-sm font-bold text-text-primary">Jour {viewingDay}</span>
+              <span className="text-xs text-text-secondary ml-1">/ {totalDays}</span>
+            </div>
+            <button
+              onClick={() => {
+                const nextDay = Math.min(totalDays, viewingDay + 1);
+                setViewingDay(nextDay);
+                if (nextDay > currentDay) {
+                  const newState = { ...programState, currentDay: nextDay };
+                  setProgramState(newState);
+                  saveProgramState(newState);
+                }
+              }}
+              disabled={viewingDay >= totalDays}
+              className="flex items-center gap-1 text-sm text-text-secondary disabled:opacity-40 hover:text-text-primary transition-colors"
+            >
+              Jour suivant
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
 
-                {diagnosisDetails.gravityFactors.length > 0 && (
-                  <div className="mt-4">
-                    <h4 className="text-xs font-semibold text-text-primary mb-2">Points d'attention identifiés :</h4>
-                    <div className="space-y-1.5">
-                      {diagnosisDetails.gravityFactors.map((factor, i) => (
-                        <div key={i} className="flex items-start gap-2 rounded-lg bg-white/70 px-3 py-2">
-                          <span className="mt-0.5 text-gold">•</span>
-                          <span className="text-xs text-text-secondary">{factor}</span>
-                        </div>
-                      ))}
+          {/* Day content */}
+          <div className="card-islamic p-5">
+            <div className="mb-4">
+              <h3 className="font-bold text-text-primary">{dayContent.theme}</h3>
+              <p className="text-sm text-text-secondary mt-0.5">{dayContent.focus}</p>
+            </div>
+
+            {dayContent.video && !isLocked && (
+              <div className="mb-4">
+                <VideoCard video={dayContent.video} />
+              </div>
+            )}
+
+            {currentPhase && affectionType !== 'sihr' && (
+              <div className="mb-4 flex items-center gap-2 rounded-xl bg-bg-cream p-3">
+                <div className="h-2.5 w-2.5 rounded-full bg-green-islamic/30" />
+                <span className="text-xs font-medium text-text-secondary">{currentPhase.title} — {currentPhase.subtitle}</span>
+              </div>
+            )}
+
+            {isLocked ? (
+              <PremiumGate />
+            ) : (
+              <>
+                <ChecklistSection
+                  title="Adhkar du matin"
+                  items={dayContent.morning}
+                  completedIds={dayProgress.morning}
+                  onToggle={(id) => handleToggleChecklist(viewingDay, 'morning', id)}
+                  icon={<Sun className="h-4 w-4 text-gold" />}
+                />
+                <ChecklistSection
+                  title="Adhkar du soir"
+                  items={dayContent.evening}
+                  completedIds={dayProgress.evening}
+                  onToggle={(id) => handleToggleChecklist(viewingDay, 'evening', id)}
+                  icon={<Moon className="h-4 w-4 text-green-islamic" />}
+                />
+                <ChecklistSection
+                  title="Actions du jour"
+                  items={dayContent.bonus}
+                  completedIds={dayProgress.bonus}
+                  onToggle={(id) => handleToggleChecklist(viewingDay, 'bonus', id)}
+                  icon={<Star className="h-4 w-4 text-gold" />}
+                />
+                {dayContent.scholarNote && (
+                  <div className="mt-4 rounded-xl border border-gold/30 bg-amber-50 p-4">
+                    <div className="flex items-start gap-2">
+                      <BookOpen className="h-4 w-4 text-gold shrink-0 mt-0.5" />
+                      <p className="text-xs text-amber-800 italic">{dayContent.scholarNote}</p>
                     </div>
                   </div>
                 )}
-
-                {/* Recommendations */}
-                <div className="mt-4">
-                  <h4 className="text-xs font-semibold text-text-primary mb-2">Nos recommandations :</h4>
-                  <div className="space-y-1.5">
-                    {diagnosisDetails.advice.map((a, i) => (
-                      <div key={i} className="flex items-start gap-2 rounded-lg bg-green-islamic/5 px-3 py-2">
-                        <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-islamic" />
-                        <span className="text-xs text-text-secondary">{a}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <p className="mt-4 text-[11px] italic text-text-secondary/70 leading-relaxed">
-                  Ce diagnostic est une indication basée sur vos réponses. Il ne remplace pas l'avis d'un professionnel de santé ni celui d'un raqi qualifié.
-                </p>
-              </div>
+              </>
             )}
-
-            {/* Simplified program content */}
-            <div className="mt-6 space-y-3">
-              <h3 className="text-sm font-semibold text-text-primary">Votre programme de {modereDays} jours comprend :</h3>
-              <div className="space-y-2">
-                <div className="flex items-start gap-2 rounded-xl bg-cream px-3 py-2.5">
-                  <Sun className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                  <span className="text-sm text-text-primary">Adhkar renforcés matin et soir</span>
-                </div>
-                <div className="flex items-start gap-2 rounded-xl bg-cream px-3 py-2.5">
-                  <BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-green-islamic" />
-                  <span className="text-sm text-text-primary">Sourate Al-Baqara 1x par semaine</span>
-                </div>
-                <div className="flex items-start gap-2 rounded-xl bg-cream px-3 py-2.5">
-                  <Droplets className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                  <span className="text-sm text-text-primary">Eau coranisée quotidienne</span>
-                </div>
-                <div className="flex items-start gap-2 rounded-xl bg-cream px-3 py-2.5">
-                  <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-green-islamic" />
-                  <span className="text-sm text-text-primary">Suivi quotidien sur {modereDays} jours</span>
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* Reminder */}
-          {answers.consultedDoctor === 'non' && (
-            <div className="mt-4 rounded-xl border border-gold/30 bg-gold/5 px-4 py-3">
-              <p className="text-xs leading-relaxed text-text-secondary">
-                <span className="font-semibold text-gold">Rappel :</span> N'hésitez pas à combiner ce programme spirituel avec tous les moyens qu'Allah a mis à votre disposition pour votre bien-être.
-              </p>
+          {/* Weekly check */}
+          {showWeeklyCheck && (
+            <div className="card-islamic p-4">
+              <h3 className="font-semibold text-text-primary mb-3 text-sm">Bilan hebdomadaire</h3>
+              <SymptomTracker startDate={startDate} onComplete={() => {}} />
             </div>
           )}
 
-          {/* Actions */}
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <button
-              onClick={() => {
-                if (user) {
-                  handleStartProgram();
-                } else {
-                  setShowAuthModal(true);
-                }
-              }}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-islamic px-8 py-3.5 font-semibold text-white shadow-md transition hover:bg-gold"
-            >
-              <Sparkles className="h-5 w-5" />
-              Commencer mon programme
-            </button>
-            <button
-              onClick={handleRestart}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-cream-dark px-6 py-3 text-sm font-medium text-text-secondary transition hover:border-green-islamic hover:text-green-islamic"
-            >
-              <RotateCcw className="h-4 w-4" />
-              Refaire le questionnaire
-            </button>
+          {/* Symptom chart */}
+          <div className="card-islamic p-4">
+            <h3 className="font-semibold text-text-primary mb-3 text-sm">Évolution des symptômes</h3>
+            <SymptomChart />
           </div>
 
-          {/* Soft consultation CTA */}
-          {renderConsultationCTA('soft')}
-
-          {/* Disclaimer */}
-          <p className="mt-8 text-center text-xs text-text-secondary/70">
-            Ce questionnaire est un outil d'orientation et ne constitue pas un diagnostic certifié.
-          </p>
-        </div>
-      );
-    }
-
-    // ═══════════════════════════════════════════════════
-    // INTENSE (severe) — Full 30-day program
-    // ═══════════════════════════════════════════════════
-    return (
-      <div className="mx-auto max-w-2xl">
-        <div className="text-center">
-          <h1 className="font-heading text-3xl font-bold text-green-islamic md:text-4xl">
-            Votre programme personnalisé
-          </h1>
-          <p className="mt-3 text-text-secondary">
-            Basé sur vos réponses, voici le programme recommandé pour vous.
-          </p>
-        </div>
-
-        <QuoteCard index={1} />
-
-        {/* Diagnosis summary */}
-        <div className="mt-6 rounded-2xl border border-cream-dark bg-white/80 p-6 shadow-sm">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
-              <Flame className="h-6 w-6 text-red-700" />
-            </div>
-            <div>
-              <h2 className="font-heading text-xl font-bold text-text-primary">{info.title}</h2>
-              <div className="flex items-center gap-2 mt-1">
-                <span className={`inline-block rounded-full px-3 py-0.5 text-xs font-semibold ${sev.color} ${sev.bg}`}>
-                  {sev.label}
-                </span>
-                <span className="text-sm text-text-secondary">{info.duration} jours</span>
+          {/* Psycho module */}
+          {showPsychoModule && (
+            <div className="card-islamic p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <BookOpen className="h-4 w-4 text-purple-600" />
+                <h3 className="font-semibold text-text-primary text-sm">Module Psycho-Roqya</h3>
               </div>
-            </div>
-          </div>
-
-          <p className="text-sm leading-relaxed text-text-secondary">
-            {info.description}
-          </p>
-
-          {/* Analyse détaillée */}
-          {diagnosisDetails && (
-            <div className="mt-5 rounded-xl border border-cream-dark bg-cream p-4">
-              <h3 className="mb-3 text-sm font-semibold text-text-primary">Analyse de vos réponses</h3>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-lg bg-white/70 px-3 py-2.5 text-center">
-                  <div className="text-2xl font-bold text-green-islamic">{diagnosisDetails.totalSymptoms}</div>
-                  <div className="text-[11px] text-text-secondary">symptômes identifiés</div>
-                </div>
-                <div className="rounded-lg bg-white/70 px-3 py-2.5 text-center">
-                  <div className="text-2xl font-bold text-gold">
-                    {answers.duration === '>1an' ? '+1 an' : answers.duration === '6-12' ? '6-12 mois' : answers.duration === '1-6' ? '1-6 mois' : '<1 mois'}
-                  </div>
-                  <div className="text-[11px] text-text-secondary">durée des symptômes</div>
-                </div>
-              </div>
-
-              {diagnosisDetails.gravityFactors.length > 0 && (
-                <div className="mt-4">
-                  <h4 className="text-xs font-semibold text-text-primary mb-2">Points d'attention identifiés :</h4>
-                  <div className="space-y-1.5">
-                    {diagnosisDetails.gravityFactors.map((factor, i) => (
-                      <div key={i} className="flex items-start gap-2 rounded-lg bg-white/70 px-3 py-2">
-                        <span className="mt-0.5 text-gold">•</span>
-                        <span className="text-xs text-text-secondary">{factor}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Recommendations */}
-              <div className="mt-4">
-                <h4 className="text-xs font-semibold text-text-primary mb-2">Nos recommandations :</h4>
-                <div className="space-y-1.5">
-                  {diagnosisDetails.advice.map((a, i) => (
-                    <div key={i} className="flex items-start gap-2 rounded-lg bg-green-islamic/5 px-3 py-2">
-                      <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-islamic" />
-                      <span className="text-xs text-text-secondary">{a}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <p className="mt-4 text-[11px] italic text-text-secondary/70 leading-relaxed">
-                Ce diagnostic est une indication basée sur vos réponses. Il ne remplace pas l'avis d'un professionnel de santé ni celui d'un raqi qualifié. La roqya est bénéfique dans tous les cas, que l'on soit atteint ou non.
-              </p>
+              {isLocked ? <PremiumGate /> : <GuidedJournal currentDay={viewingDay} />}
             </div>
           )}
 
-          {/* Summary of what program includes */}
-          <div className="mt-6 space-y-3">
-            <h3 className="text-sm font-semibold text-text-primary">Ce programme comprend :</h3>
-            <div className="grid gap-2 sm:grid-cols-2">
-              <div className="flex items-start gap-2 rounded-xl bg-cream px-3 py-2.5">
-                <Sun className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                <span className="text-sm text-text-primary">Routine du matin ({getMorningRoutine(program.type).length} actions)</span>
-              </div>
-              <div className="flex items-start gap-2 rounded-xl bg-cream px-3 py-2.5">
-                <Moon className="mt-0.5 h-4 w-4 shrink-0 text-green-islamic" />
-                <span className="text-sm text-text-primary">Routine du soir ({getEveningRoutine(program.type).length} actions)</span>
-              </div>
-              <div className="flex items-start gap-2 rounded-xl bg-cream px-3 py-2.5">
-                <Star className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                <span className="text-sm text-text-primary">Actions bonus ({getBonusActions(program.type).length} actions)</span>
-              </div>
-              <div className="flex items-start gap-2 rounded-xl bg-cream px-3 py-2.5">
-                <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-green-islamic" />
-                <span className="text-sm text-text-primary">Suivi quotidien sur {info.duration} jours</span>
-              </div>
-            </div>
+          <div className="text-center pt-4">
+            <button
+              onClick={handleResetProgram}
+              className="text-xs text-red-400 underline hover:text-red-600 transition-colors"
+            >
+              Réinitialiser le programme
+            </button>
           </div>
         </div>
-
-        {/* Reminder */}
-        {answers.consultedDoctor === 'non' && (
-          <div className="mt-4 rounded-xl border border-gold/30 bg-gold/5 px-4 py-3">
-            <p className="text-xs leading-relaxed text-text-secondary">
-              <span className="font-semibold text-gold">Rappel :</span> N'hésitez pas à combiner ce programme spirituel avec tous les moyens qu'Allah a mis à votre disposition pour votre bien-être. La guérison vient d'Allah, et Il nous a donné de multiples voies pour y parvenir.
-            </p>
-          </div>
-        )}
-
-        {/* Actions */}
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <button
-            onClick={() => {
-              if (user) {
-                handleStartProgram();
-              } else {
-                setShowAuthModal(true);
-              }
-            }}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-islamic px-8 py-3.5 font-semibold text-white shadow-md transition hover:bg-gold"
-          >
-            <Sparkles className="h-5 w-5" />
-            Commencer mon programme
-          </button>
-          <button
-            onClick={handleRestart}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-cream-dark px-6 py-3 text-sm font-medium text-text-secondary transition hover:border-green-islamic hover:text-green-islamic"
-          >
-            <RotateCcw className="h-4 w-4" />
-            Refaire le questionnaire
-          </button>
-        </div>
-
-        {/* Visible consultation CTA for severe */}
-        {renderConsultationCTA('visible')}
-
-        {/* Disclaimer */}
-        <p className="mt-8 text-center text-xs text-text-secondary/70">
-          Ce questionnaire est un outil d'orientation et ne constitue pas un diagnostic certifié.
-        </p>
       </div>
     );
   }
 
-  // ═══════════════════════════════════════════════════════
-  // RENDER: TRACKER
-  // ═══════════════════════════════════════════════════════
+  // ══════════════════════════════════════════
+  // ROOT RENDER
+  // ══════════════════════════════════════════
 
-  function renderTracker() {
-    const info = PROGRAM_INFO[program.type];
-    const currentPhase = getCurrentPhase(program.type, program.currentDay);
-    const morningItems = getMorningRoutine(program.type, currentPhase.id);
-    const eveningItems = getEveningRoutine(program.type, currentPhase.id);
-    const bonusItems = getBonusActions(program.type, currentPhase.id);
-    const dayProgress = getDayProgress(program.currentDay);
-    const overallPercent = getOverallProgress();
-    const dayPercent = getDayCompletionPercent(program.currentDay);
+  return (
+    <>
+      <SEO
+        title="Programme de Roqya Personnalisé | MaRoqya"
+        description="Programme adaptatif de roqya selon votre diagnostic : 'Ayn, Sihr, Mass, Waswas. Basé sur Ibn Qayyim, Ibn Taymiyya, Ibn Baz."
+      />
 
-    function ChecklistRow({ item, category, checked }: {
-      item: ChecklistItem;
-      category: 'morning' | 'evening' | 'bonus';
-      checked: boolean;
-    }) {
-      return (
-        <button
-          onClick={() => toggleChecklist(category, item.id)}
-          className={`flex w-full items-start gap-3 rounded-xl border px-4 py-3 text-left transition-all ${
-            checked
-              ? 'border-green-islamic/20 bg-green-islamic/5'
-              : 'border-cream-dark bg-white/70 hover:border-green-islamic/30 hover:bg-white'
-          }`}
-        >
-          {checked ? (
-            <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-islamic" />
-          ) : (
-            <Circle className="mt-0.5 h-5 w-5 shrink-0 text-text-secondary/40" />
-          )}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-baseline gap-2">
-              <span className={`text-sm font-medium ${checked ? 'text-green-islamic line-through' : 'text-text-primary'}`}>
-                {item.label}
-              </span>
-              {item.repetitions && (
-                <span className="shrink-0 rounded-full bg-cream-dark px-2 py-0.5 text-[10px] font-bold text-text-secondary">
-                  {item.repetitions}
-                </span>
-              )}
-            </div>
-            {item.arabic && (
-              <p className="mt-0.5 text-base text-green-islamic/70" style={{ fontFamily: "'Amiri', 'Times New Roman', serif" }} dir="rtl">
-                {item.arabic}
-              </p>
-            )}
-          </div>
-        </button>
-      );
-    }
-
-    const bilanDue = program.startDate ? shouldShowWeeklyCheck(program.startDate) : false;
-
-    const FREE_DAYS = 3;
-
-    // Premium gate: show overlay when day >= 4 and not premium
-    if (program.currentDay > FREE_DAYS && !isPremium) {
-      return (
-        <div className="mx-auto max-w-2xl">
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <h1 className="font-heading text-2xl font-bold text-green-islamic md:text-3xl">
-                {info.title}
-              </h1>
-              <p className="mt-1 text-sm text-text-secondary">
-                Jour {program.currentDay} sur {program.totalDays}
-              </p>
-            </div>
-          </div>
-
-          {/* Premium gate overlay */}
-          <div className="mt-8 rounded-2xl border-2 border-gold/30 bg-white/80 p-8 text-center shadow-lg">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gold/10">
-              <Crown className="h-8 w-8 text-gold" />
-            </div>
-            <h2 className="font-heading text-2xl font-bold text-text-primary">
-              Passez au Premium pour continuer votre programme
-            </h2>
-            <p className="mx-auto mt-3 max-w-md text-text-secondary">
-              Les {FREE_DAYS} premiers jours sont gratuits. D&eacute;bloquez les {program.totalDays - FREE_DAYS} jours restants pour poursuivre votre parcours de gu&eacute;rison.
-            </p>
-            <Link
-              to="/tarifs"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gold px-8 py-3.5 font-semibold text-white transition hover:opacity-90"
-            >
-              <Lock size={18} />
-              D&eacute;couvrir le Premium
-            </Link>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="mx-auto max-w-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-2">
-          <div>
-            <h1 className="font-heading text-2xl font-bold text-green-islamic md:text-3xl">
-              {info.title}
-            </h1>
-            <p className="mt-1 text-sm text-text-secondary">
-              Jour {program.currentDay} sur {program.totalDays}
-            </p>
-          </div>
-          <button
-            onClick={handleRestart}
-            className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium text-text-secondary transition hover:bg-cream-dark hover:text-green-islamic"
-            title="Recommencer"
-          >
-            <RotateCcw className="h-3.5 w-3.5" />
-            Nouveau
-          </button>
-        </div>
-
-        {/* Notification bilan hebdo */}
-        {bilanDue && !showBilan && trackerTab === 'programme' && (
-          <button
-            onClick={() => { setShowBilan(true); setTrackerTab('evolution'); }}
-            className="mb-4 flex w-full items-center gap-3 rounded-xl border border-gold/30 bg-gold/5 p-4 text-left transition hover:bg-gold/10"
-          >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold/15">
-              <Bell className="h-5 w-5 text-gold" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-semibold text-text-primary">
-                Bilan hebdomadaire disponible
-              </p>
-              <p className="text-xs text-text-secondary">
-                Évaluez vos symptômes pour suivre votre progression
-              </p>
-            </div>
-            <ChevronRight className="h-4 w-4 text-gold" />
-          </button>
-        )}
-
-        {/* Onglets Programme / Évolution */}
-        <div className="mb-6 flex rounded-xl border border-cream-dark bg-white/80 p-1">
-          <button
-            onClick={() => { setTrackerTab('programme'); setShowBilan(false); }}
-            className={`flex-1 flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-semibold transition ${
-              trackerTab === 'programme'
-                ? 'bg-green-islamic text-white shadow-sm'
-                : 'text-text-secondary hover:text-text-primary'
-            }`}
-          >
-            <BookOpen className="h-4 w-4" />
-            Programme
-          </button>
-          <button
-            onClick={() => setTrackerTab('evolution')}
-            className={`flex-1 flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-semibold transition ${
-              trackerTab === 'evolution'
-                ? 'bg-green-islamic text-white shadow-sm'
-                : 'text-text-secondary hover:text-text-primary'
-            }`}
-          >
-            <BarChart3 className="h-4 w-4" />
-            Évolution
-            {bilanDue && trackerTab !== 'evolution' && (
-              <span className="flex h-2 w-2 rounded-full bg-gold" />
-            )}
-          </button>
-        </div>
-
-        {/* Contenu onglet Évolution */}
-        {trackerTab === 'evolution' && (
-          <div className="space-y-6 mb-8">
-            {showBilan || bilanDue ? (
-              <SymptomTracker
-                startDate={program.startDate}
-                onComplete={() => setShowBilan(false)}
-              />
-            ) : null}
-            <SymptomChart />
-          </div>
-        )}
-
-        {/* Contenu onglet Programme */}
-        {trackerTab !== 'evolution' && (
-        <>
-        {/* Overall progress */}
-        <div className="rounded-2xl border border-cream-dark bg-white/80 p-4 shadow-sm mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-semibold text-text-primary">Progression globale</span>
-            <span className="text-sm font-bold text-green-islamic">{overallPercent}%</span>
-          </div>
-          <div className="h-2.5 w-full overflow-hidden rounded-full bg-cream-dark">
-            <div
-              className="h-full rounded-full bg-green-islamic transition-all duration-500"
-              style={{ width: `${overallPercent}%` }}
-            />
-          </div>
-        </div>
-
-        {/* Calendar overview */}
-        <div className="rounded-2xl border border-cream-dark bg-white/80 p-4 shadow-sm mb-6">
-          <div className="flex items-center gap-2 mb-3">
-            <Calendar className="h-4 w-4 text-green-islamic" />
-            <span className="text-sm font-semibold text-text-primary">Calendrier</span>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {Array.from({ length: program.totalDays }, (_, i) => {
-              const day = i + 1;
-              const percent = getDayCompletionPercent(day);
-              const isCurrent = day === program.currentDay;
-              const isDone = percent === 100;
-              const isStarted = percent > 0;
-
+      {/* Nav tabs when program is active */}
+      {(programState || diagnosis) && (
+        <div className="sticky top-0 z-10 bg-white border-b border-gray-100 shadow-sm">
+          <div className="max-w-lg mx-auto flex">
+            {(['questionnaire', 'result', 'tracker'] as View[]).map(v => {
+              const labels: Record<View, string> = {
+                questionnaire: 'Diagnostic',
+                result: 'Résultat',
+                tracker: 'Mon Programme',
+              };
+              const disabled = (v === 'result' && !diagnosis) || (v === 'tracker' && !programState);
               return (
                 <button
-                  key={day}
-                  onClick={() => setProgram((prev) => ({ ...prev, currentDay: day }))}
-                  className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-semibold transition-all ${
-                    isCurrent
-                      ? 'bg-gold text-white ring-2 ring-gold/30'
-                      : isDone
-                        ? 'bg-green-islamic text-white'
-                        : isStarted
-                          ? 'bg-green-islamic/20 text-green-islamic'
-                          : 'bg-cream-dark text-text-secondary'
+                  key={v}
+                  disabled={disabled}
+                  onClick={() => {
+                    if (!disabled) setView(v);
+                  }}
+                  className={`flex-1 py-3 text-sm font-medium border-b-2 transition-colors disabled:opacity-40 ${
+                    view === v ? 'border-green-islamic text-green-islamic' : 'border-transparent text-text-secondary hover:text-text-primary'
                   }`}
-                  title={`Jour ${day} — ${percent}%`}
                 >
-                  {isDone ? <Check className="h-3.5 w-3.5" /> : day}
+                  {labels[v]}
                 </button>
               );
             })}
           </div>
-          <div className="mt-3 flex items-center gap-4 text-[10px] text-text-secondary">
-            <span className="flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded bg-green-islamic" /> Terminé</span>
-            <span className="flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded bg-green-islamic/20" /> En cours</span>
-            <span className="flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded bg-gold" /> Aujourd'hui</span>
-            <span className="flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded bg-cream-dark" /> À venir</span>
-          </div>
         </div>
+      )}
 
-        {/* Phase banner */}
-        <PhaseBanner programType={program.type} currentDay={program.currentDay} />
-
-        {/* Day progress indicator */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-heading text-lg font-bold text-text-primary">
-            Jour {program.currentDay}
-          </h2>
-          <span className={`rounded-full px-3 py-0.5 text-xs font-semibold ${
-            dayPercent === 100
-              ? 'bg-green-islamic/10 text-green-islamic'
-              : dayPercent > 0
-                ? 'bg-gold/10 text-gold'
-                : 'bg-cream-dark text-text-secondary'
-          }`}>
-            {dayPercent}% complété
-          </span>
-        </div>
-
-        {/* Completion toast */}
-        {completionMsg && (
-          <div className="mb-4 animate-pulse rounded-xl border border-green-islamic/20 bg-green-islamic/5 px-4 py-2.5 text-center text-sm font-medium text-green-islamic">
-            {completionMsg}
-          </div>
-        )}
-
-        {/* ═══ PREPARATION SPIRITUELLE ═══ */}
-        <div className="mb-6 rounded-2xl border border-gold/20 bg-gold/5 p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gold/10">
-              <Heart className="h-4 w-4 text-gold" />
-            </div>
-            <h3 className="font-heading text-base font-bold text-gold">Préparation avant la séance</h3>
-          </div>
-          <p className="text-sm text-text-secondary mb-3">
-            La préparation spirituelle est essentielle. Prenez le temps de bien vous installer avant de commencer.
-          </p>
-          <div className="space-y-2 text-sm text-text-secondary">
-            <div className="flex items-start gap-2.5">
-              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-islamic/10 text-[10px] font-bold text-green-islamic">1</span>
-              <span><strong className="text-text-primary">S'allonger confortablement</strong> — mettez des écouteurs si possible (recommandé mais pas obligatoire), dans un endroit calme où personne ne vous dérangera.</span>
-            </div>
-            <div className="flex items-start gap-2.5">
-              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-islamic/10 text-[10px] font-bold text-green-islamic">2</span>
-              <span><strong className="text-text-primary">Choisir le bon moment</strong> — un moment de la journée où vous êtes le plus concentré(e) et disponible mentalement.</span>
-            </div>
-            <div className="flex items-start gap-2.5">
-              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-islamic/10 text-[10px] font-bold text-green-islamic">3</span>
-              <span><strong className="text-text-primary">Mettre l'intention (niyyah)</strong> — c'est LE plus important. Ayez la certitude qu'Allah va pulvériser tout le mal qui est en vous. La conviction fait toute la différence.</span>
-            </div>
-            <div className="flex items-start gap-2.5">
-              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-islamic/10 text-[10px] font-bold text-green-islamic">4</span>
-              <span><strong className="text-text-primary">Préparer l'eau et l'huile</strong> — ouvrez un pack de bouteilles d'eau + une bouteille d'huile d'olive et placez-les à côté de vous pendant l'écoute. L'eau et l'huile reçoivent la baraka de la récitation.</span>
-            </div>
-            <div className="flex items-start gap-2.5">
-              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-islamic/10 text-[10px] font-bold text-green-islamic">5</span>
-              <span><strong className="text-text-primary">Rester concentré(e)</strong> — suivez la récitation avec le cœur, ne vous laissez pas distraire. Fermez les yeux et écoutez chaque verset.</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ═══ SÉANCE DE ROQYA (Vidéo YouTube) ═══ */}
-        <div className="mb-6 rounded-2xl border border-cream-dark bg-white/80 p-5 shadow-sm">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-islamic/10">
-              <Play className="h-4 w-4 text-green-islamic" />
-            </div>
-            <h3 className="font-heading text-base font-bold text-text-primary">Séance de Roqya du jour</h3>
-          </div>
-          <p className="text-sm text-text-secondary mb-4">
-            Installez-vous selon les consignes ci-dessus, puis lancez la récitation.
-          </p>
-          <div className="aspect-video overflow-hidden rounded-xl bg-black">
-            <iframe
-              src={`https://www.youtube.com/embed/${
-                program.type === 'intensive'
-                  ? '_x-MfPJVIE4'
-                  : program.type === 'light'
-                    ? 'waxbAKa-9Fc'
-                    : 'waxbAKa-9Fc'
-              }?rel=0`}
-              title="Séance de Roqya"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="h-full w-full"
-            />
-          </div>
-          <p className="mt-3 text-xs text-text-secondary text-center">
-            {program.type === 'intensive'
-              ? 'Roqya Shariya complète — Sheikh Mishary Alafasy (1h13)'
-              : 'Roqya — Sheikh Mishary Alafasy (chaîne officielle)'}
-          </p>
-        </div>
-
-        {/* ═══ JOURNAL GUIDÉ ═══ */}
-        <GuidedJournal currentDay={program.currentDay} />
-
-        <div className="arabesque-separator mx-auto max-w-xs mb-6" />
-
-        {/* Morning routine */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gold/10">
-              <Sun className="h-4 w-4 text-gold" />
-            </div>
-            <h3 className="font-heading text-base font-bold text-text-primary">Routine du matin</h3>
-            <span className="ml-auto text-xs text-text-secondary">
-              {dayProgress.morning.length}/{morningItems.length}
-            </span>
-          </div>
-          <div className="space-y-2">
-            {morningItems.map((item) => (
-              <ChecklistRow
-                key={item.id}
-                item={item}
-                category="morning"
-                checked={dayProgress.morning.includes(item.id)}
-              />
-            ))}
-          </div>
-        </div>
-
-        <QuoteCard index={program.currentDay} />
-
-        {/* Evening routine */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-islamic/10">
-              <Moon className="h-4 w-4 text-green-islamic" />
-            </div>
-            <h3 className="font-heading text-base font-bold text-text-primary">Routine du soir</h3>
-            <span className="ml-auto text-xs text-text-secondary">
-              {dayProgress.evening.length}/{eveningItems.length}
-            </span>
-          </div>
-          <div className="space-y-2">
-            {eveningItems.map((item) => (
-              <ChecklistRow
-                key={item.id}
-                item={item}
-                category="evening"
-                checked={dayProgress.evening.includes(item.id)}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Bonus actions */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gold/10">
-              <Sparkles className="h-4 w-4 text-gold" />
-            </div>
-            <h3 className="font-heading text-base font-bold text-text-primary">Actions bonus</h3>
-            <span className="ml-auto text-xs text-text-secondary">
-              {dayProgress.bonus.length}/{bonusItems.length}
-            </span>
-          </div>
-          <div className="space-y-2">
-            {bonusItems.map((item) => (
-              <ChecklistRow
-                key={item.id}
-                item={item}
-                category="bonus"
-                checked={dayProgress.bonus.includes(item.id)}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Tips section */}
-        <div className="mt-8 rounded-2xl border border-green-islamic/10 bg-green-islamic/5 p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <BookOpen className="h-4 w-4 text-green-islamic" />
-            <h3 className="text-sm font-semibold text-green-islamic">Conseils du jour</h3>
-          </div>
-          <ul className="space-y-2 text-sm text-text-secondary">
-            {program.type === 'intensive' && (
-              <>
-                <li className="flex items-start gap-2">
-                  <Droplets className="mt-0.5 h-4 w-4 shrink-0 text-green-islamic/50" />
-                  <span>Récitez les versets sur l'eau avant de la boire. L'eau coranisée est une sunna thérapeutique reconnue.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Droplets className="mt-0.5 h-4 w-4 shrink-0 text-green-islamic/50" />
-                  <span>Pour l'huile d'olive, récitez Al-Fatiha et les 3 Qul dessus, puis massez les zones douloureuses.</span>
-                </li>
-              </>
-            )}
-            <li className="flex items-start gap-2">
-              <Droplets className="mt-0.5 h-4 w-4 shrink-0 text-green-islamic/50" />
-              <span>La régularité est plus importante que la quantité. Mieux vaut peu mais constant.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Droplets className="mt-0.5 h-4 w-4 shrink-0 text-green-islamic/50" />
-              <span>Faites vos invocations avec certitude et confiance en Allah.</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* Disclaimer */}
-        <p className="mt-6 text-center text-xs text-text-secondary/70">
-          Ce programme est un outil d'accompagnement spirituel basé sur le Coran et la Sunnah.
-          Il ne se substitue pas aux autres moyens qu'Allah a mis à notre disposition.
-        </p>
-        </>
-        )}
-      </div>
-    );
-  }
-
-  // ═══════════════════════════════════════════════════════
-  // MAIN RENDER
-  // ═══════════════════════════════════════════════════════
-
-  return (
-    <div className="min-h-screen bg-cream py-16 md:py-24">
-      <SEO
-        title="Programme de Roqya personnalise - MaRoqya"
-        description="Obtenez un programme de roqya personnalise selon vos symptomes. Questionnaire, suivi quotidien, videos de roqya et checklist d'adhkar."
-        keywords="programme roqya personnalise, auto-roqya, roqya seul, adhkar quotidien, douas guerison, sourate protection"
-        url="/programme"
-      />
-      <div className="mx-auto max-w-5xl px-4">
-        <Link to="/#ressources" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-green-islamic hover:underline">
-          <ArrowLeft size={16} /> Retour à l'accueil
-        </Link>
-        {view === 'questionnaire' && (
-          <div className="mx-auto max-w-2xl">
-            {/* Page header */}
-            <div className="text-center mb-8">
-              <h1 className="font-heading text-3xl font-bold text-green-islamic md:text-4xl">
-                Programme de Roqya personnalisé
-              </h1>
-              <p className="mt-3 text-text-secondary">
-                Répondez à quelques questions pour recevoir un programme adapté à votre situation.
-              </p>
-            </div>
-
-            {/* Progress */}
-            <StepProgressBar current={step} total={5} />
-
-            {/* Step content */}
-            <div className="rounded-2xl border border-cream-dark bg-white/80 p-6 shadow-sm md:p-8">
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-islamic text-xs font-bold text-white">
-                    {step + 1}
-                  </span>
-                  <h2 className="font-heading text-xl font-bold text-text-primary">
-                    {STEP_TITLES[step].title}
-                  </h2>
-                </div>
-                <p className="ml-8 text-sm text-text-secondary">{STEP_TITLES[step].subtitle}</p>
-              </div>
-
-              {renderStep()}
-
-              {/* Navigation */}
-              <div className="mt-8 flex items-center justify-between border-t border-cream-dark pt-5">
-                <button
-                  onClick={() => { setStep((s) => s - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  disabled={step === 0}
-                  className="flex items-center gap-1 text-sm font-medium text-text-secondary transition hover:text-green-islamic disabled:opacity-30 disabled:hover:text-text-secondary"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                  Précédent
-                </button>
-
-                {step < 4 ? (
-                  <button
-                    onClick={() => { setStep((s) => s + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                    disabled={!canGoNext()}
-                    className="flex items-center gap-1 rounded-xl bg-green-islamic px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-gold disabled:opacity-40"
-                  >
-                    Suivant
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleFinishQuestionnaire}
-                    disabled={!canGoNext()}
-                    className="flex items-center gap-2 rounded-xl bg-green-islamic px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-gold disabled:opacity-40"
-                  >
-                    <Sparkles className="h-4 w-4" />
-                    Voir mon programme
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Motivational quote between steps */}
-            {step > 0 && step < 4 && <QuoteCard index={step} />}
-
-            {/* Disclaimer */}
-            <p className="mt-6 text-center text-xs text-text-secondary/70">
-              Ce questionnaire est un outil d'orientation et ne constitue pas un diagnostic certifié.
-            </p>
-          </div>
-        )}
-
-        {view === 'result' && renderResult()}
-
-        {view === 'tracker' && renderTracker()}
-      </div>
+      {view === 'questionnaire' && renderQuestionnaire()}
+      {view === 'result' && renderResult()}
+      {view === 'tracker' && renderTracker()}
 
       <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
-        action="commencer votre programme"
+        action="login"
       />
-    </div>
+    </>
   );
 }
