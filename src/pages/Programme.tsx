@@ -925,6 +925,7 @@ export default function Programme() {
   const [programState, setProgramState] = useState<ProgramState | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [viewingDay, setViewingDay] = useState(1);
+  const [showEvolution, setShowEvolution] = useState(false);
 
   useEffect(() => {
     // Purge anciens localStorage de l'ancienne version du programme
@@ -1422,8 +1423,6 @@ export default function Programme() {
     const showPsychoModule = diagProfile === 'hybrid' || diagProfile === 'psycho';
 
     const showWeeklyCheck = shouldShowWeeklyCheck(startDate);
-    // Sections optionnelles affichées à la demande
-    const [showEvolution, setShowEvolution] = React.useState(false);
 
     return (
       <div className="min-h-screen bg-cream pb-24">
