@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { AlertTriangle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { AlertTriangle, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 import { quizQuestions } from '../data/quizQuestions';
 import SEO from '../components/SEO';
 
@@ -47,6 +47,9 @@ export default function Quiz() {
           url="/quiz"
         />
         <div className="mx-auto max-w-2xl text-center">
+          <Link to="/" className="mb-6 inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-green-islamic transition-colors">
+            <ArrowLeft size={15} /> Accueil
+          </Link>
           <h1 className="mb-4 font-heading text-3xl font-bold text-green-islamic sm:text-4xl">
             {t('quiz.title')}
           </h1>

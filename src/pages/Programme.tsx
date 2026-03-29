@@ -1065,6 +1065,11 @@ export default function Programme() {
       <div className="min-h-screen bg-cream pb-20">
         <div className="max-w-lg mx-auto px-4 pt-10">
 
+          {/* Retour accueil */}
+          <Link to="/" className="mb-4 inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-green-islamic transition-colors">
+            <ChevronLeft className="h-4 w-4" /> Accueil
+          </Link>
+
           {/* Hero */}
           <div className="text-center mb-10">
             <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-green-islamic/10 mb-4">

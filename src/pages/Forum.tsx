@@ -50,21 +50,42 @@ export default function Forum() {
   const [newTitle, setNewTitle] = useState('');
   const [newContent, setNewContent] = useState('');
   const [newCategorie, setNewCategorie] = useState<string>('questions');
-  const [posts, setPosts] = useState<ForumPost[]>([]);
-  const [loading, setLoading] = useState(true);
+  const FORUM_CACHE_KEY = 'cache_forum_v1';
+  const FORUM_CACHE_TTL = 2 * 60 * 1000; // 2 minutes
+
+  const readForumCache = (): ForumPost[] | null => {
+    try {
+      const raw = sessionStorage.getItem(FORUM_CACHE_KEY);
+      if (!raw) return null;
+      const { data, ts } = JSON.parse(raw) as { data: ForumPost[]; ts: number };
+      return Date.now() - ts < FORUM_CACHE_TTL ? data : null;
+    } catch { return null; }
+  };
+
+  const cachedPosts = readForumCache();
+  const [posts, setPosts] = useState<ForumPost[]>(cachedPosts ?? []);
+  const [loading, setLoading] = useState(!cachedPosts);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
   const [showAuthModal, setShowAuthModal] = useState(false);
 
-  const fetchPosts = useCallback(async () => {
+  const fetchPosts = useCallback(async (invalidateCache = false) => {
+    if (!invalidateCache) {
+      const fresh = readForumCache();
+      if (fresh) { setPosts(fresh); setLoading(false); return; }
+    }
     const { data } = await supabase
       .from('forum_posts')
       .select('*')
       .eq('statut', 'approuve')
       .order('created_at', { ascending: false });
-    if (data) setPosts(data as ForumPost[]);
+    if (data) {
+      setPosts(data as ForumPost[]);
+      sessionStorage.setItem(FORUM_CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
+    }
     setLoading(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -109,6 +130,7 @@ export default function Forum() {
       setNewTitle('');
       setNewContent('');
       setShowNewPost(false);
+      sessionStorage.removeItem('cache_forum_v1'); // invalider le cache après un nouveau post
     }
     setSubmitting(false);
   };

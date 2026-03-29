@@ -11,19 +11,37 @@ interface VideoItem {
   created_at: string;
 }
 
+const CACHE_KEY = 'cache_videos_v1';
+const CACHE_TTL = 3 * 60 * 1000; // 3 minutes
+
+function readCache(): VideoItem[] | null {
+  try {
+    const raw = sessionStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { data, ts } = JSON.parse(raw) as { data: VideoItem[]; ts: number };
+    return Date.now() - ts < CACHE_TTL ? data : null;
+  } catch { return null; }
+}
+
 export default function Videos() {
-  const [videos, setVideos] = useState<VideoItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const cached = readCache();
+  const [videos, setVideos] = useState<VideoItem[]>(cached ?? []);
+  const [loading, setLoading] = useState(!cached);
 
   useEffect(() => {
+    if (cached) return; // données fraîches en cache — pas d'appel réseau
     (async () => {
       const { data } = await supabase
         .from('videos')
         .select('*')
         .order('created_at', { ascending: false });
-      if (data) setVideos(data as VideoItem[]);
+      if (data) {
+        setVideos(data as VideoItem[]);
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
+      }
       setLoading(false);
     })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
