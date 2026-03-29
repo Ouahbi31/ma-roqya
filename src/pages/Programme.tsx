@@ -20,7 +20,7 @@ import SEO from '../components/SEO';
 
 type AffectionType = 'ayn' | 'sihr' | 'mass' | 'waswas';
 type DiagnosticProfile = 'occult' | 'psycho' | 'hybrid' | 'medical';
-type View = 'questionnaire' | 'result' | 'tracker';
+type View = 'landing' | 'questionnaire' | 'result' | 'tracker';
 
 interface Scores {
   ayn: number;
@@ -920,7 +920,7 @@ export default function Programme() {
   const { user, profile } = useAuthStore();
   const isPremium = profile?.is_premium ?? false;
 
-  const [view, setView] = useState<View>('questionnaire');
+  const [view, setView] = useState<View>('landing');
   const [currentQuestionId, setCurrentQuestionId] = useState('q_duration');
   const [questionPath, setQuestionPath] = useState<string[]>(['q_duration']);
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
@@ -931,20 +931,17 @@ export default function Programme() {
   const [viewingDay, setViewingDay] = useState(1);
 
   useEffect(() => {
+    // Purge anciens localStorage de l'ancienne version du programme
+    localStorage.removeItem('ruqya_program_state');
+    localStorage.removeItem('ruqya_questionnaire_answers');
+
+    // Charger l'état sauvegardé v2 (sans changer la vue — on reste sur landing)
     const saved = loadProgramState();
     if (saved) {
       setProgramState(saved);
       setViewingDay(saved.currentDay);
     }
-    const savedQ = localStorage.getItem(STORAGE_KEY_Q);
-    if (savedQ) {
-      try {
-        const parsed = JSON.parse(savedQ) as { answers?: Record<string, string[]> };
-        if (parsed.answers) setAnswers(parsed.answers);
-      } catch {
-        // ignore
-      }
-    }
+    // NE PAS charger les réponses partielles — on repart toujours proprement
   }, []);
 
   const currentQuestion = QUESTIONS.find(q => q.id === currentQuestionId);
@@ -1054,11 +1051,113 @@ export default function Programme() {
     setMedicalFlag(false);
     setCurrentQuestionId('q_duration');
     setQuestionPath(['q_duration']);
-    setView('questionnaire');
+    setView('landing');
   }
 
   // ══════════════════════════════════════════
   // QUESTIONNAIRE VIEW
+  // ══════════════════════════════════════════
+  // LANDING VIEW
+  // ══════════════════════════════════════════
+
+  function renderLanding() {
+    const typeConfig = programState ? TYPE_LABELS[programState.affectionType] : null;
+    const ResumeIcon = typeConfig?.Icon;
+
+    return (
+      <div className="min-h-screen bg-cream pb-20">
+        <div className="max-w-lg mx-auto px-4 pt-10">
+
+          {/* Hero */}
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-green-islamic/10 mb-4">
+              <Sparkles className="h-8 w-8 text-green-islamic" />
+            </div>
+            <h1 className="text-2xl font-bold text-text-primary">
+              Programme de Roqya Personnalisé
+            </h1>
+            <p className="mt-3 text-sm text-text-secondary leading-relaxed max-w-sm mx-auto">
+              Un diagnostic adaptatif de 11 questions pour vous orienter vers le programme qui correspond à votre situation — 'Ayn, Sihr, Mass ou Waswas.
+            </p>
+          </div>
+
+          {/* Points clés */}
+          <div className="card-islamic p-5 mb-5 space-y-3">
+            {[
+              { icon: '🎯', text: 'Diagnostic personnalisé basé sur vos symptômes réels' },
+              { icon: '📖', text: 'Programmes basés sur Ibn Qayyim, Ibn Taymiyya, Ibn Baz' },
+              { icon: '🎬', text: 'Vidéos tutos "fais avec moi" à chaque étape' },
+              { icon: '📊', text: 'Suivi de votre évolution semaine par semaine' },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <span className="text-lg">{item.icon}</span>
+                <p className="text-sm text-text-primary">{item.text}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Reprendre si programme existant */}
+          {programState && typeConfig && ResumeIcon && (
+            <div className="card-islamic border-green-islamic/30 p-4 mb-4">
+              <p className="text-xs text-text-secondary mb-2">Programme en cours</p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-islamic/10">
+                    <ResumeIcon className="h-5 w-5 text-green-islamic" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-text-primary">{typeConfig.label}</p>
+                    <p className="text-xs text-text-secondary">
+                      Jour {programState.currentDay} / {programState.totalDays}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setView('tracker')}
+                  className="rounded-full bg-green-islamic px-4 py-2 text-xs font-semibold text-white"
+                >
+                  Reprendre
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* CTA principal */}
+          <button
+            onClick={() => {
+              // Repart toujours propre
+              setAnswers({});
+              setMedicalFlag(false);
+              setCurrentQuestionId('q_duration');
+              setQuestionPath(['q_duration']);
+              setDiagnosis(null);
+              localStorage.removeItem(STORAGE_KEY_Q);
+              setView('questionnaire');
+            }}
+            className="w-full rounded-2xl bg-green-islamic py-4 text-base font-bold text-white hover:bg-green-islamic/90 active:scale-[0.98] transition-all shadow-lg shadow-green-islamic/20"
+          >
+            {programState ? 'Refaire le diagnostic' : 'Commencer le diagnostic'}
+          </button>
+
+          <p className="mt-4 text-center text-xs text-text-secondary">
+            Gratuit · 3–5 minutes · Résultats immédiats
+          </p>
+
+          {/* Verset */}
+          <div className="mt-8 card-islamic p-4 text-center">
+            <p className="font-arabic text-lg text-text-primary leading-loose">
+              وَنُنَزِّلُ مِنَ الْقُرْآنِ مَا هُوَ شِفَاءٌ وَرَحْمَةٌ لِلْمُؤْمِنِينَ
+            </p>
+            <p className="mt-2 text-xs text-text-secondary italic">
+              "Nous faisons descendre du Coran ce qui est guérison et miséricorde pour les croyants."
+            </p>
+            <p className="mt-1 text-xs text-gold">Sourate Al-Isra, 17:82</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // ══════════════════════════════════════════
 
   function renderQuestionnaire() {
@@ -1554,24 +1653,18 @@ export default function Programme() {
         description="Programme adaptatif de roqya selon votre diagnostic : 'Ayn, Sihr, Mass, Waswas. Basé sur Ibn Qayyim, Ibn Taymiyya, Ibn Baz."
       />
 
-      {/* Nav tabs when program is active */}
-      {(programState || diagnosis) && (
+      {/* Nav tabs — only show when past landing */}
+      {view !== 'landing' && (
         <div className="sticky top-0 z-10 bg-white border-b border-gray-100 shadow-sm">
           <div className="max-w-lg mx-auto flex">
-            {(['questionnaire', 'result', 'tracker'] as View[]).map(v => {
-              const labels: Record<View, string> = {
-                questionnaire: 'Diagnostic',
-                result: 'Résultat',
-                tracker: 'Mon Programme',
-              };
+            {(['questionnaire', 'result', 'tracker'] as Array<Exclude<View, 'landing'>>).map(v => {
+              const labels = { questionnaire: 'Diagnostic', result: 'Résultat', tracker: 'Mon Programme' };
               const disabled = (v === 'result' && !diagnosis) || (v === 'tracker' && !programState);
               return (
                 <button
                   key={v}
                   disabled={disabled}
-                  onClick={() => {
-                    if (!disabled) setView(v);
-                  }}
+                  onClick={() => { if (!disabled) setView(v); }}
                   className={`flex-1 py-3 text-sm font-medium border-b-2 transition-colors disabled:opacity-40 ${
                     view === v ? 'border-green-islamic text-green-islamic' : 'border-transparent text-text-secondary hover:text-text-primary'
                   }`}
@@ -1584,6 +1677,7 @@ export default function Programme() {
         </div>
       )}
 
+      {view === 'landing' && renderLanding()}
       {view === 'questionnaire' && renderQuestionnaire()}
       {view === 'result' && renderResult()}
       {view === 'tracker' && renderTracker()}
