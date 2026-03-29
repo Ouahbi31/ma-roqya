@@ -13,8 +13,6 @@ import { useAuthStore } from '../store/authStore';
 import AuthModal from '../components/auth/AuthModal';
 import SEO from '../components/SEO';
 
-// Suppress unused import warning for Eye (used in type label map)
-const _eye = Eye;
 
 // ═══════════════════════════════════════════════════════
 // TYPES
@@ -641,7 +639,7 @@ function getDayContent(type: AffectionType, day: number): DayContent {
 // ═══════════════════════════════════════════════════════
 
 const PROGRAM_CONFIG = {
-  ayn: { title: "Programme 'Ayn (Mauvais Œil)", duration: 7, icon: Star, color: 'gold', description: "7 jours de roqya ciblée contre le mauvais œil selon la Sunna prophétique" },
+  ayn: { title: "Programme 'Ayn (Mauvais Œil)", duration: 7, icon: Eye, color: 'gold', description: "7 jours de roqya ciblée contre le mauvais œil selon la Sunna prophétique" },
   sihr: { title: 'Programme Sihr (Envoûtement)', duration: 30, icon: Flame, color: 'red-dark', description: '30 jours en 3 phases : purification, traitement intensif, consolidation — selon Ibn Qayyim' },
   mass: { title: 'Programme Mass (Djinn)', duration: 21, icon: Shield, color: 'blue-dark', description: '21 jours de roqya intensive avec suivi quotidien — basé sur la méthode des savants' },
   waswas: { title: 'Programme Waswas (Obsessions)', duration: 14, icon: MessageCircle, color: 'gold', description: '14 jours pour vaincre les waswas selon Ibn Taymiyya (Risalat al-Waswas)' },
@@ -785,7 +783,7 @@ function saveProgramState(state: ProgramState) {
 // ═══════════════════════════════════════════════════════
 
 const TYPE_LABELS: Record<AffectionType, { label: string; color: string; bg: string; Icon: React.ElementType }> = {
-  ayn: { label: "'Ayn — Mauvais Œil", color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200', Icon: Star },
+  ayn: { label: "'Ayn — Mauvais Œil", color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200', Icon: Eye },
   sihr: { label: 'Sihr — Envoûtement', color: 'text-red-700', bg: 'bg-red-50 border-red-200', Icon: Flame },
   mass: { label: 'Mass — Djinn', color: 'text-blue-700', bg: 'bg-blue-50 border-blue-200', Icon: Shield },
   waswas: { label: 'Waswas — Obsessions', color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', Icon: MessageCircle },
