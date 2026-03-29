@@ -41,8 +41,19 @@ export default defineConfig({
         clientsClaim: true,
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api\//],
-        globPatterns: ['**/*.{js,css,html,svg,png,jpg,webp,woff,woff2}'],
+        maximumFileSizeToCacheInBytes: 500 * 1024, // 500 kB max
+        globPatterns: ['**/*.{js,css,html,woff,woff2}'], // fonts + app shell only
         runtimeCaching: [
+          // Images : stale-while-revalidate (served fast, updated background)
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|webp|svg|gif|ico)$/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'images',
+              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
+          // Supabase API
           {
             urlPattern: /^https:\/\/bcrippmehqoualtgazbm\.supabase\.co\/.*/i,
             handler: 'NetworkFirst',
@@ -54,6 +65,7 @@ export default defineConfig({
               },
             },
           },
+          // Google Fonts
           {
             urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
             handler: 'CacheFirst',
