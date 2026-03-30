@@ -41,7 +41,7 @@ export default defineConfig({
         clientsClaim: true,
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api\//],
-        maximumFileSizeToCacheInBytes: 500 * 1024, // 500 kB max
+        maximumFileSizeToCacheInBytes: 600 * 1024, // 600 kB max
         globPatterns: ['**/*.{js,css,html,woff,woff2}'], // fonts + app shell only
         runtimeCaching: [
           // Images : stale-while-revalidate (served fast, updated background)
