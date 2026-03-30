@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Play, Lock, Crown,
   ChevronLeft, ChevronRight, Sun, Moon, Star, CheckCircle2,
-  Circle, BookOpen, AlertTriangle, Sparkles
+  Circle, BookOpen, AlertTriangle, Sparkles, Download
 } from 'lucide-react';
 import SymptomTracker, { shouldShowWeeklyCheck } from '../components/programme/SymptomTracker';
 import SymptomChart from '../components/programme/SymptomChart';
@@ -770,6 +770,22 @@ export default function Programme() {
                     </div>
                   </div>
                 )}
+
+                {/* Téléchargement PDF des invocations complémentaires */}
+                <div className="mt-4 rounded-xl border border-green-islamic/20 bg-green-islamic/5 p-4">
+                  <p className="text-xs font-semibold text-green-islamic mb-1">📄 Invocations complémentaires</p>
+                  <p className="text-xs text-text-secondary mb-3">
+                    Toutes les invocations de votre programme en arabe, phonétique et traduction française.
+                  </p>
+                  <a
+                    href={`/pdf/${affectionType}-invocations.pdf`}
+                    download
+                    className="inline-flex items-center gap-2 rounded-lg bg-green-islamic px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+                  >
+                    <Download className="h-4 w-4" />
+                    Télécharger le PDF
+                  </a>
+                </div>
               </>
             )}
           </div>
