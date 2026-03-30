@@ -262,7 +262,7 @@ AYN_INVOCATIONS = [
         "titre": "Sourate Al-Fatiha",
         "quand": "À réciter 7x — soufflée sur les mains puis passées sur le corps",
         "arabe": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ۝ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ۝ الرَّحْمَٰنِ الرَّحِيمِ ۝ مَالِكِ يَوْمِ الدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ ۝ صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",
-        "phonetique": "Bismillāhi r-raḥmāni r-raḥīm. Al-ḥamdu lillāhi rabbi l-ʿālamīn. Ar-raḥmāni r-raḥīm. Māliki yawmi d-dīn. Iyyāka naʿbudu wa-iyyāka nastaʿīn. Ihdinā ṣ-ṣirāṭa l-mustaqīm. Ṣirāṭa lladhīna anʿamta ʿalayhim, ghayri l-maghḍūbi ʿalayhim wa-lā ḍ-ḍāllīn.",
+        "phonetique": "Bismillaahi r-rahmaani r-rahiim. Al-hamdu lillaahi rabbi l-'aalamiin. Ar-rahmaani r-rahiim. Maaliki yawmi d-diin. Iyyaaka na'budu wa-iyyaaka nasta'iin. Ihdinaa s-siraata l-mustaqiim. Siraata lladhiina an'amta 'alayhim, ghayri l-maghduubi 'alayhim wa-laa d-daalliin.",
         "traduction": "Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux. Louange à Allah, Seigneur des mondes. Le Tout Miséricordieux, le Très Miséricordieux. Maître du Jour de la rétribution. C'est Toi [Seul] que nous adorons, et c'est Toi [Seul] dont nous implorons le secours. Guide-nous vers le droit chemin. Le chemin de ceux que Tu as comblés de bienfaits, non pas de ceux qui ont encouru Ta colère, ni des égarés.",
     },
     {
@@ -270,7 +270,7 @@ AYN_INVOCATIONS = [
         "titre": "Ayat Al-Kursi",
         "quand": "3x — matin et soir",
         "arabe": "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
-        "phonetique": "Allāhu lā ilāha illā huwa l-ḥayyu l-qayyūm. Lā taʾkhudhuhu sinatun wa-lā nawm. Lahū mā fi s-samāwāti wa-mā fi l-arḍ. Man dhā lladhī yashfaʿu ʿindahu illā bi-idhnih. Yaʿlamu mā bayna aydīhim wa-mā khalfahum. Wa-lā yuḥīṭūna bi-shayʾin min ʿilmihi illā bi-mā shāʾ. Wasiʿa kursiyyuhu s-samāwāti wa-l-arḍ. Wa-lā yaʾūduhu ḥifẓuhumā wa-huwa l-ʿaliyyu l-ʿaẓīm.",
+        "phonetique": "Allaahu laa ilaaha illaa huwa l-hayyu l-qayyuum. Laa ta'khudhuhu sinatun wa-laa nawm. Lahuu maa fi s-samaawaati wa-maa fi l-ard. Man dhaa lladhii yashfa'u 'indahu illaa bi-idhnih. Ya'lamu maa bayna aydiihim wa-maa khalfahum. Wa-laa yuhiiduuna bi-shay'in min 'ilmihi illaa bi-maa shaa'. Wasi'a kursiyyuhu s-samaawaati wa-l-ard. Wa-laa ya'uuduhu hifzuhumaa wa-huwa l-'aliyyu l-'aziim.",
         "traduction": "Allah ! Point de divinité à part Lui, le Vivant, Celui qui subsiste par lui-même. Ni somnolence ni sommeil ne Le saisissent. À Lui appartient tout ce qui est dans les cieux et sur la terre. Qui peut intercéder auprès de Lui sans Sa permission ? Il connaît leur passé et leur futur. Et ils n'embrassent de Sa science que ce qu'Il veut. Son Trône s'étend sur les cieux et la terre dont la garde ne Lui coûte aucune peine. Et Il est le Très Haut, le Très Grand.",
     },
     {
@@ -278,7 +278,7 @@ AYN_INVOCATIONS = [
         "titre": "La Roqya du Prophète (saw)",
         "quand": "3x — soufflée sur les mains puis le corps",
         "arabe": "بِسْمِ اللَّهِ أَرْقِيكَ مِنْ كُلِّ شَيْءٍ يُؤْذِيكَ مِنْ شَرِّ كُلِّ نَفْسٍ أَوْ عَيْنِ حَاسِدٍ اللَّهُ يَشْفِيكَ بِسْمِ اللَّهِ أَرْقِيكَ",
-        "phonetique": "Bismillāhi arqīka, min kulli shayʾin yuʾdhīka, min sharri kulli nafsin aw ʿayni ḥāsidin, Allāhu yashfīka, bismillāhi arqīka.",
+        "phonetique": "Bismilaahi arqiika, min kulli shay'in yu'dhiika, min sharri kulli nafsin aw 'ayni haasidin, Allaahu yashfiika, bismillaahi arqiika.",
         "traduction": "Au nom d'Allah, je te fais la roqya contre tout ce qui te nuit, contre le mal de toute âme et de tout œil envieux. Qu'Allah te guérisse ! Au nom d'Allah, je te fais la roqya.",
     },
     {
@@ -286,7 +286,7 @@ AYN_INVOCATIONS = [
         "titre": "Doua pour guérir du 'Ayn",
         "quand": "3x — sur la zone douloureuse",
         "arabe": "اللَّهُمَّ رَبَّ النَّاسِ أَذْهِبِ الْبَأْسَ وَاشْفِ أَنْتَ الشَّافِي لَا شِفَاءَ إِلَّا شِفَاؤُكَ شِفَاءً لَا يُغَادِرُ سَقَمًا",
-        "phonetique": "Allāhumma rabba n-nāsi, adhhib il-baʾsa wa-shfi, anta sh-shāfi, lā shifāʾa illā shifāʾuka, shifāʾan lā yughādiru saqamā.",
+        "phonetique": "Allaahumma rabba n-naasi, adhhib il-ba'sa wa-shfi, anta sh-shaafi, laa shifaa'a illaa shifaa'uka, shifaa'an laa yughaadiiru saqamaa.",
         "traduction": "Ô Allah, Seigneur des hommes, éloigne la douleur et guéris, Tu es le Guérisseur, il n'y a pas de guérison sauf Ta guérison, une guérison qui n'laisse aucune maladie.",
     },
     {
@@ -294,7 +294,7 @@ AYN_INVOCATIONS = [
         "titre": "Protection contre l'envie",
         "quand": "7x — matin",
         "arabe": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
-        "phonetique": "Aʿūdhu bi-kalimāti llāhi t-tāmmāti min sharri mā khalaq.",
+        "phonetique": "A'uudhu bi-kalimaati llaahi t-taammati min sharri maa khalaq.",
         "traduction": "Je cherche refuge dans les paroles parfaites d'Allah contre le mal de ce qu'Il a créé.",
     },
     {
@@ -302,7 +302,7 @@ AYN_INVOCATIONS = [
         "titre": "Hasbi Allah — Invocation de confiance",
         "quand": "7x — matin et soir",
         "arabe": "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
-        "phonetique": "Ḥasbiya llāhu lā ilāha illā huwa, ʿalayhi tawakkaltu wa-huwa rabbu l-ʿarshi l-ʿaẓīm.",
+        "phonetique": "Hasbiya llaahu laa ilaaha illaa huwa, 'alayhi tawakkaltu wa-huwa rabbu l-'arshi l-'aziim.",
         "traduction": "Allah me suffit, il n'y a de divinité que Lui, je m'en remets à Lui et Il est le Seigneur du Trône immense. (Sourate At-Tawbah 9:129)",
     },
     {
@@ -310,7 +310,7 @@ AYN_INVOCATIONS = [
         "titre": "Sourate Al-Ikhlas",
         "quand": "3x",
         "arabe": "قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ",
-        "phonetique": "Qul huwa llāhu aḥad. Allāhu ṣ-ṣamad. Lam yalid wa-lam yūlad. Wa-lam yakun lahū kufuwan aḥad.",
+        "phonetique": "Qul huwa llaahu ahad. Allaahu s-samad. Lam yalid wa-lam yuulad. Wa-lam yakun lahuu kufuwan ahad.",
         "traduction": "Dis : 'Il est Allah, Unique. Allah, le Seul à être imploré pour ce que nous désirons. Il n'a jamais engendré, n'a pas été engendré non plus. Et nul n'est égal à Lui.'",
     },
     {
@@ -318,7 +318,7 @@ AYN_INVOCATIONS = [
         "titre": "Sourate Al-Falaq",
         "quand": "3x",
         "arabe": "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِنْ شَرِّ مَا خَلَقَ ۝ وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ",
-        "phonetique": "Qul aʿūdhu bi-rabbi l-falaq. Min sharri mā khalaq. Wa-min sharri ghāsiqin idhā waqab. Wa-min sharri n-naffāthāti fi l-ʿuqad. Wa-min sharri ḥāsidin idhā ḥasad.",
+        "phonetique": "Qul a'uudhu bi-rabbi l-falaq. Min sharri maa khalaq. Wa-min sharri ghaasiqin idhaa waqab. Wa-min sharri n-naffaathaati fi l-'uqad. Wa-min sharri haasidin idhaa hasad.",
         "traduction": "Dis : 'Je cherche refuge auprès du Seigneur de l'aube naissante, contre le mal de ce qu'Il a créé, contre le mal de l'obscurité quand elle s'étend, contre le mal de celles qui soufflent sur les nœuds, et contre le mal de l'envieux quand il envie.'",
     },
     {
@@ -326,7 +326,7 @@ AYN_INVOCATIONS = [
         "titre": "Sourate An-Nas",
         "quand": "3x",
         "arabe": "قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ",
-        "phonetique": "Qul aʿūdhu bi-rabbi n-nās. Maliki n-nās. Ilāhi n-nās. Min sharri l-waswāsi l-khannās. Alladhī yuwaswisu fī ṣudūri n-nās. Mina l-jinnati wa-n-nās.",
+        "phonetique": "Qul a'uudhu bi-rabbi n-naas. Maliki n-naas. Ilaahi n-naas. Min sharri l-waswaasi l-khannaas. Alladhii yuwaswisu fii suduuri n-naas. Mina l-jinnati wa-n-naas.",
         "traduction": "Dis : 'Je cherche refuge auprès du Seigneur des hommes, du Roi des hommes, du Dieu des hommes, contre le mal du mauvais conseiller, le sournois qui souffle le mal dans les poitrines des hommes, qu'il soit djinn ou être humain.'",
     },
 ]
@@ -340,7 +340,7 @@ SIHR_INVOCATIONS = [
         "titre": "Versets de Musa contre les sorciers — Sourate Al-A'raf 7:117-122",
         "quand": "3x",
         "arabe": "وَأَوْحَيْنَا إِلَىٰ مُوسَىٰ أَنْ أَلْقِ عَصَاكَ فَإِذَا هِيَ تَلْقَفُ مَا يَأْفِكُونَ ۝ فَوَقَعَ الْحَقُّ وَبَطَلَ مَا كَانُوا يَعْمَلُونَ ۝ فَغُلِبُوا هُنَالِكَ وَانْقَلَبُوا صَاغِرِينَ ۝ وَأُلْقِيَ السَّحَرَةُ سَاجِدِينَ ۝ قَالُوا آمَنَّا بِرَبِّ الْعَالَمِينَ ۝ رَبِّ مُوسَىٰ وَهَارُونَ",
-        "phonetique": "Wa-awḥaynā ilā Mūsā an alqi ʿaṣāka fa-idhā hiya talqafu mā yaʾfikūn. Fa-waqaʿa l-ḥaqqu wa-baṭala mā kānū yaʿmalūn. Fa-ghulibū hunālika wa-nqalabū ṣāghirīn. Wa-ulqiya s-saḥaratu sājidīn. Qālū āmannā bi-rabbi l-ʿālamīn. Rabbi Mūsā wa-Hārūn.",
+        "phonetique": "Wa-awhaynaa ilaa Muusaa an alqi 'asaaka fa-idhaa hiya talqafu maa ya'fikuun. Fa-waqa'a l-haqqu wa-batala maa kaanuu ya'maluun. Fa-ghulibuу hunaaliika wa-nqalabuu saaghiriin. Wa-ulqiya s-saharatu saajidiin. Qaaluu aamannaa bi-rabbi l-'aalamiin. Rabbi Muusaa wa-Haaruun.",
         "traduction": "Et Nous révélâmes à Moïse : 'Lance ton bâton.' Et voilà qu'il engloutit ce qu'ils falsifiaient. Ainsi la vérité fut établie et ce qu'ils faisaient s'anéantit. Là, ils furent vaincus et devinrent humiliés. Et les magiciens se prosternèrent. Ils dirent : 'Nous croyons au Seigneur des mondes, le Seigneur de Moïse et Aaron.'",
     },
     {
@@ -348,7 +348,7 @@ SIHR_INVOCATIONS = [
         "titre": "Versets de Yunus 10:79-82",
         "quand": "3x",
         "arabe": "وَقَالَ فِرْعَوْنُ ائْتُونِي بِكُلِّ سَاحِرٍ عَلِيمٍ ۝ فَلَمَّا جَاءَ السَّحَرَةُ قَالَ لَهُمْ مُوسَىٰ أَلْقُوا مَا أَنْتُمْ مُلْقُونَ ۝ فَلَمَّا أَلْقَوْا قَالَ مُوسَىٰ مَا جِئْتُمْ بِهِ السِّحْرُ إِنَّ اللَّهَ سَيُبْطِلُهُ إِنَّ اللَّهَ لَا يُصْلِحُ عَمَلَ الْمُفْسِدِينَ ۝ وَيُحِقُّ اللَّهُ الْحَقَّ بِكَلِمَاتِهِ وَلَوْ كَرِهَ الْمُجْرِمُونَ",
-        "phonetique": "Wa-qāla firʿawnu ʾtūnī bi-kulli sāḥirin ʿalīm. Fa-lammā jāʾa s-saḥaratu qāla lahum Mūsā alqū mā antum mulqūn. Fa-lammā alqaw qāla Mūsā mā jiʾtum bihi s-siḥru, inna llāha sa-yubṭiluh, inna llāha lā yuṣliḥu ʿamala l-mufsidīn. Wa-yuḥiqqu llāhu l-ḥaqqa bi-kalimātihi wa-law kariha l-mujrimūn.",
+        "phonetique": "Wa-qaala fir'awnu 'tuunii bi-kulli saahirin 'aliim. Fa-lammaa jaa'a s-saharatu qaala lahum Muusaa alquu maa antum mulquun. Fa-lammaa alqaw qaala Muusaa maa ji'tum bihi s-sihru, inna llaaha sa-yubtiluh, inna llaaha laa yuslihu 'amala l-mufsiidiin. Wa-yuhiqqu llaahu l-haqqa bi-kalimaatihi wa-law kariha l-mujrimuun.",
         "traduction": "Pharaon dit : 'Amenez-moi tout magicien compétent.' Et quand les magiciens vinrent, Moïse leur dit : 'Jetez ce que vous voulez jeter.' Quand ils eurent jeté, Moïse dit : 'Ce que vous avez apporté, c'est de la sorcellerie. Allah va certainement l'annuler. Allah ne rend pas saine l'œuvre des corrupteurs. Et Allah confirme la vérité par Ses paroles, en dépit de ce que détestent les criminels.'",
     },
     {
@@ -356,7 +356,7 @@ SIHR_INVOCATIONS = [
         "titre": "Versets de Taha 20:65-70",
         "quand": "3x",
         "arabe": "قَالُوا يَا مُوسَىٰ إِمَّا أَنْ تُلْقِيَ وَإِمَّا أَنْ نَكُونَ أَوَّلَ مَنْ أَلْقَىٰ ۝ قَالَ بَلْ أَلْقُوا فَإِذَا حِبَالُهُمْ وَعِصِيُّهُمْ يُخَيَّلُ إِلَيْهِ مِنْ سِحْرِهِمْ أَنَّهَا تَسْعَىٰ ۝ فَأَوْجَسَ فِي نَفْسِهِ خِيفَةً مُوسَىٰ ۝ قُلْنَا لَا تَخَفْ إِنَّكَ أَنْتَ الْأَعْلَىٰ ۝ وَأَلْقِ مَا فِي يَمِينِكَ تَلْقَفْ مَا صَنَعُوا إِنَّمَا صَنَعُوا كَيْدُ سَاحِرٍ وَلَا يُفْلِحُ السَّاحِرُ حَيْثُ أَتَىٰ",
-        "phonetique": "Qālū yā Mūsā immā an tulqiya wa-immā an nakūna awwala man alqā. Qāla bal alqū, fa-idhā ḥibāluhum wa-ʿiṣiyyuhum yukhayyalu ilayhi min siḥrihim annahā tasʿā. Fa-awjasa fī nafsihi khīfatan Mūsā. Qulnā lā takhaf innaka anta l-aʿlā. Wa-alqi mā fī yamīnika talqaf mā ṣanaʿū, innamā ṣanaʿū kaydu sāḥirin wa-lā yufliḥu s-sāḥiru ḥaythu atā.",
+        "phonetique": "Qaaluu yaa Muusaa immaa an tulqiya wa-immaa an nakuuna awwala man alqaa. Qaala bal alquu, fa-idhaa hibaaluhum wa-'isiyyuhum yukhayyalu ilayhi min sihrihim annahaa tas'aa. Fa-awjasa fii nafsihi khiifatan Muusaa. Qulnaa laa takhaf innaka anta l-a'laa. Wa-alqi maa fii yamiinika talqaf maa sana'uu, innamaa sana'uu kaydu saahirin wa-laa yuflihu s-saahiru haytu ataa.",
         "traduction": "Ils dirent : 'Ô Moïse, ou bien tu jettes, ou bien nous serons les premiers à jeter.' Il dit : 'Non, jetez.' Et voilà que leurs cordes et leurs bâtons lui semblaient, par leur magie, ramper. Alors Moïse ressentit en lui-même une peur. Nous dîmes : 'N'aie pas peur ! C'est toi qui seras le plus fort. Lance ce que tu tiens dans ta main droite : elle engloutira ce qu'ils ont fabriqué. Ce qu'ils ont fabriqué n'est qu'un stratagème de magicien. Et le magicien ne réussit pas, où qu'il aille.'",
     },
     {
@@ -364,7 +364,7 @@ SIHR_INVOCATIONS = [
         "titre": "Istighfar intensif",
         "quand": "100x par jour",
         "arabe": "أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",
-        "phonetique": "Astaghfiru llāha l-ʿaẓīma lladhī lā ilāha illā huwa l-ḥayyu l-qayyūmu wa-atūbu ilayh.",
+        "phonetique": "Astaghfiru llaaha l-'aziima lladhii laa ilaaha illaa huwa l-hayyu l-qayyuumu wa-atuubu ilayh.",
         "traduction": "Je demande pardon à Allah, le Très Grand, Celui à part qui il n'y a pas de divinité, le Vivant, le Subsistant, et je me repens à Lui.",
     },
     {
@@ -372,7 +372,7 @@ SIHR_INVOCATIONS = [
         "titre": "Doua de dissolution du sihr",
         "quand": "3x",
         "arabe": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ",
-        "phonetique": "Allāhumma anta rabbī, lā ilāha illā anta, khalaqtanī wa-anā ʿabduka, wa-anā ʿalā ʿahdika wa-waʿdika ma staṭaʿtu, aʿūdhu bika min sharri mā ṣanaʿtu.",
+        "phonetique": "Allaahumma anta rabbii, laa ilaaha illaa anta, khalaqtanii wa-anaa 'abduka, wa-anaa 'alaa 'ahdika wa-wa'dika ma stata'tu, a'uudhu bika min sharri maa sana'tu.",
         "traduction": "Ô Allah, Tu es mon Seigneur, il n'y a de divinité que Toi. Tu m'as créé et je suis Ton serviteur. Je suis dans mon engagement et ma promesse envers Toi autant que je le peux. Je cherche refuge en Toi contre le mal de ce que j'ai commis.",
     },
     {
@@ -380,7 +380,7 @@ SIHR_INVOCATIONS = [
         "titre": "Ayat Al-Kursi",
         "quand": "3x",
         "arabe": "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
-        "phonetique": "Allāhu lā ilāha illā huwa l-ḥayyu l-qayyūm. Lā taʾkhudhuhu sinatun wa-lā nawm. Lahū mā fi s-samāwāti wa-mā fi l-arḍ. Man dhā lladhī yashfaʿu ʿindahu illā bi-idhnih. Yaʿlamu mā bayna aydīhim wa-mā khalfahum. Wa-lā yuḥīṭūna bi-shayʾin min ʿilmihi illā bi-mā shāʾ. Wasiʿa kursiyyuhu s-samāwāti wa-l-arḍ. Wa-lā yaʾūduhu ḥifẓuhumā wa-huwa l-ʿaliyyu l-ʿaẓīm.",
+        "phonetique": "Allaahu laa ilaaha illaa huwa l-hayyu l-qayyuum. Laa ta'khudhuhu sinatun wa-laa nawm. Lahuu maa fi s-samaawaati wa-maa fi l-ard. Man dhaa lladhii yashfa'u 'indahu illaa bi-idhnih. Ya'lamu maa bayna aydiihim wa-maa khalfahum. Wa-laa yuhiiduuna bi-shay'in min 'ilmihi illaa bi-maa shaa'. Wasi'a kursiyyuhu s-samaawaati wa-l-ard. Wa-laa ya'uuduhu hifzuhumaa wa-huwa l-'aliyyu l-'aziim.",
         "traduction": "Allah ! Point de divinité à part Lui, le Vivant, Celui qui subsiste par lui-même. Ni somnolence ni sommeil ne Le saisissent. À Lui appartient tout ce qui est dans les cieux et sur la terre. Qui peut intercéder auprès de Lui sans Sa permission ? Il connaît leur passé et leur futur. Et ils n'embrassent de Sa science que ce qu'Il veut. Son Trône s'étend sur les cieux et la terre dont la garde ne Lui coûte aucune peine. Et Il est le Très Haut, le Très Grand.",
     },
     {
@@ -388,7 +388,7 @@ SIHR_INVOCATIONS = [
         "titre": "Les 3 Qul (Mu'awwidhat)",
         "quand": "7x chacune",
         "arabe": "قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ",
-        "phonetique": "Qul huwa llāhu aḥad. Allāhu ṣ-ṣamad. Lam yalid wa-lam yūlad. Wa-lam yakun lahū kufuwan aḥad. — Puis Al-Falaq et An-Nas (7x chacune)",
+        "phonetique": "Qul huwa llaahu ahad / Qul a'uudhu bi-rabbi l-falaq / Qul a'uudhu bi-rabbi n-naas",
         "traduction": "Réciter Al-Ikhlas (l'Unicité), Al-Falaq (l'Aube naissante) et An-Nas (Les Hommes) — 7 fois chacune. Ces sourates constituent la protection suprême contre la sorcellerie.",
     },
 ]
@@ -402,7 +402,7 @@ MASS_INVOCATIONS = [
         "titre": "Ta'awwudh complet",
         "quand": "Avant chaque séance de roqya",
         "arabe": "أَعُوذُ بِاللَّهِ السَّمِيعِ الْعَلِيمِ مِنَ الشَّيْطَانِ الرَّجِيمِ مِنْ هَمْزِهِ وَنَفْخِهِ وَنَفْثِهِ",
-        "phonetique": "Aʿūdhu billāhi s-samīʿi l-ʿalīmi mina sh-shayṭāni r-rajīm, min hamzihi wa-nafkhihi wa-nafthih.",
+        "phonetique": "A'uudhu billaahi s-samii'i l-'aliimi mina sh-shaytaani r-rajiim, min hamzihi wa-nafkhihi wa-nafthih.",
         "traduction": "Je cherche refuge auprès d'Allah, l'Omniscient, le Tout-Entendant, contre le diable maudit — contre sa folie, son arrogance et sa poésie pernicieuse.",
     },
     {
@@ -410,7 +410,7 @@ MASS_INVOCATIONS = [
         "titre": "Doua pendant la séance de roqya",
         "quand": "Répéter plusieurs fois durant la séance",
         "arabe": "اللَّهُمَّ رَبَّ النَّاسِ مُذْهِبَ الْبَأْسِ اشْفِ أَنْتَ الشَّافِي لَا شَافِيَ إِلَّا أَنْتَ شِفَاءً لَا يُغَادِرُ سَقَمًا",
-        "phonetique": "Allāhumma rabba n-nāsi, mudhhiba l-baʾsi, ishfi anta sh-shāfī, lā shāfiya illā anta, shifāʾan lā yughādiru saqamā.",
+        "phonetique": "Allaahumma rabba n-naasi, mudhhiba l-ba'si, ishfi anta sh-shaafii, laa shaafiya illaa anta, shifaa'an laa yughaadiiru saqamaa.",
         "traduction": "Ô Allah, Seigneur des hommes, Celui qui éloigne la souffrance, guéris — Tu es le Guérisseur, il n'y a de guérisseur que Toi — d'une guérison qui n'laisse aucune trace de maladie.",
     },
     {
@@ -418,7 +418,7 @@ MASS_INVOCATIONS = [
         "titre": "Protection contre les djinns — Sourate Al-Baqara 2:285-286",
         "quand": "1x — chaque soir",
         "arabe": "آمَنَ الرَّسُولُ بِمَا أُنْزِلَ إِلَيْهِ مِنْ رَبِّهِ وَالْمُؤْمِنُونَ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِنْ رُسُلِهِ وَقَالُوا سَمِعْنَا وَأَطَعْنَا غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ",
-        "phonetique": "Āmana r-rasūlu bi-mā unzila ilayhi min rabbihi wa-l-muʾminūn, kullun āmana billāhi wa-malāʾikatihi wa-kutubihi wa-rusulihi, lā nufarriqu bayna aḥadin min rusulihi, wa-qālū samiʿnā wa-aṭaʿnā, ghufrānaka rabbanā wa-ilayka l-maṣīr.",
+        "phonetique": "Aamana r-rasuulu bi-maa unzila ilayhi min rabbihi wa-l-mu'minuun, kullun aamana billaahi wa-malaa'ikatihi wa-kutubihi wa-rusulihi, laa nufarriqu bayna ahadin min rusulihi, wa-qaaluu sami'naa wa-ata'naa, ghufraanaka rabbanaa wa-ilayka l-masiir.",
         "traduction": "Le Messager a cru en ce qu'on a fait descendre vers lui venant de son Seigneur, et les croyants aussi. Chacun a cru en Allah, en Ses anges, en Ses livres et en Ses messagers. Nous ne faisons pas de différence entre Ses messagers. Et ils ont dit : 'Nous avons entendu et obéi ! Accorde-nous Ton pardon, notre Seigneur, car c'est Toi notre destination.'",
     },
     {
@@ -426,7 +426,7 @@ MASS_INVOCATIONS = [
         "titre": "Bismillah — Protection de la maison",
         "quand": "À répéter en entrant dans chaque pièce",
         "arabe": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
-        "phonetique": "Bismillāhi lladhī lā yaḍurru maʿa smihi shayʾun fi l-arḍi wa-lā fi s-samāʾi wa-huwa s-samīʿu l-ʿalīm.",
+        "phonetique": "Bismillaahi lladhii laa yadurru ma'a smihi shay'un fi l-ardi wa-laa fi s-samaa'i wa-huwa s-samii'u l-'aliim.",
         "traduction": "Au nom d'Allah avec dont le Nom rien ne peut nuire ni sur terre ni au ciel. Et Il est l'Omniscient, le Tout-Entendant.",
     },
     {
@@ -434,7 +434,7 @@ MASS_INVOCATIONS = [
         "titre": "Doua d'expulsion — Ibn Qayyim",
         "quand": "3x — avec intention ferme",
         "arabe": "أَعُوذُ بِوَجْهِ اللَّهِ الْكَرِيمِ وَبِكَلِمَاتِ اللَّهِ التَّامَّاتِ الَّتِي لَا يُجَاوِزُهُنَّ بَرٌّ وَلَا فَاجِرٌ مِنْ شَرِّ مَا يَنْزِلُ مِنَ السَّمَاءِ وَمِنْ شَرِّ مَا يَعْرُجُ فِيهَا وَمِنْ شَرِّ مَا ذَرَأَ فِي الْأَرْضِ وَمِنْ شَرِّ مَا يَخْرُجُ مِنْهَا",
-        "phonetique": "Aʿūdhu bi-wajhi llāhi l-karīmi wa-bi-kalimāti llāhi t-tāmmāti llatī lā yujāwizuhunna barrun wa-lā fājiru, min sharri mā yanzilu mina s-samāʾi wa-min sharri mā yaʿruju fīhā, wa-min sharri mā dharaʾa fi l-arḍi wa-min sharri mā yakhruju minhā.",
+        "phonetique": "A'uudhu bi-wajhi llaahi l-kariimi wa-bi-kalimaati llaahi t-taammaati llatii laa yujaawiizuhunna barrun wa-laa faajirun, min sharri maa yanzilu mina s-samaa'i wa-min sharri maa ya'ruju fiihaa, wa-min sharri maa dhara'a fi l-ardi wa-min sharri maa yakhruju minhaa.",
         "traduction": "Je cherche refuge par la Face Noble d'Allah et par les paroles parfaites d'Allah que nul homme pieux ni pécheur ne peut dépasser — contre le mal de ce qui descend du ciel et de ce qui y monte, contre le mal de ce qui est répandu sur terre et de ce qui en sort.",
     },
     {
@@ -448,7 +448,7 @@ MASS_INVOCATIONS = [
         "titre": "Dhikr continu contre le mass",
         "quand": "100x dans la journée",
         "arabe": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
-        "phonetique": "Lā ilāha illā llāhu waḥdahu lā sharīka lah, lahu l-mulku wa-lahu l-ḥamdu wa-huwa ʿalā kulli shayʾin qadīr.",
+        "phonetique": "Laa ilaaha illaa llaahu wahdahu laa shariika lah, lahu l-mulku wa-lahu l-hamdu wa-huwa 'alaa kulli shay'in qadiir.",
         "traduction": "Il n'y a de divinité qu'Allah, Seul, sans associé. À Lui la Royauté et à Lui la louange. Et Il est Omnipotent.",
     },
 ]
@@ -462,7 +462,7 @@ WASWAS_INVOCATIONS = [
         "titre": "Ta'awwudh — La règle d'or",
         "quand": "Dès qu'une pensée obsessionnelle surgit",
         "arabe": "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
-        "phonetique": "Aʿūdhu billāhi mina sh-shayṭāni r-rajīm.",
+        "phonetique": "A'uudhu billaahi mina sh-shaytaani r-rajiim.",
         "traduction": "Je cherche refuge auprès d'Allah contre le diable maudit.",
     },
     {
@@ -470,7 +470,7 @@ WASWAS_INVOCATIONS = [
         "titre": "La réponse du croyant aux waswas — (Muslim)",
         "quand": "3x — si les waswas deviennent intenses",
         "arabe": "آمَنْتُ بِاللَّهِ وَرُسُلِهِ",
-        "phonetique": "Āmantu billāhi wa-rusulihi.",
+        "phonetique": "Aamantu billaahi wa-rusulihi.",
         "traduction": "Je crois en Allah et en Ses messagers.",
     },
     {
@@ -478,7 +478,7 @@ WASWAS_INVOCATIONS = [
         "titre": "Doua d'Al-Mu'awwidhat après chaque prière",
         "quand": "3x — après chaque salat",
         "arabe": "قُلْ هُوَ اللَّهُ أَحَدٌ / قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ / قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
-        "phonetique": "Qul huwa llāhu aḥad / Qul aʿūdhu bi-rabbi l-falaq / Qul aʿūdhu bi-rabbi n-nās",
+        "phonetique": "Qul huwa llaahu ahad / Qul a'uudhu bi-rabbi l-falaq / Qul a'uudhu bi-rabbi n-naas",
         "traduction": "Les 3 Qul — Réciter Al-Ikhlas, Al-Falaq et An-Nas 3 fois chacune après chaque prière.",
     },
     {
@@ -486,7 +486,7 @@ WASWAS_INVOCATIONS = [
         "titre": "La Hawla — Contre l'impuissance face aux waswas",
         "quand": "À répéter quand on se sent dépassé",
         "arabe": "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ الْعَلِيِّ الْعَظِيمِ",
-        "phonetique": "Lā ḥawla wa-lā quwwata illā billāhi l-ʿaliyyi l-ʿaẓīm.",
+        "phonetique": "Laa hawla wa-laa quwwata illaa billaahi l-'aliyyi l-'aziim.",
         "traduction": "Il n'y a de force ni de puissance qu'en Allah, le Très Haut, le Très Grand.",
     },
     {
@@ -494,7 +494,7 @@ WASWAS_INVOCATIONS = [
         "titre": "Dhikr actif pour occuper l'esprit",
         "quand": "Alterner en boucle pendant 10 min",
         "arabe": "سُبْحَانَ اللَّهِ — الْحَمْدُ لِلَّهِ — اللَّهُ أَكْبَرُ",
-        "phonetique": "Subḥāna llāh (33x) — Al-ḥamdu lillāh (33x) — Allāhu akbar (34x)",
+        "phonetique": "Subhaana llaah (33x) — Al-hamdu lillaah (33x) — Allaahu akbar (34x)",
         "traduction": "Gloire à Allah (33x) — Louange à Allah (33x) — Allah est le plus Grand (34x). Total : 100 dhikr.",
     },
     {
@@ -502,7 +502,7 @@ WASWAS_INVOCATIONS = [
         "titre": "Doua du Prophète (saw) contre les waswas de la prière",
         "quand": "Avant de commencer la prière",
         "arabe": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الشَّيْطَانِ مِنْ هَمْزِهِ وَنَفْخِهِ وَنَفْثِهِ",
-        "phonetique": "Allāhumma innī aʿūdhu bika mina sh-shayṭāni min hamzihi wa-nafkhihi wa-nafthih.",
+        "phonetique": "Allaahumma innii a'uudhu bika mina sh-shaytaani min hamzihi wa-nafkhihi wa-nafthih.",
         "traduction": "Ô Allah, je cherche refuge en Toi contre le démon — contre sa folie, son arrogance et sa poésie pernicieuse.",
     },
     {
@@ -510,7 +510,7 @@ WASWAS_INVOCATIONS = [
         "titre": "Ayat Al-Kursi après chaque prière",
         "quand": "1x — après chaque salat obligatoire",
         "arabe": "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
-        "phonetique": "Allāhu lā ilāha illā huwa l-ḥayyu l-qayyūm. Lā taʾkhudhuhu sinatun wa-lā nawm. Lahū mā fi s-samāwāti wa-mā fi l-arḍ. Man dhā lladhī yashfaʿu ʿindahu illā bi-idhnih. Yaʿlamu mā bayna aydīhim wa-mā khalfahum. Wa-lā yuḥīṭūna bi-shayʾin min ʿilmihi illā bi-mā shāʾ. Wasiʿa kursiyyuhu s-samāwāti wa-l-arḍ. Wa-lā yaʾūduhu ḥifẓuhumā wa-huwa l-ʿaliyyu l-ʿaẓīm.",
+        "phonetique": "Allaahu laa ilaaha illaa huwa l-hayyu l-qayyuum. Laa ta'khudhuhu sinatun wa-laa nawm. Lahuu maa fi s-samaawaati wa-maa fi l-ard. Man dhaa lladhii yashfa'u 'indahu illaa bi-idhnih. Ya'lamu maa bayna aydiihim wa-maa khalfahum. Wa-laa yuhiiduuna bi-shay'in min 'ilmihi illaa bi-maa shaa'. Wasi'a kursiyyuhu s-samaawaati wa-l-ard. Wa-laa ya'uuduhu hifzuhumaa wa-huwa l-'aliyyu l-'aziim.",
         "traduction": "Allah ! Point de divinité à part Lui, le Vivant, Celui qui subsiste par lui-même. Ni somnolence ni sommeil ne Le saisissent. À Lui appartient tout ce qui est dans les cieux et sur la terre. Qui peut intercéder auprès de Lui sans Sa permission ? Il connaît leur passé et leur futur. Et ils n'embrassent de Sa science que ce qu'Il veut. Son Trône s'étend sur les cieux et la terre dont la garde ne Lui coûte aucune peine. Et Il est le Très Haut, le Très Grand.",
     },
     {
@@ -518,7 +518,7 @@ WASWAS_INVOCATIONS = [
         "titre": "Invocation de sérénité — Doua de la quiétude",
         "quand": "Matin et soir",
         "arabe": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الثَّبَاتَ فِي الْأَمْرِ وَالْعَزِيمَةَ عَلَى الرُّشْدِ وَأَسْأَلُكَ شُكْرَ نِعْمَتِكَ وَحُسْنَ عِبَادَتِكَ",
-        "phonetique": "Allāhumma innī asʾaluka th-thabāta fi l-amri wa-l-ʿazīmata ʿalā r-rushdi wa-asʾaluka shukra niʿmatika wa-ḥusna ʿibādatika.",
+        "phonetique": "Allaahumma innii as'aluka th-thabaata fi l-amri wa-l-'aziimata 'alaa r-rushdi wa-as'aluka shukra ni'matika wa-husna 'ibaadatika.",
         "traduction": "Ô Allah, je Te demande la stabilité dans les affaires, la détermination à suivre la bonne voie, je Te demande la reconnaissance de Tes bienfaits et la qualité de Ton adoration.",
     },
 ]
