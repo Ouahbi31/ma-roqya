@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, BookOpen, Shield } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
+import SEO from '../components/SEO';
 
 export default function PremiumSuccess() {
   const fetchProfile = useAuthStore((s) => s.fetchProfile);
@@ -13,6 +14,11 @@ export default function PremiumSuccess() {
 
   return (
     <div className="min-h-screen bg-cream">
+      <SEO
+        title="Abonnement Premium activé - MaRoqya"
+        description="Votre abonnement MaRoqya Premium est activé. Accédez à tous les programmes, douas et contenus exclusifs."
+        noindex={true}
+      />
       <div className="mx-auto max-w-2xl px-4 py-20 text-center">
         {/* Green checkmark */}
         <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-islamic/10">

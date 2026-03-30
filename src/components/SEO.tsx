@@ -7,6 +7,7 @@ interface SEOProps {
   image?: string;
   url?: string;
   type?: 'website' | 'article';
+  noindex?: boolean;
   article?: {
     publishedTime?: string;
     author?: string;
@@ -53,11 +54,25 @@ export default function SEO({
   image,
   url,
   type = 'website',
+  noindex = false,
   article,
 }: SEOProps) {
   useEffect(() => {
     // Page title
     document.title = `${title} | ${SITE_NAME}`;
+
+    // Robots meta
+    let robotsEl = document.querySelector('meta[name="robots"]') as HTMLMetaElement | null;
+    if (noindex) {
+      if (!robotsEl) {
+        robotsEl = document.createElement('meta');
+        robotsEl.setAttribute('name', 'robots');
+        document.head.appendChild(robotsEl);
+      }
+      robotsEl.setAttribute('content', 'noindex, nofollow');
+    } else if (robotsEl) {
+      robotsEl.remove();
+    }
 
     // Standard meta tags
     setMetaTag('description', description);

@@ -5,6 +5,45 @@ import { AlertTriangle, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-reac
 import { quizQuestions } from '../data/quizQuestions';
 import SEO from '../components/SEO';
 
+const JSON_LD_FAQ = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Comment savoir si j\'ai le mauvais œil (ayn) ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Les signes du mauvais œil incluent : maux de tête fréquents sans cause médicale, fatigue intense, tristesse inexpliquée, problèmes relationnels soudains. Notre quiz gratuit vous aide à évaluer votre situation.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Qu\'est-ce que la roqya shar\'iyya ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'La roqya shar\'iyya est un traitement spirituel islamique basé sur la récitation de versets coraniques et de supplications authentiques. Elle est utilisée contre le mauvais œil, la sorcellerie et la possession.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Comment distinguer une maladie spirituelle d\'une maladie psychologique ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'L\'approche Psycho-Roqya de MaRoqya analyse les deux dimensions : spirituelle (ayn, sihr, mass) et psychologique. Notre questionnaire adaptatif évalue les deux aspects pour proposer un programme personnalisé.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'La roqya peut-elle aider contre la sorcellerie ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Oui, la roqya shar\'iyya est reconnue pour son efficacité contre la sorcellerie (sihr). Le programme MaRoqya pour le sihr dure 30 jours avec 3 phases progressives basées sur le Coran et la Sunnah.',
+      },
+    },
+  ],
+});
+
 export default function Quiz() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -46,6 +85,7 @@ export default function Quiz() {
           keywords="quiz roqya, test mauvais oeil, symptomes sorcellerie test, auto-evaluation spirituelle islam"
           url="/quiz"
         />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON_LD_FAQ }} />
         <div className="mx-auto max-w-2xl text-center">
           <Link to="/" className="mb-6 inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-green-islamic transition-colors">
             <ArrowLeft size={15} /> Accueil

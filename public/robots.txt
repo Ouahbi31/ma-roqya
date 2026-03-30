@@ -2,7 +2,12 @@ User-agent: *
 Allow: /
 Sitemap: https://ma-roqya.fr/sitemap.xml
 
-# Block admin/auth pages
+# Block admin/auth/private pages
+Disallow: /admin
 Disallow: /dashboard
 Disallow: /profil
+Disallow: /login
+Disallow: /register
+Disallow: /premium-success
+Disallow: /reservation-confirmee
 Disallow: /premium/

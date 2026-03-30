@@ -46,7 +46,12 @@ export default function Videos() {
 
   return (
     <div className="min-h-screen bg-cream">
-      <SEO title="Vidéos — MaRoqya" description="Vidéos éducatives sur la roqya, la psycho-roqya et le bien-être spirituel." />
+      <SEO
+        title="Vidéos de Roqya et Psycho-Roqya - MaRoqya"
+        description="Regardez nos vidéos éducatives sur la roqya shariya, la psycho-roqya et la guérison spirituelle islamique. Récitations coraniques, adhkar et explications."
+        keywords="videos roqya, roqya youtube, recitation coran guerison, videos psycho-roqya, adhkar video, roqya shariya video"
+        url="/videos"
+      />
 
       <section className="py-10 sm:py-16">
         <div className="mx-auto max-w-4xl px-4">

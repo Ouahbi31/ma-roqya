@@ -26,6 +26,35 @@ const resourceCards = [
   { icon: Calendar, label: 'Programme', desc: 'Votre parcours de guérison', to: '/programme' },
 ];
 
+const JSON_LD_ORGANIZATION = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'MaRoqya',
+  url: 'https://ma-roqya.fr',
+  logo: 'https://ma-roqya.fr/icons/icon-512x512.svg',
+  description: 'Accompagnement spirituel islamique : roqya shar\'iyya, psycho-roqya, programmes de guérison basés sur le Coran et la Sunnah.',
+  email: 'coaching.roqya@gmail.com',
+  sameAs: [],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer support',
+    availableLanguage: 'French',
+    url: 'https://ma-roqya.fr/tarifs',
+  },
+});
+
+const JSON_LD_WEBSITE = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'MaRoqya',
+  url: 'https://ma-roqya.fr',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://ma-roqya.fr/articles?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+});
+
 export default function Home() {
   const { t } = useTranslation();
 
@@ -37,6 +66,8 @@ export default function Home() {
         keywords="roqya, roqya shariya, guerison spirituelle islam, psycho-roqya, mauvais oeil, sorcellerie, possession, douas, protection islamique"
         url="/"
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON_LD_ORGANIZATION }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON_LD_WEBSITE }} />
       {/* Hero Section */}
       <section className="relative overflow-hidden py-12 sm:py-20 md:py-32">
         <div className="islamic-pattern-bg absolute inset-0 z-0" />
