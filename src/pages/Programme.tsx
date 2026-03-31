@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Play, Lock, Crown,
   ChevronLeft, ChevronRight, Sun, Moon, Star, CheckCircle2,
-  Circle, BookOpen, AlertTriangle, Sparkles, Download
+  Circle, BookOpen, AlertTriangle, Sparkles, Download, ExternalLink
 } from 'lucide-react';
 import SymptomTracker, { shouldShowWeeklyCheck } from '../components/programme/SymptomTracker';
 import SymptomChart from '../components/programme/SymptomChart';
@@ -777,14 +777,25 @@ export default function Programme() {
                   <p className="text-xs text-text-secondary mb-3">
                     Toutes les invocations de votre programme en arabe, phonétique et traduction française.
                   </p>
-                  <a
-                    href={`/pdf/${affectionType}-invocations.pdf`}
-                    download
-                    className="inline-flex items-center gap-2 rounded-lg bg-green-islamic px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-                  >
-                    <Download className="h-4 w-4" />
-                    Télécharger le PDF
-                  </a>
+                  <div className="flex gap-2 flex-wrap">
+                    <a
+                      href={`/pdf/${affectionType}-invocations.pdf`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-lg bg-green-islamic px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      Consulter le PDF
+                    </a>
+                    <a
+                      href={`/pdf/${affectionType}-invocations.pdf`}
+                      download
+                      className="inline-flex items-center gap-2 rounded-lg border border-green-islamic/40 px-4 py-2 text-sm font-semibold text-green-islamic hover:bg-green-islamic/10 transition-colors"
+                    >
+                      <Download className="h-4 w-4" />
+                      Télécharger
+                    </a>
+                  </div>
                 </div>
               </>
             )}
