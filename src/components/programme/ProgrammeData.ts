@@ -177,13 +177,13 @@ export const QUESTIONS: TreeQuestion[] = [
   },
   {
     id: 'q_regard',
-    text: "Avez-vous récemment été exposé(e) à de l'admiration, de la jalousie, ou un regard envieux ?",
+    text: "Avez-vous remarqué que vos difficultés ont commencé après un événement positif dans votre vie ?",
     subtitle: "Le Prophète ﷺ a dit : 'L'œil (ayn) est une réalité' — Bukhari & Muslim",
     type: 'single',
     options: [
-      { id: 'q_regard_1', label: "Oui, d'une personne précise que je soupçonne", scores: { ayn: 4 }, next: 'q_pratique' },
-      { id: 'q_regard_2', label: 'Probablement, dans mon entourage il y a de la jalousie', scores: { ayn: 2 }, next: 'q_pratique' },
-      { id: 'q_regard_3', label: 'Non ou je ne sais pas', scores: {}, next: 'q_pratique' },
+      { id: 'q_regard_1', label: "Oui, après une réussite, un mariage, une naissance ou un changement positif", scores: { ayn: 4 }, next: 'q_pratique' },
+      { id: 'q_regard_2', label: "Peut-être, les choses ont changé sans raison apparente", scores: { ayn: 2 }, next: 'q_pratique' },
+      { id: 'q_regard_3', label: 'Non, ça ne correspond pas à ma situation', scores: {}, next: 'q_pratique' },
     ],
   },
   {
