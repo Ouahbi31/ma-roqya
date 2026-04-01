@@ -119,14 +119,8 @@ export default function Header() {
               ))}
             </nav>
 
-            {/* Mobile: CTA "Réserver" */}
+            {/* Mobile: icône profil uniquement */}
             <div className="flex md:hidden items-center gap-2">
-              <Link
-                to="/tarifs?booking=1"
-                className="rounded-full bg-gold px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-gold/90 active:scale-[0.97]"
-              >
-                Réserver
-              </Link>
               {user ? (
                 <Link
                   to="/dashboard"

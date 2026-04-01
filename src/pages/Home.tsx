@@ -91,25 +91,19 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row px-2 sm:px-0">
+          <div className="mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row px-2 sm:px-0">
+            <Link
+              to="/quiz"
+              className="w-full sm:w-auto inline-block rounded-xl bg-green-islamic px-8 py-3.5 font-semibold text-white text-base transition hover:opacity-90 active:scale-[0.98] text-center"
+            >
+              {t('home.cta_start')}
+            </Link>
             <a
               href="#ressources"
-              className="w-full sm:w-auto inline-block rounded-xl bg-green-islamic px-6 sm:px-8 py-3.5 sm:py-3 font-semibold text-white text-base sm:text-base transition hover:opacity-90 active:scale-[0.98] text-center"
+              className="w-full sm:w-auto inline-block rounded-xl border border-green-islamic/40 px-8 py-3.5 font-semibold text-green-islamic text-base transition hover:bg-green-islamic/10 active:scale-[0.98] text-center"
             >
-              {t('home.cta_free')}
+              {t('home.cta_explore')}
             </a>
-            <Link
-              to="/tarifs"
-              className="w-full sm:w-auto inline-block rounded-xl border-2 border-green-islamic px-6 sm:px-8 py-3.5 sm:py-3 font-semibold text-green-islamic text-base sm:text-base transition hover:bg-green-islamic hover:text-white active:scale-[0.98]"
-            >
-              {t('home.cta_premium')}
-            </Link>
-            <Link
-              to="/tarifs?booking=1"
-              className="w-full sm:w-auto inline-block rounded-xl bg-gold px-6 sm:px-8 py-3.5 sm:py-3 font-semibold text-white text-base sm:text-base transition hover:opacity-90 active:scale-[0.98]"
-            >
-              Réserver une séance individuelle
-            </Link>
           </div>
         </div>
       </section>
