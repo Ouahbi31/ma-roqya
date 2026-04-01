@@ -98,14 +98,14 @@ export default async function handler(req, res) {
               name: nomProduit,
               description: `${dateFormatted} à ${heure} — Visioconférence / Appel vocal`,
             },
-            unit_amount: 5000, // 50€ in cents
+            unit_amount: type_seance === 'couple' ? 6500 : 5000, // 65€ couple / 50€ individuel
           },
           quantity: 1,
         },
       ],
       mode: 'payment',
-      success_url: `${req.headers.origin || 'https://ma-roqya.fr'}/coaching/reserver?success=1`,
-      cancel_url: `${req.headers.origin || 'https://ma-roqya.fr'}/coaching/reserver`,
+      success_url: `${req.headers.origin || 'https://coachmynefs.com'}/coaching/reserver?success=1`,
+      cancel_url: `${req.headers.origin || 'https://coachmynefs.com'}/coaching/reserver`,
       metadata: {
         reservation_id: reservation.id,
         nom,

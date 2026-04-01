@@ -24,7 +24,7 @@ const services = [
     description:
       'Retrouvez l\'harmonie dans votre relation avec une séance dédiée aux deux partenaires.',
     duration: '1h',
-    price: '50€',
+    price: '65€',
     highlights: [
       'Communication bienveillante',
       'Gestion des conflits',

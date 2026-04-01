@@ -18,6 +18,11 @@ const MOIS = [
 // Jours exclus : vendredi (5) et dimanche (0)
 const JOURS_EXCLUS = [0, 5];
 
+const PRIX: Record<TypeSeance, number> = {
+  individuel: 50,
+  couple: 65,
+};
+
 function formatDate(date: Date): string {
   return `${JOURS_SEMAINE[date.getDay()]} ${date.getDate()} ${MOIS[date.getMonth()]} ${date.getFullYear()}`;
 }
@@ -247,7 +252,7 @@ export default function CoachingReserver() {
               <div className="flex items-center gap-2 mb-3">
                 <Clock className="h-3.5 w-3.5 text-text-secondary" />
                 <span className="text-xs text-text-secondary">1h</span>
-                <span className="font-heading text-lg font-bold text-gold ml-auto">50€</span>
+                <span className="font-heading text-lg font-bold text-gold ml-auto">65€</span>
               </div>
               <p className="text-sm text-text-secondary leading-relaxed">
                 Séance à deux pour retrouver l'harmonie et la communication dans votre relation.
@@ -433,7 +438,7 @@ export default function CoachingReserver() {
                 </div>
                 <div className="border-t border-gold/20 pt-2.5 flex justify-between">
                   <span className="font-semibold text-text-primary">Montant</span>
-                  <span className="font-heading text-xl font-bold text-gold">50€</span>
+                  <span className="font-heading text-xl font-bold text-gold">{selectedService ? PRIX[selectedService] : 50}€</span>
                 </div>
               </div>
 
