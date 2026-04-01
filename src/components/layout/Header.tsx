@@ -56,16 +56,16 @@ export default function Header() {
   // Bottom tab bar items (mobile) — 5 items max
   const bottomTabs = [
     { to: '/', label: 'Accueil', icon: Home },
-    { to: '/articles', label: 'Articles', icon: BookOpen },
     { to: '/quiz', label: 'Quiz', icon: ClipboardList },
     { to: '/programme', label: 'Programme', icon: Calendar },
+    { to: '/qui-suis-je', label: 'Qui suis-je', icon: User },
   ];
 
   // Items in the "Plus" drawer
   const moreLinks = [
+    { to: '/articles', label: t('nav.articles'), icon: BookOpen },
     { to: '/douas', label: t('nav.douas'), icon: HandHeart },
     { to: '/forum', label: t('nav.forum'), icon: MessageCircle },
-    { to: '/qui-suis-je', label: 'Qui suis-je', icon: User },
     { to: '/tarifs', label: t('nav.pricing'), icon: CreditCard },
   ];
 
