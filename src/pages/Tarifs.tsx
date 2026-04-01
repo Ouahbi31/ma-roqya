@@ -59,6 +59,7 @@ export default function Tarifs() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string>('monthly');
   const [subscriptionLoading, setSubscriptionLoading] = useState(false);
+  const [subscriptionError, setSubscriptionError] = useState<string | null>(null);
 
   // ═══ Slots from Supabase ═══
   const [weeklySlots, setWeeklySlots] = useState<Record<number, string[]>>(FALLBACK_SLOTS);
@@ -389,6 +390,7 @@ export default function Tarifs() {
                     return;
                   }
                   setSubscriptionLoading(true);
+                  setSubscriptionError(null);
                   try {
                     const plan = PLANS.find((p) => p.key === selectedPlan)!;
                     const res = await fetch('/api/create-subscription', {
@@ -404,11 +406,11 @@ export default function Tarifs() {
                     if (data.url) {
                       window.location.href = data.url;
                     } else {
-                      alert('Erreur lors de la cr\u00e9ation du paiement. Veuillez r\u00e9essayer.');
+                      setSubscriptionError('Erreur lors de la création du paiement. Veuillez réessayer.');
                       setSubscriptionLoading(false);
                     }
                   } catch {
-                    alert('Erreur de connexion. Veuillez r\u00e9essayer.');
+                    setSubscriptionError('Erreur de connexion. Veuillez réessayer.');
                     setSubscriptionLoading(false);
                   }
                 }}
@@ -416,6 +418,9 @@ export default function Tarifs() {
               >
                 {subscriptionLoading ? 'Redirection...' : "S'abonner au Premium"}
               </button>
+            )}
+            {subscriptionError && (
+              <p className="mt-3 text-center text-sm text-red-600">{subscriptionError}</p>
             )}
           </div>
         </div>
