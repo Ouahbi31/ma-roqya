@@ -16,13 +16,11 @@ const Articles = lazy(() => import('./pages/Articles'));
 const Forum = lazy(() => import('./pages/Forum'));
 const Douas = lazy(() => import('./pages/Douas'));
 const Videos = lazy(() => import('./pages/Videos'));
-const Quiz = lazy(() => import('./pages/Quiz'));
 const Tarifs = lazy(() => import('./pages/Tarifs'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const ArticleDetail = lazy(() => import('./pages/ArticleDetail'));
-const QuizResultat = lazy(() => import('./pages/QuizResultat'));
 const ForumPostPage = lazy(() => import('./pages/ForumPostPage'));
 const Profil = lazy(() => import('./pages/Profil'));
 const Admin = lazy(() => import('./pages/Admin'));
@@ -107,8 +105,6 @@ export default function App() {
             <Route path="/forum/:id" element={<ForumPostPage />} />
             <Route path="/douas" element={<Douas />} />
             <Route path="/videos" element={<Videos />} />
-            <Route path="/quiz" element={<Quiz />} />
-            <Route path="/quiz/resultat" element={<QuizResultat />} />
             <Route path="/tarifs" element={<Tarifs />} />
 
             {/* Pages secondaires — lazy */}

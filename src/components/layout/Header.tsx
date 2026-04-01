@@ -8,7 +8,6 @@ import {
   User,
   Home,
   BookOpen,
-  ClipboardList,
   Calendar,
   MoreHorizontal,
   X,
@@ -46,7 +45,6 @@ export default function Header() {
     { to: '/', label: t('nav.home') },
     { to: '/articles', label: t('nav.articles') },
     { to: '/douas', label: t('nav.douas') },
-    { to: '/quiz', label: t('nav.quiz') },
     { to: '/forum', label: t('nav.forum') },
     { to: '/programme', label: 'Programme' },
     { to: '/qui-suis-je', label: 'Qui suis-je' },
@@ -63,7 +61,6 @@ export default function Header() {
 
   // Items in the "Plus" drawer
   const moreLinks = [
-    { to: '/quiz', label: t('nav.quiz'), icon: ClipboardList },
     { to: '/douas', label: t('nav.douas'), icon: HandHeart },
     { to: '/forum', label: t('nav.forum'), icon: MessageCircle },
     { to: '/tarifs', label: t('nav.pricing'), icon: CreditCard },

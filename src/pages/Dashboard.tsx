@@ -12,7 +12,7 @@ export default function Dashboard() {
   const quickLinks = [
     { icon: BookOpen, label: t('nav.articles'), to: '/articles', color: 'bg-green-islamic' },
     { icon: Heart, label: t('nav.douas'), to: '/douas', color: 'bg-gold' },
-    { icon: ClipboardList, label: t('quiz.title'), to: '/quiz', color: 'bg-green-light' },
+    { icon: ClipboardList, label: 'Programme', to: '/programme', color: 'bg-green-light' },
     { icon: Users, label: t('nav.forum'), to: '/forum', color: 'bg-green-islamic' },
   ];
 

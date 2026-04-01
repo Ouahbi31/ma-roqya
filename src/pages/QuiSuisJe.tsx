@@ -245,10 +245,10 @@ export default function QuiSuisJe() {
               Réserver une séance
             </Link>
             <Link
-              to="/quiz"
+              to="/programme"
               className="rounded-xl border-2 border-green-islamic px-8 py-3.5 text-sm font-semibold text-green-islamic transition hover:bg-green-islamic/5"
             >
-              Évaluer ma situation
+              Commencer le programme
             </Link>
           </div>
         </div>

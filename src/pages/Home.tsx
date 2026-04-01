@@ -10,7 +10,6 @@ import {
   BookOpen,
   Heart,
   Play,
-  ClipboardCheck,
   Calendar,
 } from 'lucide-react';
 import SEO from '../components/SEO';
@@ -22,7 +21,6 @@ const resourceCards = [
   { icon: Heart, label: 'Douas', desc: 'Invocations de protection', to: '/douas' },
   { icon: MessageCircle, label: 'Forum', desc: 'Échangez avec la communauté', to: '/forum' },
   { icon: Play, label: 'Vidéos', desc: 'Contenus éducatifs', to: '/videos' },
-  { icon: ClipboardCheck, label: 'Quiz', desc: 'Évaluez votre situation', to: '/quiz' },
   { icon: Calendar, label: 'Programme', desc: 'Votre parcours de guérison', to: '/programme' },
 ];
 
@@ -93,10 +91,10 @@ export default function Home() {
 
           <div className="mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row px-2 sm:px-0">
             <Link
-              to="/quiz"
+              to="/programme"
               className="w-full sm:w-auto inline-block rounded-xl bg-green-islamic px-8 py-3.5 font-semibold text-white text-base transition hover:opacity-90 active:scale-[0.98] text-center"
             >
-              {t('home.cta_start')}
+              Commencer le programme
             </Link>
             <a
               href="#ressources"
