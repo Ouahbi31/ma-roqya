@@ -77,7 +77,16 @@ export default function CoachingHeader() {
       <header className="sticky top-0 z-50 bg-cream border-b border-cream-dark">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-14 md:h-16 items-center justify-between">
-            {/* Logo */}
+            {/* Logo + bouton retour */}
+            <div className="flex items-center gap-3">
+              <Link
+                to="/"
+                className="flex items-center gap-1 text-xs text-text-secondary hover:text-gold transition-colors"
+                title="Retour à l'accueil"
+              >
+                <ChevronDown className="h-3.5 w-3.5 rotate-90" />
+                <span className="hidden sm:inline">Accueil</span>
+              </Link>
             <Link to="/coaching" className="flex items-center gap-2">
               <Star className="h-5 w-5 md:h-6 md:w-6 text-gold fill-gold" />
               <div className="flex flex-col leading-none">
@@ -89,6 +98,7 @@ export default function CoachingHeader() {
                 </span>
               </div>
             </Link>
+            </div>
 
             {/* Desktop nav */}
             <nav className="hidden md:flex items-center gap-6">
