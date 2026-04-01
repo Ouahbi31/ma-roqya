@@ -135,7 +135,7 @@ export default function CoachingProgrammes() {
               Voir les services
             </Link>
             <Link
-              to="/tarifs"
+              to="/coaching/reserver"
               className="inline-block rounded-xl bg-gold px-8 py-3.5 font-semibold text-white text-base transition hover:opacity-90 active:scale-[0.98] text-center"
             >
               Réserver une séance

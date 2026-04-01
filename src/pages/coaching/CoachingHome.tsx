@@ -15,7 +15,7 @@ const resourceCards = [
   { icon: BookOpen, label: 'Articles', desc: 'Développement personnel & couple', to: '/coaching/articles' },
   { icon: Briefcase, label: 'Services', desc: 'Séances individuelles et de couple', to: '/coaching/services' },
   { icon: Calendar, label: 'Programmes', desc: 'Formations courtes et accessibles', to: '/coaching/programmes' },
-  { icon: Heart, label: 'Réserver', desc: 'Prenez rendez-vous', to: '/tarifs?booking=1' },
+  { icon: Heart, label: 'Réserver', desc: 'Prenez rendez-vous', to: '/coaching/reserver' },
 ];
 
 const features = [
@@ -76,7 +76,7 @@ export default function CoachingHome() {
 
           <div className="mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row px-2 sm:px-0">
             <Link
-              to="/tarifs?booking=1"
+              to="/coaching/reserver"
               className="w-full sm:w-auto inline-block rounded-xl bg-gold px-8 py-3.5 font-semibold text-white text-base transition hover:opacity-90 active:scale-[0.98] text-center"
             >
               Réserver une séance
@@ -171,7 +171,7 @@ export default function CoachingHome() {
           </p>
           <div className="mt-8">
             <Link
-              to="/tarifs?booking=1"
+              to="/coaching/reserver"
               className="inline-block rounded-xl bg-gold px-10 py-4 font-semibold text-white text-base transition hover:opacity-90 active:scale-[0.98]"
             >
               Réserver une séance

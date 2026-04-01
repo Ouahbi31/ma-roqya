@@ -220,7 +220,7 @@ export default function CoachingProgramme() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link
-                  to="/tarifs?booking=1"
+                  to="/coaching/reserver"
                   className="rounded-xl bg-gold px-6 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
                 >
                   Réserver une séance
