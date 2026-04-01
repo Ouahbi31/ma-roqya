@@ -14,7 +14,7 @@ import SEO from '../../components/SEO';
 const resourceCards = [
   { icon: BookOpen, label: 'Articles', desc: 'Développement personnel & couple', to: '/coaching/articles' },
   { icon: Briefcase, label: 'Services', desc: 'Séances individuelles et de couple', to: '/coaching/services' },
-  { icon: Calendar, label: 'Programme', desc: 'Votre parcours en 30 jours', to: '/coaching/programme' },
+  { icon: Calendar, label: 'Programmes', desc: 'Formations courtes et accessibles', to: '/coaching/programmes' },
   { icon: Heart, label: 'Réserver', desc: 'Prenez rendez-vous', to: '/tarifs?booking=1' },
 ];
 
@@ -82,10 +82,10 @@ export default function CoachingHome() {
               Réserver une séance
             </Link>
             <Link
-              to="/coaching/programme"
+              to="/coaching/programmes"
               className="w-full sm:w-auto inline-block rounded-xl border border-gold/40 px-8 py-3.5 font-semibold text-gold text-base transition hover:bg-gold/10 active:scale-[0.98] text-center"
             >
-              Voir le programme
+              Voir les programmes
             </Link>
           </div>
         </div>

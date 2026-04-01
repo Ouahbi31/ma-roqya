@@ -40,6 +40,8 @@ const CoachingHome = lazy(() => import('./pages/coaching/CoachingHome'));
 const CoachingArticles = lazy(() => import('./pages/coaching/CoachingArticles'));
 const CoachingServices = lazy(() => import('./pages/coaching/CoachingServices'));
 const CoachingProgramme = lazy(() => import('./pages/coaching/CoachingProgramme'));
+const CoachingProgrammes = lazy(() => import('./pages/coaching/CoachingProgrammes'));
+const CoachingProgrammeDetail = lazy(() => import('./pages/coaching/CoachingProgrammeDetail'));
 
 // ─── Spinner léger pour les pages secondaires
 function PageLoader() {
@@ -242,9 +244,21 @@ export default function App() {
             />
             <Route
               path="/coaching/programme"
+              element={<Navigate to="/coaching/programmes" replace />}
+            />
+            <Route
+              path="/coaching/programmes"
               element={
                 <CoachingLayout>
-                  <CoachingProgramme />
+                  <CoachingProgrammes />
+                </CoachingLayout>
+              }
+            />
+            <Route
+              path="/coaching/programmes/:slug"
+              element={
+                <CoachingLayout>
+                  <CoachingProgrammeDetail />
                 </CoachingLayout>
               }
             />

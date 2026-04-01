@@ -1,50 +1,35 @@
 import { Link } from 'react-router-dom';
-import { User, Users, Calendar, Clock, Tag } from 'lucide-react';
+import { User, Users, Clock, Tag } from 'lucide-react';
 import SEO from '../../components/SEO';
 
 const services = [
   {
     icon: User,
-    title: 'Séance individuelle',
+    title: 'Coaching individuel',
     description:
-      'Un espace d\'écoute bienveillant pour travailler sur vos blocages personnels, renforcer votre confiance en vous et en Allah, et avancer avec clarté vers vos objectifs.',
+      'Travaillez sur vos blocages, votre confiance et votre développement personnel en séance individuelle.',
     duration: '1h',
     price: '50€',
     highlights: [
-      'Écoute active et bienveillante',
-      'Identification de vos blocages',
-      'Outils pratiques et exercices',
-      'Suivi personnalisé',
+      'Travail sur vos blocages personnels',
+      'Renforcement de la confiance en soi',
+      'Développement personnel ancré dans la foi',
+      'Outils pratiques et plan d\'action',
     ],
     accent: 'green-islamic',
   },
   {
     icon: Users,
-    title: 'Accompagnement de couple',
+    title: 'Coaching de couple',
     description:
-      'Une séance dédiée aux deux partenaires pour améliorer la communication, dépasser les conflits, se retrouver et construire ensemble un projet de vie épanouissant.',
-    duration: '1h30',
-    price: '80€',
+      'Retrouvez l\'harmonie dans votre relation avec une séance dédiée aux deux partenaires.',
+    duration: '1h',
+    price: '50€',
     highlights: [
       'Communication bienveillante',
       'Gestion des conflits',
-      'Réconciliation et confiance',
       'Projet de vie commun',
-    ],
-    accent: 'gold',
-  },
-  {
-    icon: Calendar,
-    title: 'Suivi mensuel',
-    description:
-      'Un programme complet sur un mois avec 4 séances pour transformer en profondeur votre vie personnelle ou votre relation de couple. Idéal pour des changements durables.',
-    duration: '4 séances',
-    price: '160€',
-    highlights: [
-      '4 séances sur 1 mois',
-      'Programme personnalisé',
-      'Suivi entre les séances',
-      'Bilan et plan d\'action',
+      'Reconnexion et harmonie',
     ],
     accent: 'gold',
   },
@@ -54,9 +39,9 @@ export default function CoachingServices() {
   return (
     <div className="min-h-screen bg-cream">
       <SEO
-        title="Services de coaching - CoachMyNefs"
-        description="Séances individuelles, accompagnement de couple et suivi mensuel. Des services de coaching personnalisés pour votre développement personnel et votre épanouissement."
-        keywords="coaching individuel, accompagnement de couple, suivi mensuel, séance coaching, tarifs coaching"
+        title="Services de coaching — CoachMyNefs"
+        description="Coaching individuel et coaching de couple. Des séances personnalisées de 1h à 50€ pour votre développement personnel et votre épanouissement."
+        keywords="coaching individuel, coaching de couple, séance coaching, tarifs coaching"
         url="/coaching/services"
       />
 
@@ -75,31 +60,31 @@ export default function CoachingServices() {
 
       <div className="arabesque-separator mx-auto max-w-lg" />
 
-      {/* Services Cards */}
+      {/* Services Cards — 2 cartes côte à côte */}
       <section className="py-10 sm:py-16 md:py-24">
-        <div className="mx-auto max-w-5xl px-5 sm:px-4">
-          <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
+        <div className="mx-auto max-w-3xl px-5 sm:px-4">
+          <div className="grid gap-6 sm:gap-8 sm:grid-cols-2">
             {services.map((service) => {
               const Icon = service.icon;
               const isGold = service.accent === 'gold';
               return (
                 <div
                   key={service.title}
-                  className="card-islamic flex flex-col p-6 sm:p-7 gap-5"
+                  className="card-islamic flex flex-col p-6 sm:p-8 gap-5"
                 >
                   {/* Icon & Title */}
                   <div className="flex flex-col items-center text-center gap-3">
                     <div
-                      className={`flex h-14 w-14 items-center justify-center rounded-2xl ${
+                      className={`flex h-16 w-16 items-center justify-center rounded-2xl ${
                         isGold ? 'bg-gold/10' : 'bg-green-islamic/10'
                       }`}
                     >
                       <Icon
-                        className={`h-7 w-7 ${isGold ? 'text-gold' : 'text-green-islamic'}`}
+                        className={`h-8 w-8 ${isGold ? 'text-gold' : 'text-green-islamic'}`}
                       />
                     </div>
                     <h2
-                      className={`font-heading text-lg font-bold ${
+                      className={`font-heading text-xl font-bold ${
                         isGold ? 'text-gold' : 'text-green-islamic'
                       }`}
                     >
@@ -134,7 +119,7 @@ export default function CoachingServices() {
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Tag className="h-4 w-4 text-gold" />
-                      <span className="font-heading text-lg font-bold text-gold">
+                      <span className="font-heading text-xl font-bold text-gold">
                         {service.price}
                       </span>
                     </div>
@@ -142,12 +127,12 @@ export default function CoachingServices() {
 
                   {/* CTA */}
                   <Link
-                    to="/tarifs?booking=1"
-                    className={`w-full text-center rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 ${
+                    to="/tarifs"
+                    className={`w-full text-center rounded-xl px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90 active:scale-[0.98] ${
                       isGold ? 'bg-gold' : 'bg-green-islamic'
                     }`}
                   >
-                    Réserver
+                    Réserver une séance
                   </Link>
                 </div>
               );
@@ -162,16 +147,16 @@ export default function CoachingServices() {
       <section className="py-10 sm:py-16 md:py-20">
         <div className="mx-auto max-w-2xl px-5 sm:px-4 text-center">
           <h2 className="font-heading text-xl sm:text-2xl font-bold text-green-islamic mb-3">
-            Vous avez une question ?
+            Vous préférez avancer à votre rythme ?
           </h2>
           <p className="text-text-secondary text-sm sm:text-base leading-relaxed mb-6">
-            N'hésitez pas à consulter la page tarifs pour plus d'informations ou à réserver directement une première séance découverte.
+            Découvrez nos programmes en ligne : des formations courtes, accessibles et ancrées dans l'Islam.
           </p>
           <Link
-            to="/tarifs?booking=1"
+            to="/coaching/programmes"
             className="inline-block rounded-xl bg-gold px-8 py-3.5 font-semibold text-white text-base transition hover:opacity-90"
           >
-            Réserver une séance
+            Voir les programmes
           </Link>
         </div>
       </section>

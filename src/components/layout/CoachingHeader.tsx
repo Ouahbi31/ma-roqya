@@ -41,7 +41,7 @@ export default function CoachingHeader() {
     { to: '/coaching', label: 'Accueil' },
     { to: '/coaching/articles', label: 'Articles' },
     { to: '/coaching/services', label: 'Services' },
-    { to: '/coaching/programme', label: 'Programme' },
+    { to: '/coaching/programmes', label: 'Programmes' },
     { to: '/qui-suis-je', label: 'Qui suis-je' },
     { to: '/coaching/tarifs', label: t('nav.pricing') },
   ];
@@ -50,7 +50,7 @@ export default function CoachingHeader() {
     { to: '/coaching', label: 'Accueil', icon: Home },
     { to: '/coaching/articles', label: 'Articles', icon: BookOpen },
     { to: '/coaching/services', label: 'Services', icon: Briefcase },
-    { to: '/coaching/programme', label: 'Programme', icon: Calendar },
+    { to: '/coaching/programmes', label: 'Programmes', icon: Calendar },
   ];
 
   const moreLinks = [
