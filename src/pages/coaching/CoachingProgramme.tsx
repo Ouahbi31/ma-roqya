@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Lock, Crown, CheckCircle2, Circle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Lock, Crown, Circle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import SEO from '../../components/SEO';
 
@@ -78,7 +78,7 @@ const weeks: Week[] = [
 ];
 
 export default function CoachingProgramme() {
-  const { user, profile } = useAuthStore();
+  const { profile } = useAuthStore();
   const isPremium = profile?.is_premium;
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set([1]));
 
