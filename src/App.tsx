@@ -39,7 +39,6 @@ const ConditionsUtilisation = lazy(() => import('./pages/ConditionsUtilisation')
 const CoachingHome = lazy(() => import('./pages/coaching/CoachingHome'));
 const CoachingArticles = lazy(() => import('./pages/coaching/CoachingArticles'));
 const CoachingServices = lazy(() => import('./pages/coaching/CoachingServices'));
-const CoachingProgramme = lazy(() => import('./pages/coaching/CoachingProgramme'));
 const CoachingProgrammes = lazy(() => import('./pages/coaching/CoachingProgrammes'));
 const CoachingProgrammeDetail = lazy(() => import('./pages/coaching/CoachingProgrammeDetail'));
 
