@@ -8,18 +8,16 @@ import {
   User,
   Home,
   BookOpen,
+  Briefcase,
   Calendar,
   MoreHorizontal,
   X,
-  HandHeart,
-  MessageCircle,
   CreditCard,
-  Shield,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
-export default function Header() {
-  const { t, i18n } = useTranslation();
+export default function CoachingHeader() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const { user, profile, logout } = useAuthStore();
@@ -27,13 +25,11 @@ export default function Header() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
 
-  // Fermer les menus quand on change de page
   useEffect(() => {
     setProfileOpen(false);
     setMoreOpen(false);
   }, [location.pathname]);
 
-  // Bloquer le scroll quand le menu "Plus" est ouvert
   useEffect(() => {
     document.body.style.overflow = moreOpen ? 'hidden' : '';
     return () => {
@@ -42,35 +38,25 @@ export default function Header() {
   }, [moreOpen]);
 
   const desktopNavLinks = [
-    { to: '/roqya', label: t('nav.home') },
-    { to: '/articles', label: t('nav.articles') },
-    { to: '/douas', label: t('nav.douas') },
-    { to: '/forum', label: t('nav.forum') },
-    { to: '/programme', label: 'Programme' },
+    { to: '/coaching', label: 'Accueil' },
+    { to: '/coaching/articles', label: 'Articles' },
+    { to: '/coaching/services', label: 'Services' },
+    { to: '/coaching/programme', label: 'Programme' },
     { to: '/qui-suis-je', label: 'Qui suis-je' },
-    { to: '/tarifs', label: t('nav.pricing') },
+    { to: '/coaching/tarifs', label: t('nav.pricing') },
   ];
 
-  // Bottom tab bar items (mobile) — 5 items max
   const bottomTabs = [
-    { to: '/roqya', label: 'Accueil', icon: Home },
-    { to: '/articles', label: 'Articles', icon: BookOpen },
-    { to: '/programme', label: 'Programme', icon: Calendar },
-    { to: '/qui-suis-je', label: 'Qui suis-je', icon: User },
+    { to: '/coaching', label: 'Accueil', icon: Home },
+    { to: '/coaching/articles', label: 'Articles', icon: BookOpen },
+    { to: '/coaching/services', label: 'Services', icon: Briefcase },
+    { to: '/coaching/programme', label: 'Programme', icon: Calendar },
   ];
 
-  // Items in the "Plus" drawer
   const moreLinks = [
-    { to: '/douas', label: t('nav.douas'), icon: HandHeart },
-    { to: '/forum', label: t('nav.forum'), icon: MessageCircle },
-    { to: '/tarifs', label: t('nav.pricing'), icon: CreditCard },
+    { to: '/qui-suis-je', label: 'Qui suis-je', icon: User },
+    { to: '/coaching/tarifs', label: t('nav.pricing'), icon: CreditCard },
   ];
-
-  const switchLanguage = (lang: 'fr' | 'ar') => {
-    i18n.changeLanguage(lang);
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-  };
 
   const handleLogout = async () => {
     await logout();
@@ -79,7 +65,7 @@ export default function Header() {
   };
 
   const isActive = (path: string) => {
-    if (path === '/roqya') return location.pathname === '/roqya';
+    if (path === '/coaching') return location.pathname === '/coaching';
     return location.pathname.startsWith(path);
   };
 
@@ -92,11 +78,16 @@ export default function Header() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-14 md:h-16 items-center justify-between">
             {/* Logo */}
-            <Link to="/roqya" className="flex items-center gap-2">
+            <Link to="/coaching" className="flex items-center gap-2">
               <Star className="h-5 w-5 md:h-6 md:w-6 text-gold fill-gold" />
-              <span className="font-heading text-lg md:text-xl font-bold text-green-islamic">
-                CoachMyNefs
-              </span>
+              <div className="flex flex-col leading-none">
+                <span className="font-heading text-base md:text-lg font-bold text-gold">
+                  CoachMyNefs
+                </span>
+                <span className="text-[10px] text-text-secondary font-medium tracking-wide uppercase">
+                  Coaching
+                </span>
+              </div>
             </Link>
 
             {/* Desktop nav */}
@@ -107,8 +98,8 @@ export default function Header() {
                   to={link.to}
                   className={`text-sm font-medium transition-colors ${
                     isActive(link.to)
-                      ? 'text-green-islamic'
-                      : 'text-text-secondary hover:text-green-islamic'
+                      ? 'text-gold'
+                      : 'text-text-secondary hover:text-gold'
                   }`}
                 >
                   {link.label}
@@ -119,17 +110,11 @@ export default function Header() {
             {/* Mobile: icône profil uniquement */}
             <div className="flex md:hidden items-center gap-2">
               {user ? (
-                <Link
-                  to="/dashboard"
-                  className="p-2 text-green-islamic"
-                >
+                <Link to="/dashboard" className="p-2 text-gold">
                   <User className="h-5 w-5" />
                 </Link>
               ) : (
-                <Link
-                  to="/login"
-                  className="p-2 text-green-islamic"
-                >
+                <Link to="/login" className="p-2 text-gold">
                   <User className="h-5 w-5" />
                 </Link>
               )}
@@ -144,29 +129,6 @@ export default function Header() {
               >
                 Réserver une séance
               </Link>
-
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => switchLanguage('fr')}
-                  className={`px-2 py-1 text-xs rounded font-medium transition-colors ${
-                    i18n.language === 'fr'
-                      ? 'bg-green-islamic text-white'
-                      : 'bg-cream-dark text-text-secondary hover:bg-cream-dark/80'
-                  }`}
-                >
-                  FR
-                </button>
-                <button
-                  onClick={() => switchLanguage('ar')}
-                  className={`px-2 py-1 text-xs rounded font-medium transition-colors ${
-                    i18n.language === 'ar'
-                      ? 'bg-green-islamic text-white'
-                      : 'bg-cream-dark text-text-secondary hover:bg-cream-dark/80'
-                  }`}
-                >
-                  عر
-                </button>
-              </div>
 
               {user ? (
                 <div className="relative">
@@ -218,13 +180,13 @@ export default function Header() {
                 <div className="flex items-center gap-2">
                   <Link
                     to="/login"
-                    className="rounded-lg px-4 py-2 text-sm font-medium text-green-islamic hover:bg-cream-dark transition-colors"
+                    className="rounded-lg px-4 py-2 text-sm font-medium text-gold hover:bg-cream-dark transition-colors"
                   >
                     {t('nav.login')}
                   </Link>
                   <Link
                     to="/register"
-                    className="rounded-lg bg-green-islamic px-4 py-2 text-sm font-medium text-white hover:bg-green-islamic/90 transition-colors"
+                    className="rounded-lg bg-gold px-4 py-2 text-sm font-medium text-white hover:bg-gold/90 transition-colors"
                   >
                     {t('nav.register')}
                   </Link>
@@ -246,7 +208,7 @@ export default function Header() {
                 key={tab.to}
                 to={tab.to}
                 className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
-                  active ? 'text-green-islamic' : 'text-gray-400'
+                  active ? 'text-gold' : 'text-gray-400'
                 }`}
               >
                 <Icon className="h-5 w-5" strokeWidth={active ? 2.5 : 1.5} />
@@ -261,7 +223,7 @@ export default function Header() {
           <button
             onClick={() => setMoreOpen(!moreOpen)}
             className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
-              moreOpen || isMoreActive ? 'text-green-islamic' : 'text-gray-400'
+              moreOpen || isMoreActive ? 'text-gold' : 'text-gray-400'
             }`}
           >
             <MoreHorizontal className="h-5 w-5" strokeWidth={moreOpen || isMoreActive ? 2.5 : 1.5} />
@@ -275,12 +237,10 @@ export default function Header() {
       {/* ===== "PLUS" BOTTOM SHEET ===== */}
       {moreOpen && (
         <>
-          {/* Backdrop */}
           <div
             className="fixed inset-0 z-40 bg-black/30 md:hidden"
             onClick={() => setMoreOpen(false)}
           />
-          {/* Sheet */}
           <div className="fixed bottom-16 inset-x-0 z-50 md:hidden bg-white rounded-t-2xl shadow-lg pb-[env(safe-area-inset-bottom)] animate-slide-up">
             <div className="flex items-center justify-between px-5 pt-4 pb-2">
               <h3 className="font-heading font-bold text-lg text-text-primary">Plus</h3>
@@ -298,7 +258,7 @@ export default function Header() {
                     to={link.to}
                     className={`flex items-center gap-4 rounded-xl px-4 py-3 transition-colors ${
                       active
-                        ? 'bg-green-islamic/10 text-green-islamic'
+                        ? 'bg-gold/10 text-gold'
                         : 'text-text-primary hover:bg-cream'
                     }`}
                   >
@@ -310,14 +270,13 @@ export default function Header() {
 
               <div className="border-t border-gray-100 my-2" />
 
-              {/* Auth links in sheet */}
               {user ? (
                 <>
                   <Link
                     to="/dashboard"
                     className="flex items-center gap-4 rounded-xl px-4 py-3 text-text-primary hover:bg-cream transition-colors"
                   >
-                    <Shield className="h-5 w-5" />
+                    <Star className="h-5 w-5" />
                     <span className="font-medium text-sm">{t('nav.dashboard')}</span>
                   </Link>
                   {profile?.role === 'admin' && (
@@ -341,14 +300,14 @@ export default function Header() {
                 <>
                   <Link
                     to="/register"
-                    className="flex items-center gap-4 rounded-xl px-4 py-3 bg-green-islamic text-white transition-colors"
+                    className="flex items-center gap-4 rounded-xl px-4 py-3 bg-gold text-white transition-colors"
                   >
                     <User className="h-5 w-5" />
                     <span className="font-medium text-sm">{t('nav.register')}</span>
                   </Link>
                   <Link
                     to="/login"
-                    className="flex items-center gap-4 rounded-xl px-4 py-3 text-green-islamic hover:bg-cream transition-colors"
+                    className="flex items-center gap-4 rounded-xl px-4 py-3 text-gold hover:bg-cream transition-colors"
                   >
                     <LogOut className="h-5 w-5" />
                     <span className="font-medium text-sm">{t('nav.login')}</span>

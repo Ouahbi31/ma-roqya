@@ -1,16 +1,20 @@
 import { useEffect, lazy, Suspense, Component, type ReactNode } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from './store/authStore';
 import Layout from './components/layout/Layout';
+import CoachingLayout from './components/layout/CoachingLayout';
 import ScrollToTop from './components/ScrollToTop';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import AdminRoute from './components/auth/AdminRoute';
 
-// ─── Page principale : chargée directement (landing page doit être instantanée)
+// ─── Landing page : chargée directement (page principale, doit être instantanée)
+import Landing from './pages/Landing';
+
+// ─── Page Roqya principale : chargée directement
 import Home from './pages/Home';
 
-// ─── Pages secondaires : lazy (visitées moins souvent)
+// ─── Pages Roqya secondaires : lazy
 const Programme = lazy(() => import('./pages/Programme'));
 const Articles = lazy(() => import('./pages/Articles'));
 const Forum = lazy(() => import('./pages/Forum'));
@@ -30,6 +34,12 @@ const PremiumSuccess = lazy(() => import('./pages/PremiumSuccess'));
 const MentionsLegales = lazy(() => import('./pages/MentionsLegales'));
 const PolitiqueConfidentialite = lazy(() => import('./pages/PolitiqueConfidentialite'));
 const ConditionsUtilisation = lazy(() => import('./pages/ConditionsUtilisation'));
+
+// ─── Pages Coaching : lazy
+const CoachingHome = lazy(() => import('./pages/coaching/CoachingHome'));
+const CoachingArticles = lazy(() => import('./pages/coaching/CoachingArticles'));
+const CoachingServices = lazy(() => import('./pages/coaching/CoachingServices'));
+const CoachingProgramme = lazy(() => import('./pages/coaching/CoachingProgramme'));
 
 // ─── Spinner léger pour les pages secondaires
 function PageLoader() {
@@ -91,58 +101,222 @@ export default function App() {
   }, []);
 
   return (
-    <Layout>
+    <>
       <ScrollToTop />
       <ChunkErrorBoundary>
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            {/* Pages principales — chargement immédiat */}
-            <Route path="/" element={<Home />} />
-            <Route path="/programme" element={<Programme />} />
-            <Route path="/articles" element={<Articles />} />
-            <Route path="/articles/:id" element={<ArticleDetail />} />
-            <Route path="/forum" element={<Forum />} />
-            <Route path="/forum/:id" element={<ForumPostPage />} />
-            <Route path="/douas" element={<Douas />} />
-            <Route path="/videos" element={<Videos />} />
-            <Route path="/tarifs" element={<Tarifs />} />
+            {/* ── Landing page (sans Layout) ── */}
+            <Route path="/" element={<Landing />} />
 
-            {/* Pages secondaires — lazy */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/reservation-confirmee" element={<ReservationConfirmee />} />
-            <Route path="/qui-suis-je" element={<QuiSuisJe />} />
-            <Route path="/premium-success" element={<PremiumSuccess />} />
-            <Route path="/mentions-legales" element={<MentionsLegales />} />
-            <Route path="/confidentialite" element={<PolitiqueConfidentialite />} />
-            <Route path="/cgu" element={<ConditionsUtilisation />} />
+            {/* ── Section Roqya (avec Layout existant) ── */}
+            <Route
+              path="/roqya"
+              element={
+                <Layout>
+                  <Home />
+                </Layout>
+              }
+            />
+            <Route
+              path="/programme"
+              element={
+                <Layout>
+                  <Programme />
+                </Layout>
+              }
+            />
+            <Route
+              path="/articles"
+              element={
+                <Layout>
+                  <Articles />
+                </Layout>
+              }
+            />
+            <Route
+              path="/articles/:id"
+              element={
+                <Layout>
+                  <ArticleDetail />
+                </Layout>
+              }
+            />
+            <Route
+              path="/forum"
+              element={
+                <Layout>
+                  <Forum />
+                </Layout>
+              }
+            />
+            <Route
+              path="/forum/:id"
+              element={
+                <Layout>
+                  <ForumPostPage />
+                </Layout>
+              }
+            />
+            <Route
+              path="/douas"
+              element={
+                <Layout>
+                  <Douas />
+                </Layout>
+              }
+            />
+            <Route
+              path="/videos"
+              element={
+                <Layout>
+                  <Videos />
+                </Layout>
+              }
+            />
+            <Route
+              path="/tarifs"
+              element={
+                <Layout>
+                  <Tarifs />
+                </Layout>
+              }
+            />
+            <Route
+              path="/qui-suis-je"
+              element={
+                <Layout>
+                  <QuiSuisJe />
+                </Layout>
+              }
+            />
+            <Route
+              path="/mentions-legales"
+              element={
+                <Layout>
+                  <MentionsLegales />
+                </Layout>
+              }
+            />
+            <Route
+              path="/confidentialite"
+              element={
+                <Layout>
+                  <PolitiqueConfidentialite />
+                </Layout>
+              }
+            />
+            <Route
+              path="/cgu"
+              element={
+                <Layout>
+                  <ConditionsUtilisation />
+                </Layout>
+              }
+            />
+
+            {/* ── Section Coaching (avec CoachingLayout) ── */}
+            <Route
+              path="/coaching"
+              element={
+                <CoachingLayout>
+                  <CoachingHome />
+                </CoachingLayout>
+              }
+            />
+            <Route
+              path="/coaching/articles"
+              element={
+                <CoachingLayout>
+                  <CoachingArticles />
+                </CoachingLayout>
+              }
+            />
+            <Route
+              path="/coaching/services"
+              element={
+                <CoachingLayout>
+                  <CoachingServices />
+                </CoachingLayout>
+              }
+            />
+            <Route
+              path="/coaching/programme"
+              element={
+                <CoachingLayout>
+                  <CoachingProgramme />
+                </CoachingLayout>
+              }
+            />
+            {/* /coaching/tarifs → redirect vers /tarifs */}
+            <Route path="/coaching/tarifs" element={<Navigate to="/tarifs" replace />} />
+
+            {/* ── Pages communes (avec Layout) ── */}
+            <Route
+              path="/login"
+              element={
+                <Layout>
+                  <Login />
+                </Layout>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <Layout>
+                  <Register />
+                </Layout>
+              }
+            />
+            <Route
+              path="/reservation-confirmee"
+              element={
+                <Layout>
+                  <ReservationConfirmee />
+                </Layout>
+              }
+            />
+            <Route
+              path="/premium-success"
+              element={
+                <Layout>
+                  <PremiumSuccess />
+                </Layout>
+              }
+            />
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
+                <Layout>
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                </Layout>
               }
             />
             <Route
               path="/profil"
               element={
-                <ProtectedRoute>
-                  <Profil />
-                </ProtectedRoute>
+                <Layout>
+                  <ProtectedRoute>
+                    <Profil />
+                  </ProtectedRoute>
+                </Layout>
               }
             />
             <Route
               path="/admin"
               element={
-                <AdminRoute>
-                  <Admin />
-                </AdminRoute>
+                <Layout>
+                  <AdminRoute>
+                    <Admin />
+                  </AdminRoute>
+                </Layout>
               }
             />
           </Routes>
         </Suspense>
       </ChunkErrorBoundary>
-    </Layout>
+    </>
   );
 }
