@@ -127,7 +127,7 @@ export default function CoachingServices() {
 
                   {/* CTA */}
                   <Link
-                    to="/tarifs"
+                    to="/coaching/reserver"
                     className={`w-full text-center rounded-xl px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90 active:scale-[0.98] ${
                       isGold ? 'bg-gold' : 'bg-green-islamic'
                     }`}
