@@ -157,7 +157,7 @@ export default function QuiSuisJe() {
               {
                 icon: BookOpen,
                 title: 'Spirituel',
-                desc: 'Par la puissance du Coran et des invocations.',
+                desc: "Par la puissance du Coran et des invocations, mais aussi en créant et en raffermissant une connexion profonde et ancrée avec Allah — une relation solide, fondée sur la confiance en Allah et la certitude de Sa miséricorde.",
                 color: 'text-green-islamic',
                 bg: 'bg-green-islamic/10',
               },
