@@ -15,7 +15,7 @@ export default function Footer() {
           <Link to="/" className="flex items-center gap-2">
             <Star className="h-4 w-4 text-gold fill-gold" />
             <span className="font-heading text-sm font-bold text-green-islamic">
-              MaRoqya
+              CoachMyNefs
             </span>
           </Link>
 
@@ -24,7 +24,7 @@ export default function Footer() {
             <Link to="/mentions-legales" className="hover:text-green-islamic transition-colors">{t('footer.legal')}</Link>
             <Link to="/confidentialite" className="hover:text-green-islamic transition-colors">{t('footer.privacy')}</Link>
             <Link to="/cgu" className="hover:text-green-islamic transition-colors">{t('footer.terms')}</Link>
-            <a href="mailto:coaching.roqya@gmail.com" className="hover:text-green-islamic transition-colors">coaching.roqya@gmail.com</a>
+            <a href="mailto:coachmynefs@gmail.com" className="hover:text-green-islamic transition-colors">coachmynefs@gmail.com</a>
           </div>
         </div>
 

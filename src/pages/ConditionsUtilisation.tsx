@@ -3,7 +3,7 @@ import SEO from '../components/SEO';
 export default function ConditionsUtilisation() {
   return (
     <div className="min-h-screen bg-cream">
-      <SEO title="Conditions d'utilisation — MaRoqya" description="Conditions générales d'utilisation du site et des services MaRoqya." />
+      <SEO title="Conditions d'utilisation — CoachMyNefs" description="Conditions générales d'utilisation du site et des services CoachMyNefs." />
       <section className="py-12">
         <div className="mx-auto max-w-3xl px-4">
           <h1 className="font-heading text-3xl font-bold text-green-islamic mb-8">
@@ -18,7 +18,7 @@ export default function ConditionsUtilisation() {
               </h2>
               <p>
                 Les pr&eacute;sentes Conditions G&eacute;n&eacute;rales d'Utilisation (ci-apr&egrave;s &laquo; CGU &raquo;) ont pour objet
-                de d&eacute;finir les modalit&eacute;s et conditions d'utilisation du site ma-roqya.fr
+                de d&eacute;finir les modalit&eacute;s et conditions d'utilisation du site coachmynefs.com
                 (ci-apr&egrave;s &laquo; le Site &raquo;), &eacute;dit&eacute; par Ouchen Ouahbi. Le Site propose un accompagnement
                 en coaching de d&eacute;veloppement personnel et spirituel (Psycho-Roqya), incluant des
                 contenus &eacute;ducatifs (articles, vid&eacute;os, douas), un programme structur&eacute;, un forum
@@ -127,7 +127,7 @@ export default function ConditionsUtilisation() {
               </h3>
               <p>
                 L'utilisateur peut r&eacute;silier son abonnement &agrave; tout moment depuis son espace
-                personnel ou en envoyant un email &agrave; coaching.roqya@gmail.com. La r&eacute;siliation
+                personnel ou en envoyant un email &agrave; coachmynefs@gmail.com. La r&eacute;siliation
                 prend effet &agrave; la fin de la p&eacute;riode en cours. L'utilisateur conserve l'acc&egrave;s &agrave;
                 son abonnement jusqu'&agrave; la date d'expiration.
               </p>
@@ -264,8 +264,8 @@ export default function ConditionsUtilisation() {
               </p>
               <p className="mt-3">
                 Pour exercer votre droit de r&eacute;tractation, envoyez un email &agrave;{' '}
-                <a href="mailto:coaching.roqya@gmail.com" className="text-green-islamic underline hover:text-gold transition-colors">
-                  coaching.roqya@gmail.com
+                <a href="mailto:coachmynefs@gmail.com" className="text-green-islamic underline hover:text-gold transition-colors">
+                  coachmynefs@gmail.com
                 </a>{' '}
                 en indiquant vos coordonn&eacute;es et votre souhait de vous r&eacute;tracter.
               </p>
@@ -281,8 +281,8 @@ export default function ConditionsUtilisation() {
                 utilisateur en cas de non-respect des pr&eacute;sentes CGU, et ce sans pr&eacute;avis ni
                 indemnit&eacute;. L'utilisateur peut &agrave; tout moment demander la suppression de son
                 compte en envoyant un email &agrave;{' '}
-                <a href="mailto:coaching.roqya@gmail.com" className="text-green-islamic underline hover:text-gold transition-colors">
-                  coaching.roqya@gmail.com
+                <a href="mailto:coachmynefs@gmail.com" className="text-green-islamic underline hover:text-gold transition-colors">
+                  coachmynefs@gmail.com
                 </a>.
               </p>
             </div>
@@ -334,8 +334,8 @@ export default function ConditionsUtilisation() {
               </h2>
               <p>
                 Pour toute question relative aux pr&eacute;sentes CGU, vous pouvez nous contacter &agrave; :{' '}
-                <a href="mailto:coaching.roqya@gmail.com" className="text-green-islamic underline hover:text-gold transition-colors">
-                  coaching.roqya@gmail.com
+                <a href="mailto:coachmynefs@gmail.com" className="text-green-islamic underline hover:text-gold transition-colors">
+                  coachmynefs@gmail.com
                 </a>
               </p>
             </div>

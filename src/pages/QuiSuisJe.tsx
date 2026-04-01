@@ -6,7 +6,7 @@ export default function QuiSuisJe() {
   return (
     <div className="min-h-screen bg-cream">
       <SEO
-        title="Qui suis-je — Dr Frère Muz | MaRoqya"
+        title="Qui suis-je — Dr Frère Muz | CoachMyNefs"
         description="Praticien en Psycho-Roqya & Coach en développement personnel depuis plus de 15 ans. Découvrez mon parcours et mon approche unique alliant spiritualité et psychologie."
       />
 

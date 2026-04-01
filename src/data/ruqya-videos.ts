@@ -118,7 +118,7 @@ export const RUQYA_VIDEOS: RuqyaVideo[] = [
   // {
   //   videoId: 'VOTRE_ID_YOUTUBE',
   //   title: 'Mon introduction au programme',
-  //   reciter: 'MaRoqya',
+  //   reciter: 'CoachMyNefs',
   //   duration: '10min',
   //   category: 'custom',
   //   description: 'Vidéo personnelle de présentation du programme',

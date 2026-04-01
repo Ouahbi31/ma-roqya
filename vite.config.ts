@@ -11,9 +11,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'robots.txt', 'icons/*.svg', 'images/**/*', 'patterns/*'],
       manifest: {
-        name: 'MaRoqya - Accompagnement spirituel islamique',
-        short_name: 'MaRoqya',
-        description: 'Votre guide de roqya personnalisé. Programme, douas, articles et suivi quotidien.',
+        name: 'CoachMyNefs - Coaching & Accompagnement spirituel',
+        short_name: 'CoachMyNefs',
+        description: 'Votre guide de coaching, développement personnel et roqya personnalisé. Programme, douas, articles et suivi quotidien.',
         theme_color: '#2E6AB8',
         background_color: '#F0F7FF',
         display: 'standalone',

@@ -43,7 +43,7 @@ export default function ForumPostPage() {
 
   return (
     <div className="min-h-screen bg-cream px-4 py-8 sm:px-6 lg:px-8">
-      <SEO title="Discussion — Forum MaRoqya" description="Participez aux discussions de la communauté MaRoqya sur la roqya, les douas et le bien-être spirituel." />
+      <SEO title="Discussion — Forum CoachMyNefs" description="Participez aux discussions de la communauté CoachMyNefs sur le coaching, la roqya, les douas et le bien-être spirituel." />
       <div className="mx-auto max-w-3xl">
         <Link to="/forum" className="mb-6 inline-flex items-center gap-2 text-sm text-green-islamic hover:text-gold">
           <ArrowLeft size={16} /> {t('common.back')}

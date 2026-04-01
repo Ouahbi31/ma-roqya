@@ -16,8 +16,8 @@ interface SEOProps {
   };
 }
 
-const SITE_NAME = 'MaRoqya';
-const BASE_URL = 'https://ma-roqya.fr';
+const SITE_NAME = 'CoachMyNefs';
+const BASE_URL = 'https://coachmynefs.com';
 const DEFAULT_IMAGE = `${BASE_URL}/images/og-cover.png`;
 
 function setMetaTag(property: string, content: string, isProperty = false) {

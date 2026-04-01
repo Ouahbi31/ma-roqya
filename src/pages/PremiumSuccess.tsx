@@ -63,8 +63,8 @@ export default function PremiumSuccess() {
   return (
     <div className="min-h-screen bg-cream">
       <SEO
-        title="Abonnement Premium activé - MaRoqya"
-        description="Votre abonnement MaRoqya Premium est activé. Accédez à tous les programmes, douas et contenus exclusifs."
+        title="Abonnement Premium activé - CoachMyNefs"
+        description="Votre abonnement CoachMyNefs Premium est activé. Accédez à tous les programmes, douas et contenus exclusifs."
         noindex={true}
       />
 
@@ -92,7 +92,7 @@ export default function PremiumSuccess() {
           className="font-heading text-3xl font-bold text-green-islamic sm:text-4xl"
           style={{ animation: 'fadeInUp 0.5s 0.3s ease-out both' }}
         >
-          Bienvenue dans MaRoqya Premium !
+          Bienvenue dans CoachMyNefs Premium !
         </h1>
 
         {/* Message */}

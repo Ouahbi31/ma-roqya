@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Article data model & sample articles for MaRoqya blog / magazine section
+// Article data model & sample articles for CoachMyNefs blog / magazine section
 // ---------------------------------------------------------------------------
 
 export type ArticleCategory =

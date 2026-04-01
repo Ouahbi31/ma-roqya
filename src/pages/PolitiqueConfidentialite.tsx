@@ -3,7 +3,7 @@ import SEO from '../components/SEO';
 export default function PolitiqueConfidentialite() {
   return (
     <div className="min-h-screen bg-cream">
-      <SEO title="Politique de confidentialité — MaRoqya" description="Comment MaRoqya collecte, utilise et protège vos données personnelles." />
+      <SEO title="Politique de confidentialité — CoachMyNefs" description="Comment CoachMyNefs collecte, utilise et protège vos données personnelles." />
       <section className="py-12">
         <div className="mx-auto max-w-3xl px-4">
           <h1 className="font-heading text-3xl font-bold text-green-islamic mb-8">
@@ -14,7 +14,7 @@ export default function PolitiqueConfidentialite() {
             {/* Introduction */}
             <p>
               La pr&eacute;sente politique de confidentialit&eacute; d&eacute;crit la mani&egrave;re dont le site
-              ma-roqya.fr collecte, utilise et prot&egrave;ge les donn&eacute;es personnelles de ses
+              coachmynefs.com collecte, utilise et prot&egrave;ge les donn&eacute;es personnelles de ses
               utilisateurs, conform&eacute;ment au R&egrave;glement G&eacute;n&eacute;ral sur la Protection des
               Donn&eacute;es (RGPD) et &agrave; la loi Informatique et Libert&eacute;s du 6 janvier 1978 modifi&eacute;e.
             </p>
@@ -27,7 +27,7 @@ export default function PolitiqueConfidentialite() {
               <div className="rounded-2xl bg-white border border-cream-dark p-6 shadow-sm space-y-1">
                 <p><strong className="text-text-primary">Responsable :</strong> Ouchen Ouahbi</p>
                 <p><strong className="text-text-primary">Adresse :</strong> 13 cheminement Francisco de Goya, 31100 Toulouse, France</p>
-                <p><strong className="text-text-primary">Email :</strong> coaching.roqya@gmail.com</p>
+                <p><strong className="text-text-primary">Email :</strong> coachmynefs@gmail.com</p>
                 <p><strong className="text-text-primary">SIRET :</strong> 982 950 420 00017</p>
               </div>
             </div>
@@ -38,7 +38,7 @@ export default function PolitiqueConfidentialite() {
                 2. Donn&eacute;es personnelles collect&eacute;es
               </h2>
               <p className="mb-3">
-                Dans le cadre de l'utilisation du site ma-roqya.fr, nous sommes amen&eacute;s &agrave; collecter
+                Dans le cadre de l'utilisation du site coachmynefs.com, nous sommes amen&eacute;s &agrave; collecter
                 les donn&eacute;es personnelles suivantes :
               </p>
               <ul className="list-disc pl-6 space-y-2">
@@ -153,8 +153,8 @@ export default function PolitiqueConfidentialite() {
               <div className="mt-4 rounded-2xl bg-white border border-cream-dark p-6 shadow-sm">
                 <p>
                   Pour exercer vos droits, envoyez un email &agrave; :{' '}
-                  <a href="mailto:coaching.roqya@gmail.com" className="text-green-islamic underline hover:text-gold transition-colors">
-                    coaching.roqya@gmail.com
+                  <a href="mailto:coachmynefs@gmail.com" className="text-green-islamic underline hover:text-gold transition-colors">
+                    coachmynefs@gmail.com
                   </a>
                 </p>
                 <p className="mt-2 text-sm">
@@ -170,7 +170,7 @@ export default function PolitiqueConfidentialite() {
               <h2 className="font-heading text-xl font-bold text-green-islamic mb-3">
                 7. Cookies
               </h2>
-              <p className="mb-3">Le site ma-roqya.fr utilise les types de cookies suivants :</p>
+              <p className="mb-3">Le site coachmynefs.com utilise les types de cookies suivants :</p>
               <ul className="list-disc pl-6 space-y-2">
                 <li>
                   <strong className="text-text-primary">Cookies strictement n&eacute;cessaires :</strong> indispensables
@@ -248,7 +248,7 @@ export default function PolitiqueConfidentialite() {
               </ul>
               <p className="mt-3">
                 Vous pouvez obtenir une copie des garanties mises en place en nous contactant
-                &agrave; l'adresse coaching.roqya@gmail.com.
+                &agrave; l'adresse coachmynefs@gmail.com.
               </p>
             </div>
 

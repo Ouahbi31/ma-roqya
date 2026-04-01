@@ -30,7 +30,7 @@ const JSON_LD_FAQ = JSON.stringify({
       name: 'Comment distinguer une maladie spirituelle d\'une maladie psychologique ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'L\'approche Psycho-Roqya de MaRoqya analyse les deux dimensions : spirituelle (ayn, sihr, mass) et psychologique. Notre questionnaire adaptatif évalue les deux aspects pour proposer un programme personnalisé.',
+        text: 'L\'approche Psycho-Roqya de CoachMyNefs analyse les deux dimensions : spirituelle (ayn, sihr, mass) et psychologique. Notre questionnaire adaptatif évalue les deux aspects pour proposer un programme personnalisé.',
       },
     },
     {
@@ -38,7 +38,7 @@ const JSON_LD_FAQ = JSON.stringify({
       name: 'La roqya peut-elle aider contre la sorcellerie ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Oui, la roqya shar\'iyya est reconnue pour son efficacité contre la sorcellerie (sihr). Le programme MaRoqya pour le sihr dure 30 jours avec 3 phases progressives basées sur le Coran et la Sunnah.',
+        text: 'Oui, la roqya shar\'iyya est reconnue pour son efficacité contre la sorcellerie (sihr). Le programme CoachMyNefs pour le sihr dure 30 jours avec 3 phases progressives basées sur le Coran et la Sunnah.',
       },
     },
   ],
@@ -80,7 +80,7 @@ export default function Quiz() {
     return (
       <div className="min-h-screen bg-cream px-4 py-12 sm:px-6 lg:px-8">
         <SEO
-          title="Quiz d'auto-evaluation spirituelle - MaRoqya"
+          title="Quiz d'auto-evaluation spirituelle - CoachMyNefs"
           description="Evaluez votre situation spirituelle avec notre quiz. Identifiez les signes potentiels de mauvais oeil, sorcellerie ou possession et recevez des conseils personnalises."
           keywords="quiz roqya, test mauvais oeil, symptomes sorcellerie test, auto-evaluation spirituelle islam"
           url="/quiz"

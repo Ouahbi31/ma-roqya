@@ -100,7 +100,7 @@ function HeroImage({ article }: { article: Article }) {
         </svg>
       </div>
       <span className="relative font-heading text-2xl font-bold text-white/60 select-none">
-        MaRoqya
+        CoachMyNefs
       </span>
       <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/40 to-transparent" />
     </div>
@@ -424,24 +424,24 @@ export default function ArticleDetail() {
     headline: article.title,
     description: article.excerpt,
     image: article.imageUrl
-      ? (article.imageUrl.startsWith('http') ? article.imageUrl : `https://ma-roqya.fr${article.imageUrl}`)
-      : 'https://ma-roqya.fr/images/og-cover.png',
+      ? (article.imageUrl.startsWith('http') ? article.imageUrl : `https://coachmynefs.com${article.imageUrl}`)
+      : 'https://coachmynefs.com/images/og-cover.png',
     author: {
       '@type': 'Person',
       name: article.author.name,
     },
     publisher: {
       '@type': 'Organization',
-      name: 'MaRoqya',
+      name: 'CoachMyNefs',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://ma-roqya.fr/favicon.svg',
+        url: 'https://coachmynefs.com/favicon.svg',
       },
     },
     datePublished: article.date,
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://ma-roqya.fr/articles/${article.slug}`,
+      '@id': `https://coachmynefs.com/articles/${article.slug}`,
     },
   };
 
@@ -453,19 +453,19 @@ export default function ArticleDetail() {
         '@type': 'ListItem',
         position: 1,
         name: 'Accueil',
-        item: 'https://ma-roqya.fr/',
+        item: 'https://coachmynefs.com/',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Articles',
-        item: 'https://ma-roqya.fr/articles',
+        item: 'https://coachmynefs.com/articles',
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: article.title,
-        item: `https://ma-roqya.fr/articles/${article.slug}`,
+        item: `https://coachmynefs.com/articles/${article.slug}`,
       },
     ],
   };

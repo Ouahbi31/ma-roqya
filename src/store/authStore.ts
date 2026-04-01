@@ -87,11 +87,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     // ══ MODE DÉMO ══ Supprimer ce bloc en production
     if (localStorage.getItem('ruqya_demo_premium') === 'true') {
       set({
-        user: { id: 'demo-user-001', email: 'demo@ma-roqya.fr' } as User,
+        user: { id: 'demo-user-001', email: 'demo@coachmynefs.com' } as User,
         profile: {
           id: 'demo-user-001',
           prenom: 'Abdellah',
-          email: 'demo@ma-roqya.fr',
+          email: 'demo@coachmynefs.com',
           avatar_url: null,
           is_premium: true,
           role: 'user' as const,

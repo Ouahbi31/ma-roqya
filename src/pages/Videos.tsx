@@ -47,7 +47,7 @@ export default function Videos() {
   return (
     <div className="min-h-screen bg-cream">
       <SEO
-        title="Vidéos de Roqya et Psycho-Roqya - MaRoqya"
+        title="Vidéos de Coaching, Roqya et Psycho-Roqya - CoachMyNefs"
         description="Regardez nos vidéos éducatives sur la roqya shariya, la psycho-roqya et la guérison spirituelle islamique. Récitations coraniques, adhkar et explications."
         keywords="videos roqya, roqya youtube, recitation coran guerison, videos psycho-roqya, adhkar video, roqya shariya video"
         url="/videos"

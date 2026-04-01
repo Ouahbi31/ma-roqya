@@ -3,7 +3,7 @@ import SEO from '../components/SEO';
 export default function MentionsLegales() {
   return (
     <div className="min-h-screen bg-cream">
-      <SEO title="Mentions légales — MaRoqya" description="Mentions légales du site MaRoqya — informations légales, éditeur et hébergeur." />
+      <SEO title="Mentions légales — CoachMyNefs" description="Mentions légales du site CoachMyNefs — informations légales, éditeur et hébergeur." />
       <section className="py-12">
         <div className="mx-auto max-w-3xl px-4">
           <h1 className="font-heading text-3xl font-bold text-green-islamic mb-8">
@@ -17,13 +17,13 @@ export default function MentionsLegales() {
                 1. &Eacute;diteur du site
               </h2>
               <div className="rounded-2xl bg-white border border-cream-dark p-6 shadow-sm space-y-1">
-                <p><strong className="text-text-primary">Nom du site :</strong> MaRoqya</p>
-                <p><strong className="text-text-primary">URL :</strong> ma-roqya.fr</p>
+                <p><strong className="text-text-primary">Nom du site :</strong> CoachMyNefs</p>
+                <p><strong className="text-text-primary">URL :</strong> coachmynefs.com</p>
                 <p><strong className="text-text-primary">&Eacute;diteur :</strong> Ouchen Ouahbi</p>
                 <p><strong className="text-text-primary">Statut :</strong> Entrepreneur individuel</p>
                 <p><strong className="text-text-primary">SIRET :</strong> 982 950 420 00017</p>
                 <p><strong className="text-text-primary">Adresse :</strong> 13 cheminement Francisco de Goya, 31100 Toulouse, France</p>
-                <p><strong className="text-text-primary">Email :</strong> coaching.roqya@gmail.com</p>
+                <p><strong className="text-text-primary">Email :</strong> coachmynefs@gmail.com</p>
                 <p>
                   <strong className="text-text-primary">Activit&eacute; :</strong> Coaching en
                   d&eacute;veloppement personnel et accompagnement spirituel (Psycho-Roqya)
@@ -38,7 +38,7 @@ export default function MentionsLegales() {
               </h2>
               <p>
                 Le directeur de la publication est <strong className="text-text-primary">Ouchen Ouahbi</strong>,
-                joignable &agrave; l'adresse email : coaching.roqya@gmail.com.
+                joignable &agrave; l'adresse email : coachmynefs@gmail.com.
               </p>
             </div>
 
@@ -60,7 +60,7 @@ export default function MentionsLegales() {
                 4. Propri&eacute;t&eacute; intellectuelle
               </h2>
               <p>
-                L'ensemble du contenu du site ma-roqya.fr (textes, images, vid&eacute;os, logos,
+                L'ensemble du contenu du site coachmynefs.com (textes, images, vid&eacute;os, logos,
                 &eacute;l&eacute;ments graphiques, structure) est prot&eacute;g&eacute; par le droit d'auteur et le droit
                 de la propri&eacute;t&eacute; intellectuelle. Toute reproduction, repr&eacute;sentation, modification,
                 publication ou adaptation de tout ou partie des &eacute;l&eacute;ments du site, quel que soit
@@ -80,7 +80,7 @@ export default function MentionsLegales() {
                 5. Cr&eacute;dits
               </h2>
               <p>
-                Le site ma-roqya.fr a &eacute;t&eacute; con&ccedil;u et d&eacute;velopp&eacute; par Ouchen Ouahbi.
+                Le site coachmynefs.com a &eacute;t&eacute; con&ccedil;u et d&eacute;velopp&eacute; par Ouchen Ouahbi.
                 Les ic&ocirc;nes utilis&eacute;es proviennent de la biblioth&egrave;que Lucide Icons.
               </p>
             </div>

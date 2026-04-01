@@ -115,7 +115,7 @@ function ArticleImage({
         </svg>
       </div>
       <span className="relative font-heading text-lg font-bold text-white/80 select-none">
-        MaRoqya
+        CoachMyNefs
       </span>
     </div>
   );
@@ -439,8 +439,8 @@ export default function Articles() {
   return (
     <div className="min-h-screen bg-cream">
       <SEO
-        title="Articles & Conseils - Roqya, Psycho-Roqya, Guerison spirituelle"
-        description="Decouvrez nos articles sur la roqya, la Psycho-Roqya, le mauvais oeil, la sorcellerie, la possession et les moyens de guerison selon le Coran et la Sunnah."
+        title="Articles & Conseils - Coaching, Roqya, Psycho-Roqya, Developpement personnel"
+        description="Decouvrez nos articles sur le coaching, le développement personnel, l'accompagnement de couple, la roqya, la Psycho-Roqya, le mauvais oeil, la sorcellerie et la possession selon le Coran et la Sunnah."
         keywords="articles roqya, blog islam guerison, mauvais oeil symptomes, sorcellerie islam, possession djinn signes, psycho-roqya, eau coranisee, sourate baqara"
         url="/articles"
       />

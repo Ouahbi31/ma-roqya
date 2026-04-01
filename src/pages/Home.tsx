@@ -27,28 +27,28 @@ const resourceCards = [
 const JSON_LD_ORGANIZATION = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'MaRoqya',
-  url: 'https://ma-roqya.fr',
-  logo: 'https://ma-roqya.fr/icons/icon-512x512.svg',
-  description: 'Accompagnement spirituel islamique : roqya shar\'iyya, psycho-roqya, programmes de guérison basés sur le Coran et la Sunnah.',
-  email: 'coaching.roqya@gmail.com',
+  name: 'CoachMyNefs',
+  url: 'https://coachmynefs.com',
+  logo: 'https://coachmynefs.com/icons/icon-512x512.svg',
+  description: 'Coaching, développement personnel, accompagnement de couple et roqya shar\'iyya. Psycho-roqya et programmes de guérison basés sur le Coran et la Sunnah.',
+  email: 'coachmynefs@gmail.com',
   sameAs: [],
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',
     availableLanguage: 'French',
-    url: 'https://ma-roqya.fr/tarifs',
+    url: 'https://coachmynefs.com/tarifs',
   },
 });
 
 const JSON_LD_WEBSITE = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'MaRoqya',
-  url: 'https://ma-roqya.fr',
+  name: 'CoachMyNefs',
+  url: 'https://coachmynefs.com',
   potentialAction: {
     '@type': 'SearchAction',
-    target: 'https://ma-roqya.fr/articles?q={search_term_string}',
+    target: 'https://coachmynefs.com/articles?q={search_term_string}',
     'query-input': 'required name=search_term_string',
   },
 });
@@ -59,9 +59,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-cream">
       <SEO
-        title="MaRoqya - Accompagnement spirituel islamique"
-        description="MaRoqya vous accompagne dans votre parcours de guérison spirituelle avec la roqya shar'iyya, la Psycho-Roqya et des programmes personnalisés basés sur le Coran et la Sunnah."
-        keywords="roqya, roqya shariya, guerison spirituelle islam, psycho-roqya, mauvais oeil, sorcellerie, possession, douas, protection islamique"
+        title="CoachMyNefs - Coaching, développement personnel & accompagnement spirituel"
+        description="CoachMyNefs vous accompagne dans votre parcours de coaching, développement personnel, accompagnement de couple et guérison spirituelle avec la roqya shar'iyya et la Psycho-Roqya, basés sur le Coran et la Sunnah."
+        keywords="coaching, développement personnel, accompagnement de couple, roqya, roqya shariya, guerison spirituelle islam, psycho-roqya, mauvais oeil, sorcellerie, possession, douas, protection islamique"
         url="/"
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON_LD_ORGANIZATION }} />

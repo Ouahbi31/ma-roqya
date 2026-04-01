@@ -54,7 +54,7 @@ export default function InstallPrompt() {
         </div>
         <div className="flex-1">
           <p className="text-sm font-semibold text-white">
-            Installer MaRoqya
+            Installer CoachMyNefs
           </p>
           <p className="text-xs text-white/80">
             Accédez rapidement depuis votre écran d'accueil

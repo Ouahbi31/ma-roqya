@@ -95,7 +95,7 @@ export default function Header() {
             <Link to="/" className="flex items-center gap-2">
               <Star className="h-5 w-5 md:h-6 md:w-6 text-gold fill-gold" />
               <span className="font-heading text-lg md:text-xl font-bold text-green-islamic">
-                MaRoqya
+                CoachMyNefs
               </span>
             </Link>
 

@@ -66,7 +66,7 @@ export default function Register() {
             <p className="text-xs font-semibold text-gold mb-1">Vous ne trouvez pas l'email ?</p>
             <ul className="text-xs text-text-secondary space-y-1">
               <li>• Vérifiez votre dossier <strong>Spam</strong> ou <strong>Courrier indésirable</strong></li>
-              <li>• L'expéditeur est <strong>noreply@ma-roqya.fr</strong></li>
+              <li>• L'expéditeur est <strong>noreply@coachmynefs.com</strong></li>
               <li>• L'email peut prendre quelques minutes</li>
             </ul>
           </div>

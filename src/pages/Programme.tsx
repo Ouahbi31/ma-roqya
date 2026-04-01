@@ -846,7 +846,7 @@ export default function Programme() {
   return (
     <>
       <SEO
-        title="Programme de Roqya Personnalisé | MaRoqya"
+        title="Programme de Roqya Personnalisé | CoachMyNefs"
         description="Programme adaptatif de roqya selon votre diagnostic : 'Ayn, Sihr, Mass, Waswas. Basé sur Ibn Qayyim, Ibn Taymiyya, Ibn Baz."
       />
 

@@ -284,9 +284,9 @@ export default function Tarifs() {
   return (
     <div className="min-h-screen bg-cream py-8 md:py-24">
       <SEO
-        title="Tarifs & Seances de Psycho-Roqya - MaRoqya"
-        description="Decouvrez nos formules d'accompagnement et reservez une seance de Psycho-Roqya. Approche unique combinant roqya et accompagnement psychologique."
-        keywords="seance psycho-roqya, consultation roqya, prix roqya, accompagnement spirituel islam, psycho-roqya tarif"
+        title="Tarifs & Seances de Coaching, Psycho-Roqya et Accompagnement de couple - CoachMyNefs"
+        description="Decouvrez nos formules d'accompagnement et reservez une seance de coaching, Psycho-Roqya ou accompagnement de couple. Approche unique combinant développement personnel, roqya et psychologie."
+        keywords="seance coaching, développement personnel, accompagnement de couple, psycho-roqya, consultation roqya, prix roqya, accompagnement spirituel islam, psycho-roqya tarif"
         url="/tarifs"
       />
       <div className="mx-auto max-w-5xl px-4">
@@ -634,7 +634,7 @@ export default function Tarifs() {
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-green-islamic/10">
                     <MessageCircle size={18} className="text-green-islamic" />
                   </div>
-                  <p className="text-sm font-medium text-green-islamic">MaRoqya</p>
+                  <p className="text-sm font-medium text-green-islamic">CoachMyNefs</p>
                   <h3 className="mt-1 font-heading text-xl font-bold text-text-primary">
                     Séance individuelle
                   </h3>
@@ -754,7 +754,7 @@ export default function Tarifs() {
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-green-islamic/10">
                     <MessageCircle size={18} className="text-green-islamic" />
                   </div>
-                  <p className="text-sm font-medium text-green-islamic">MaRoqya</p>
+                  <p className="text-sm font-medium text-green-islamic">CoachMyNefs</p>
                   <h3 className="mt-1 font-heading text-xl font-bold text-text-primary">
                     Séance individuelle
                   </h3>
