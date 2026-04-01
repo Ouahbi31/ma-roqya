@@ -20,10 +20,34 @@
     font-family: var(--font-body);
     color: var(--color-text-primary);
     background-color: var(--color-cream);
+    /* Empêche le zoom automatique sur les inputs iOS */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Bloque le défilement horizontal */
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
   body {
     margin: 0;
+    /* Bloque le défilement horizontal */
+    overflow-x: hidden;
+    max-width: 100%;
+    /* Supprime l'effet rebond haut/bas sur iOS quand on est en dehors du contenu */
+    overscroll-behavior-y: contain;
+  }
+
+  /* Conteneur racine React */
+  #root {
+    overflow-x: hidden;
+    max-width: 100%;
+    /* Hauteur plein écran y compris la barre de statut (encoche) */
+    min-height: 100dvh;
+  }
+
+  /* Supprime le flash bleu au tap sur iOS/Android partout */
+  * {
+    -webkit-tap-highlight-color: transparent;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -98,16 +122,15 @@
     @apply active:scale-[0.97] transition-transform;
   }
 
+  /* Touch action optimisé sur tous les boutons/liens */
+  button, a {
+    touch-action: manipulation;
+  }
+
   /* Ensure minimum touch targets on mobile */
   @media (max-width: 768px) {
     .card-islamic {
       border-radius: 0.75rem;
-    }
-
-    /* Prevent text selection on interactive elements */
-    button, a {
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
     }
   }
 }
