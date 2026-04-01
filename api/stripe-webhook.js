@@ -87,8 +87,8 @@ export default async function handler(req, res) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'MaRoqya <noreply@ma-roqya.fr>',
-          to: 'coaching.roqya@gmail.com',
+          from: 'CoachMyNefs <noreply@coachmynefs.com>',
+          to: 'coachmynefs@gmail.com',
           subject: `✅ Nouvelle réservation — ${metadata.nom || 'Client'}`,
           html: `
             <h2>Nouvelle réservation confirmée</h2>
@@ -98,7 +98,7 @@ export default async function handler(req, res) {
             <p><strong>Heure :</strong> ${metadata.heure || 'N/A'}</p>
             <p><strong>Montant :</strong> ${(session.amount_total / 100).toFixed(2)}€</p>
             <hr />
-            <p><a href="https://ma-roqya.fr/admin">Voir dans l'administration</a></p>
+            <p><a href="https://coachmynefs.com/admin">Voir dans l'administration</a></p>
           `,
         }),
       });
@@ -116,9 +116,9 @@ export default async function handler(req, res) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'MaRoqya <noreply@ma-roqya.fr>',
+          from: 'CoachMyNefs <noreply@coachmynefs.com>',
           to: session.customer_email,
-          subject: 'Votre réservation MaRoqya est confirmée ✅',
+          subject: 'Votre réservation CoachMyNefs est confirmée ✅',
           html: `
             <h2>Assalamu alaykum,</h2>
             <p>Votre séance individuelle est confirmée.</p>
@@ -129,7 +129,7 @@ export default async function handler(req, res) {
             <hr />
             <p>Vous recevrez le lien de la visioconférence par email avant la séance.</p>
             <p>Qu'Allah vous accorde la guérison. 🤲</p>
-            <p>— L'équipe MaRoqya</p>
+            <p>— L'équipe CoachMyNefs</p>
           `,
         }),
       });
