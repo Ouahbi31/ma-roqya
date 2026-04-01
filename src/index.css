@@ -23,24 +23,27 @@
     /* Empêche le zoom automatique sur les inputs iOS */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    /* Bloque le défilement horizontal */
-    overflow-x: hidden;
-    max-width: 100%;
+    /* overflow-x: clip ne casse PAS position:sticky (contrairement à overflow-x:hidden) */
+    overflow-x: clip;
+    /* Masque la scrollbar sur mobile */
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   body {
     margin: 0;
-    /* Bloque le défilement horizontal */
-    overflow-x: hidden;
-    max-width: 100%;
+    overflow-x: clip;
     /* Supprime l'effet rebond haut/bas sur iOS quand on est en dehors du contenu */
     overscroll-behavior-y: contain;
   }
 
   /* Conteneur racine React */
   #root {
-    overflow-x: hidden;
-    max-width: 100%;
+    /* overflow-x: clip ici aussi, ne casse pas sticky */
+    overflow-x: clip;
     /* Hauteur plein écran y compris la barre de statut (encoche) */
     min-height: 100dvh;
   }
