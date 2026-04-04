@@ -1,6 +1,9 @@
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  httpClient: Stripe.createFetchHttpClient(),
+  apiVersion: '2024-06-20',
+});
 
 export default async function handler(req, res) {
   // CORS headers
