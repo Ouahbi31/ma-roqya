@@ -167,13 +167,16 @@ export default function CoachingReserver() {
       <section className="relative overflow-hidden py-10 sm:py-14 md:py-20">
         <div className="islamic-pattern-bg absolute inset-0 z-0 opacity-50" />
         <div className="relative z-10 mx-auto max-w-4xl px-5 sm:px-4 text-center">
-          <Link
-            to={fromBio ? '/bio' : '/coaching/services'}
-            className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-gold transition-colors mb-6"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            {fromBio ? 'Retour' : 'Retour aux services'}
-          </Link>
+          {/* Bouton retour — ligne séparée */}
+          <div className="flex justify-center mb-5">
+            <Link
+              to={fromBio ? '/bio' : '/coaching/services'}
+              className="inline-flex items-center gap-2 rounded-xl border border-gold/40 bg-white px-4 py-2 text-sm font-semibold text-gold shadow-sm hover:bg-gold hover:text-white transition-all duration-150"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              {fromBio ? 'Retour' : 'Retour aux services'}
+            </Link>
+          </div>
 
           <div className="inline-flex items-center gap-2 rounded-full bg-gold/15 px-4 py-1.5 text-sm font-semibold text-gold mb-4">
             <span className="h-2 w-2 rounded-full bg-gold animate-pulse" />
