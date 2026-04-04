@@ -35,8 +35,8 @@ export default async function handler(req, res) {
           quantity: 1,
         },
       ],
-      success_url: `${req.headers.origin || 'https://coachmynefs.com'}/coaching/programmes/${slug}?success=1`,
-      cancel_url: `${req.headers.origin || 'https://coachmynefs.com'}/coaching/programmes/${slug}`,
+      success_url: `${req.headers.origin || 'https://ma-roqya.fr'}/coaching/programmes/${slug}?success=1`,
+      cancel_url: `${req.headers.origin || 'https://ma-roqya.fr'}/coaching/programmes/${slug}`,
       metadata: { userId: userId || '', programmeSlug: slug },
     });
 

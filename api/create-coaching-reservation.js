@@ -44,6 +44,9 @@ export default async function handler(req, res) {
       notes ? `\nNotes : ${notes}` : '',
     ].join('');
 
+    // Prix en centimes
+    const montantCentimes = type_seance === 'couple' ? 6500 : 5000;
+
     // Create reservation in DB with pending status
     const insertData = {
       nom,
@@ -54,6 +57,7 @@ export default async function handler(req, res) {
       heure,
       user_id: user_id || null,
       statut: 'en_attente',
+      montant: montantCentimes,
     };
 
     // Essayer d'insérer avec la colonne type_seance si elle existe
@@ -104,8 +108,8 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'payment',
-      success_url: `${req.headers.origin || 'https://coachmynefs.com'}/coaching/reserver?success=1`,
-      cancel_url: `${req.headers.origin || 'https://coachmynefs.com'}/coaching/reserver`,
+      success_url: `${req.headers.origin || 'https://ma-roqya.fr'}/coaching/reserver?success=1`,
+      cancel_url: `${req.headers.origin || 'https://ma-roqya.fr'}/coaching/reserver`,
       metadata: {
         reservation_id: reservation.id,
         nom,

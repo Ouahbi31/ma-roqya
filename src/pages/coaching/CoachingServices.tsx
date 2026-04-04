@@ -6,6 +6,7 @@ const services = [
   {
     icon: User,
     title: 'Coaching individuel',
+    type: 'individuel',
     description:
       'Travaillez sur vos blocages, votre confiance et votre développement personnel en séance individuelle.',
     duration: '1h',
@@ -21,6 +22,7 @@ const services = [
   {
     icon: Users,
     title: 'Coaching de couple',
+    type: 'couple',
     description:
       'Retrouvez l\'harmonie dans votre relation avec une séance dédiée aux deux partenaires.',
     duration: '1h',
@@ -127,7 +129,7 @@ export default function CoachingServices() {
 
                   {/* CTA */}
                   <Link
-                    to="/coaching/reserver"
+                    to={`/coaching/reserver?type=${service.type}`}
                     className={`w-full text-center rounded-xl px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90 active:scale-[0.98] ${
                       isGold ? 'bg-gold' : 'bg-green-islamic'
                     }`}

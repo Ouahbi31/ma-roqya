@@ -42,6 +42,10 @@ const CoachingServices = lazy(() => import('./pages/coaching/CoachingServices'))
 const CoachingProgrammes = lazy(() => import('./pages/coaching/CoachingProgrammes'));
 const CoachingProgrammeDetail = lazy(() => import('./pages/coaching/CoachingProgrammeDetail'));
 const CoachingReserver = lazy(() => import('./pages/coaching/CoachingReserver'));
+const CoachingCouple = lazy(() => import('./pages/coaching/CoachingCouple'));
+const CoachingIndividuel = lazy(() => import('./pages/coaching/CoachingIndividuel'));
+const CoachingSpiritualite = lazy(() => import('./pages/coaching/CoachingSpiritualite'));
+const CoachingSexualite = lazy(() => import('./pages/coaching/CoachingSexualite'));
 
 // ─── Spinner léger pour les pages secondaires
 function PageLoader() {
@@ -267,6 +271,38 @@ export default function App() {
               element={
                 <CoachingLayout>
                   <CoachingReserver />
+                </CoachingLayout>
+              }
+            />
+            <Route
+              path="/coaching/couple"
+              element={
+                <CoachingLayout>
+                  <CoachingCouple />
+                </CoachingLayout>
+              }
+            />
+            <Route
+              path="/coaching/individuel"
+              element={
+                <CoachingLayout>
+                  <CoachingIndividuel />
+                </CoachingLayout>
+              }
+            />
+            <Route
+              path="/coaching/spiritualite"
+              element={
+                <CoachingLayout>
+                  <CoachingSpiritualite />
+                </CoachingLayout>
+              }
+            />
+            <Route
+              path="/coaching/sexualite"
+              element={
+                <CoachingLayout>
+                  <CoachingSexualite />
                 </CoachingLayout>
               }
             />

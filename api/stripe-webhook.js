@@ -98,7 +98,7 @@ export default async function handler(req, res) {
             <p><strong>Heure :</strong> ${metadata.heure || 'N/A'}</p>
             <p><strong>Montant :</strong> ${(session.amount_total / 100).toFixed(2)}€</p>
             <hr />
-            <p><a href="https://coachmynefs.com/admin">Voir dans l'administration</a></p>
+            <p><a href="https://ma-roqya.fr/admin">Voir dans l'administration</a></p>
           `,
         }),
       });
@@ -109,6 +109,8 @@ export default async function handler(req, res) {
     // Send confirmation email to client
     try {
       const metadata = session.metadata || {};
+      const typeSeance = metadata.type_seance === 'couple' ? 'de couple' : 'individuelle';
+      const montantEur = ((session.amount_total || 0) / 100).toFixed(2);
       await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -120,15 +122,16 @@ export default async function handler(req, res) {
           to: session.customer_email,
           subject: 'Votre réservation CoachMyNefs est confirmée ✅',
           html: `
-            <h2>Assalamu alaykum,</h2>
-            <p>Votre séance individuelle est confirmée.</p>
+            <h2>Assalamu alaykum ${metadata.nom || ''},</h2>
+            <p>Votre séance de coaching <strong>${typeSeance}</strong> est confirmée.</p>
             <p><strong>Date :</strong> ${metadata.date_reservation || 'N/A'}</p>
             <p><strong>Heure :</strong> ${metadata.heure || 'N/A'}</p>
             <p><strong>Format :</strong> Visioconférence / Appel vocal</p>
-            <p><strong>Durée :</strong> 45 minutes</p>
+            <p><strong>Durée :</strong> 1 heure</p>
+            <p><strong>Montant réglé :</strong> ${montantEur}€</p>
             <hr />
             <p>Vous recevrez le lien de la visioconférence par email avant la séance.</p>
-            <p>Qu'Allah vous accorde la guérison. 🤲</p>
+            <p>Qu'Allah vous bénisse dans votre démarche. 🤲</p>
             <p>— L'équipe CoachMyNefs</p>
           `,
         }),

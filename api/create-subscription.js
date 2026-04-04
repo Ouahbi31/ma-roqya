@@ -19,8 +19,8 @@ export default async function handler(req, res) {
       payment_method_types: ['card'],
       customer_email: email,
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${req.headers.origin || 'https://coachmynefs.com'}/premium-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.origin || 'https://coachmynefs.com'}/tarifs`,
+      success_url: `${req.headers.origin || 'https://ma-roqya.fr'}/premium-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin || 'https://ma-roqya.fr'}/tarifs`,
       metadata: { userId: userId || '' },
     });
 

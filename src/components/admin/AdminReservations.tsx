@@ -11,6 +11,7 @@ interface Reservation {
   heure: string;
   montant: number;
   statut: string;
+  type_seance: string | null;
   created_at: string;
 }
 
@@ -170,10 +171,19 @@ function ReservationCard({
           {STATUT_LABELS[r.statut] || r.statut}
         </span>
       </div>
-      <div className="mt-3 flex items-center gap-4 text-sm text-text-secondary">
+      <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-text-secondary">
         <span>📅 {formatDate(r.date_reservation)}</span>
         <span>🕐 {r.heure}</span>
-        <span>💰 {r.montant / 100}€</span>
+        <span>💰 {r.montant ? r.montant / 100 : '—'}€</span>
+        {r.type_seance && (
+          <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+            r.type_seance === 'couple'
+              ? 'bg-gold/10 text-yellow-700'
+              : 'bg-green-islamic/10 text-green-800'
+          }`}>
+            {r.type_seance === 'couple' ? '👫 Couple' : '👤 Individuel'}
+          </span>
+        )}
       </div>
       {r.notes && (
         <div className="mt-3 rounded-lg bg-cream-dark/20 p-3 text-sm text-text-secondary">

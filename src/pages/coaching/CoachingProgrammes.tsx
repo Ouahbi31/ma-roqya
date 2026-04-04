@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Clock,
@@ -10,9 +11,11 @@ import {
   Zap,
   CalendarCheck,
   ArrowRight,
+  Bell,
 } from 'lucide-react';
 import SEO from '../../components/SEO';
 import { coachingProgrammes } from '../../data/coachingProgrammes';
+import WaitlistModal from '../../components/coaching/WaitlistModal';
 import type { LucideIcon } from 'lucide-react';
 
 const iconMap: Record<string, LucideIcon> = {
@@ -24,6 +27,8 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export default function CoachingProgrammes() {
+  const [waitlistProg, setWaitlistProg] = useState<{ slug: string; title: string } | null>(null);
+
   return (
     <div className="min-h-screen bg-cream">
       <SEO
@@ -143,13 +148,23 @@ export default function CoachingProgrammes() {
                     <span className="font-heading text-2xl font-bold text-gold">
                       {prog.price}€
                     </span>
-                    <Link
-                      to={`/coaching/programmes/${prog.slug}`}
-                      className="inline-flex items-center gap-1.5 rounded-xl bg-gold px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 active:scale-[0.98]"
-                    >
-                      Découvrir
-                      <ChevronRight className="h-4 w-4" />
-                    </Link>
+                    {prog.comingSoon ? (
+                      <button
+                        onClick={() => setWaitlistProg({ slug: prog.slug, title: prog.title })}
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-green-islamic px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 active:scale-[0.98]"
+                      >
+                        <Bell className="h-3.5 w-3.5" />
+                        Réserver ma place
+                      </button>
+                    ) : (
+                      <Link
+                        to={`/coaching/programmes/${prog.slug}`}
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-gold px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 active:scale-[0.98]"
+                      >
+                        Découvrir
+                        <ChevronRight className="h-4 w-4" />
+                      </Link>
+                    )}
                   </div>
                 </div>
               );
@@ -190,5 +205,14 @@ export default function CoachingProgrammes() {
         </div>
       </section>
     </div>
+
+    {/* Modale waitlist */}
+    {waitlistProg && (
+      <WaitlistModal
+        programmeTitle={waitlistProg.title}
+        programmeSlug={waitlistProg.slug}
+        onClose={() => setWaitlistProg(null)}
+      />
+    )}
   );
 }

@@ -43,9 +43,12 @@ function isSameDay(a: Date, b: Date): boolean {
 export default function CoachingReserver() {
   const [searchParams] = useSearchParams();
   const success = searchParams.get('success') === '1';
+  const typeParam = searchParams.get('type');
+  const preselectedType: TypeSeance | null =
+    typeParam === 'individuel' || typeParam === 'couple' ? typeParam : null;
   const { user } = useAuthStore();
 
-  const [selectedService, setSelectedService] = useState<TypeSeance | null>(null);
+  const [selectedService, setSelectedService] = useState<TypeSeance | null>(preselectedType);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedHeure, setSelectedHeure] = useState<string | null>(null);
   const [nom, setNom] = useState('');
@@ -190,88 +193,123 @@ export default function CoachingReserver() {
       <div className="mx-auto max-w-3xl px-5 sm:px-4 py-10 sm:py-14 space-y-10">
 
         {/* Étape 1 — Choix du type de séance */}
-        <section>
-          <h2 className="font-heading text-xl font-bold text-green-islamic mb-5">
-            1. Choisissez votre type de séance
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Individuel */}
-            <button
-              type="button"
-              onClick={() => setSelectedService('individuel')}
-              className={`text-left rounded-2xl border-2 p-5 sm:p-6 transition-all duration-200 ${
-                selectedService === 'individuel'
-                  ? 'border-gold bg-gold/5 shadow-md'
-                  : 'border-cream-dark bg-white hover:border-gold/50 hover:shadow-sm'
-              }`}
-            >
-              <div className={`flex h-12 w-12 items-center justify-center rounded-xl mb-4 ${
-                selectedService === 'individuel' ? 'bg-gold/15' : 'bg-green-islamic/10'
-              }`}>
-                <User className={`h-6 w-6 ${selectedService === 'individuel' ? 'text-gold' : 'text-green-islamic'}`} />
-              </div>
-              <div className="flex items-baseline gap-2 mb-1">
-                <h3 className="font-heading text-base font-bold text-text-primary">Individuel</h3>
-                <span className="text-xs text-text-secondary">👤</span>
-              </div>
-              <div className="flex items-center gap-2 mb-3">
-                <Clock className="h-3.5 w-3.5 text-text-secondary" />
-                <span className="text-xs text-text-secondary">1h</span>
-                <span className="font-heading text-lg font-bold text-gold ml-auto">50€</span>
-              </div>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Travaillez sur vos blocages, votre confiance et votre développement personnel.
-              </p>
-              {selectedService === 'individuel' && (
-                <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-gold">
-                  <CheckCircle className="h-3.5 w-3.5" />
-                  Sélectionné
+        {preselectedType ? (
+          /* Version compacte quand pré-sélectionné via URL */
+          <section>
+            <div className="rounded-2xl border-2 border-gold/40 bg-gold/5 px-5 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold/15">
+                  {preselectedType === 'individuel'
+                    ? <User className="h-5 w-5 text-gold" />
+                    : <Users className="h-5 w-5 text-gold" />
+                  }
                 </div>
-              )}
-            </button>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-gold" />
+                    <span className="font-heading text-sm font-bold text-text-primary">
+                      Coaching {preselectedType === 'couple' ? 'de couple' : 'individuel'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-text-secondary mt-0.5">
+                    1h · {PRIX[preselectedType]}€
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => { window.history.replaceState({}, '', '/coaching/reserver'); setSelectedService(null); }}
+                className="text-xs text-text-secondary hover:text-gold underline transition-colors"
+              >
+                Changer
+              </button>
+            </div>
+          </section>
+        ) : (
+          /* Version complète quand pas de pré-sélection */
+          <section>
+            <h2 className="font-heading text-xl font-bold text-green-islamic mb-5">
+              1. Choisissez votre type de séance
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Individuel */}
+              <button
+                type="button"
+                onClick={() => setSelectedService('individuel')}
+                className={`text-left rounded-2xl border-2 p-5 sm:p-6 transition-all duration-200 ${
+                  selectedService === 'individuel'
+                    ? 'border-gold bg-gold/5 shadow-md'
+                    : 'border-cream-dark bg-white hover:border-gold/50 hover:shadow-sm'
+                }`}
+              >
+                <div className={`flex h-12 w-12 items-center justify-center rounded-xl mb-4 ${
+                  selectedService === 'individuel' ? 'bg-gold/15' : 'bg-green-islamic/10'
+                }`}>
+                  <User className={`h-6 w-6 ${selectedService === 'individuel' ? 'text-gold' : 'text-green-islamic'}`} />
+                </div>
+                <div className="flex items-baseline gap-2 mb-1">
+                  <h3 className="font-heading text-base font-bold text-text-primary">Individuel</h3>
+                  <span className="text-xs text-text-secondary">👤</span>
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Clock className="h-3.5 w-3.5 text-text-secondary" />
+                  <span className="text-xs text-text-secondary">1h</span>
+                  <span className="font-heading text-lg font-bold text-gold ml-auto">50€</span>
+                </div>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  Travaillez sur vos blocages, votre confiance et votre développement personnel.
+                </p>
+                {selectedService === 'individuel' && (
+                  <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-gold">
+                    <CheckCircle className="h-3.5 w-3.5" />
+                    Sélectionné
+                  </div>
+                )}
+              </button>
 
-            {/* Couple */}
-            <button
-              type="button"
-              onClick={() => setSelectedService('couple')}
-              className={`text-left rounded-2xl border-2 p-5 sm:p-6 transition-all duration-200 ${
-                selectedService === 'couple'
-                  ? 'border-gold bg-gold/5 shadow-md'
-                  : 'border-cream-dark bg-white hover:border-gold/50 hover:shadow-sm'
-              }`}
-            >
-              <div className={`flex h-12 w-12 items-center justify-center rounded-xl mb-4 ${
-                selectedService === 'couple' ? 'bg-gold/15' : 'bg-gold/10'
-              }`}>
-                <Users className={`h-6 w-6 ${selectedService === 'couple' ? 'text-gold' : 'text-gold'}`} />
-              </div>
-              <div className="flex items-baseline gap-2 mb-1">
-                <h3 className="font-heading text-base font-bold text-text-primary">Couple</h3>
-                <span className="text-xs text-text-secondary">👫</span>
-              </div>
-              <div className="flex items-center gap-2 mb-3">
-                <Clock className="h-3.5 w-3.5 text-text-secondary" />
-                <span className="text-xs text-text-secondary">1h</span>
-                <span className="font-heading text-lg font-bold text-gold ml-auto">65€</span>
-              </div>
-              <p className="text-sm text-text-secondary leading-relaxed">
-                Séance à deux pour retrouver l'harmonie et la communication dans votre relation.
-              </p>
-              {selectedService === 'couple' && (
-                <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-gold">
-                  <CheckCircle className="h-3.5 w-3.5" />
-                  Sélectionné
+              {/* Couple */}
+              <button
+                type="button"
+                onClick={() => setSelectedService('couple')}
+                className={`text-left rounded-2xl border-2 p-5 sm:p-6 transition-all duration-200 ${
+                  selectedService === 'couple'
+                    ? 'border-gold bg-gold/5 shadow-md'
+                    : 'border-cream-dark bg-white hover:border-gold/50 hover:shadow-sm'
+                }`}
+              >
+                <div className={`flex h-12 w-12 items-center justify-center rounded-xl mb-4 ${
+                  selectedService === 'couple' ? 'bg-gold/15' : 'bg-gold/10'
+                }`}>
+                  <Users className="h-6 w-6 text-gold" />
                 </div>
-              )}
-            </button>
-          </div>
-        </section>
+                <div className="flex items-baseline gap-2 mb-1">
+                  <h3 className="font-heading text-base font-bold text-text-primary">Couple</h3>
+                  <span className="text-xs text-text-secondary">👫</span>
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Clock className="h-3.5 w-3.5 text-text-secondary" />
+                  <span className="text-xs text-text-secondary">1h</span>
+                  <span className="font-heading text-lg font-bold text-gold ml-auto">65€</span>
+                </div>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  Séance à deux pour retrouver l'harmonie et la communication dans votre relation.
+                </p>
+                {selectedService === 'couple' && (
+                  <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-gold">
+                    <CheckCircle className="h-3.5 w-3.5" />
+                    Sélectionné
+                  </div>
+                )}
+              </button>
+            </div>
+          </section>
+        )}
 
         {/* Étape 2 — Calendrier */}
         {selectedService && (
           <section>
             <h2 className="font-heading text-xl font-bold text-green-islamic mb-2">
-              2. Choisissez une date
+              {preselectedType ? '1.' : '2.'} Choisissez une date
             </h2>
             <p className="text-sm text-text-secondary mb-5">
               Disponible du lundi au samedi (hors vendredi et dimanche)
@@ -325,7 +363,7 @@ export default function CoachingReserver() {
         {selectedDate && (
           <section>
             <h2 className="font-heading text-xl font-bold text-green-islamic mb-2">
-              3. Choisissez un créneau
+              {preselectedType ? '2.' : '3.'} Choisissez un créneau
             </h2>
             <p className="text-sm text-text-secondary mb-5">
               {formatDate(selectedDate)}
@@ -352,7 +390,10 @@ export default function CoachingReserver() {
         {/* Étape 4 — Formulaire */}
         <section>
           <h2 className="font-heading text-xl font-bold text-green-islamic mb-5">
-            {selectedDate ? '4.' : '3.'} Vos coordonnées
+            {preselectedType
+              ? selectedDate ? '3.' : '2.'
+              : selectedDate ? '4.' : '3.'
+            } Vos coordonnées
           </h2>
           <div className="rounded-2xl bg-white border border-cream-dark p-5 sm:p-6 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
