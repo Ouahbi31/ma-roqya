@@ -89,6 +89,25 @@ export default function CoachingProgrammes() {
         </div>
       </section>
 
+      {/* 🎁 Bannière promo early bird */}
+      <section className="py-4 sm:py-6">
+        <div className="mx-auto max-w-4xl px-5 sm:px-4">
+          <div className="relative overflow-hidden rounded-2xl border border-gold/40 bg-gradient-to-r from-gold/10 via-amber-50 to-gold/10 px-6 py-5 sm:px-8 sm:py-6 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+              <div className="text-3xl shrink-0">🎁</div>
+              <div className="flex-1">
+                <p className="font-heading font-bold text-text-primary text-base sm:text-lg leading-snug">
+                  Offre de lancement exclusive — inscrivez-vous avant tout le monde
+                </p>
+                <p className="mt-1 text-sm text-text-secondary leading-relaxed">
+                  Les <strong className="text-gold">10 premiers inscrits</strong> obtiennent <strong className="text-gold">-50%</strong> au lancement · Les <strong className="text-gold">50 premiers</strong> obtiennent <strong className="text-gold">-30%</strong> · Réservez votre place dès maintenant, c'est gratuit.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Grid des programmes */}
       <section className="py-10 sm:py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-5 sm:px-4">
