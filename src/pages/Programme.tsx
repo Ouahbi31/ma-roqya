@@ -308,10 +308,13 @@ export default function Programme() {
       <div className="min-h-screen bg-cream pb-20">
         <div className="max-w-lg mx-auto px-4 pt-10">
 
-          {/* Retour accueil */}
-          <Link to="/" className="mb-4 inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-green-islamic transition-colors">
-            <ChevronLeft className="h-4 w-4" /> Accueil
-          </Link>
+          {/* Bandeau bientôt disponible */}
+          <div className="mb-6 rounded-xl bg-gray-100 border border-gray-200 px-4 py-3 text-center">
+            <span className="text-sm font-semibold text-gray-500">🕐 Programme bientôt disponible — </span>
+            <Link to="/tarifs#psycho-roqya" className="text-sm font-semibold text-green-islamic underline underline-offset-2">
+              Réserver une séance dès maintenant →
+            </Link>
+          </div>
 
           {/* Hero */}
           <div className="text-center mb-10">
