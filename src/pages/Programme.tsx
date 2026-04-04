@@ -309,10 +309,14 @@ export default function Programme() {
         <div className="max-w-lg mx-auto px-4 pt-10">
 
           {/* Bandeau bientôt disponible */}
-          <div className="mb-6 rounded-xl bg-gray-100 border border-gray-200 px-4 py-3 text-center">
-            <span className="text-sm font-semibold text-gray-500">🕐 Programme bientôt disponible — </span>
-            <Link to="/tarifs#psycho-roqya" className="text-sm font-semibold text-green-islamic underline underline-offset-2">
-              Réserver une séance dès maintenant →
+          <div className="mb-6 rounded-2xl bg-green-islamic px-5 py-4 text-center shadow-md">
+            <p className="text-white font-bold text-base">🕐 Programme bientôt disponible</p>
+            <p className="text-white/80 text-sm mt-1">En attendant, bénéficiez d'un accompagnement personnalisé en direct.</p>
+            <Link
+              to="/tarifs#psycho-roqya"
+              className="mt-3 inline-block rounded-xl bg-white px-5 py-2 text-sm font-bold text-green-islamic shadow transition hover:opacity-90"
+            >
+              Réserver une séance →
             </Link>
           </div>
 
@@ -370,25 +374,13 @@ export default function Programme() {
             </div>
           )}
 
-          {/* CTA principal */}
-          <button
-            onClick={() => {
-              // Repart toujours propre
-              setAnswers({});
-              setMedicalFlag(false);
-              setCurrentQuestionId('q_duration');
-              setQuestionPath(['q_duration']);
-              setDiagnosis(null);
-              localStorage.removeItem(STORAGE_KEY_Q);
-              setView('questionnaire');
-            }}
-            className="w-full rounded-2xl bg-green-islamic py-4 text-base font-bold text-white hover:bg-green-islamic/90 active:scale-[0.98] transition-all shadow-lg shadow-green-islamic/20"
-          >
-            {programState ? 'Refaire le diagnostic' : 'Commencer le diagnostic'}
-          </button>
+          {/* CTA principal — bloqué */}
+          <div className="w-full rounded-2xl bg-gray-200 py-4 text-base font-bold text-gray-400 text-center cursor-not-allowed select-none">
+            🕐 Bientôt disponible
+          </div>
 
           <p className="mt-4 text-center text-xs text-text-secondary">
-            Gratuit · 3–5 minutes · Résultats immédiats
+            Le programme sera disponible très prochainement.
           </p>
 
           {/* Verset */}
