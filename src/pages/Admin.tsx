@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CalendarDays, MessageSquare, CreditCard, Users, Video, MessageCircle, Crown, FileText } from 'lucide-react';
+import { CalendarDays, MessageSquare, CreditCard, Users, Video, MessageCircle, Crown, FileText, Bell } from 'lucide-react';
 import AdminDisponibilites from '../components/admin/AdminDisponibilites';
 import AdminMessages from '../components/admin/AdminMessages';
 import AdminReservations from '../components/admin/AdminReservations';
@@ -8,8 +8,9 @@ import AdminVideos from '../components/admin/AdminVideos';
 import AdminForum from '../components/admin/AdminForum';
 import AdminAbonnements from '../components/admin/AdminAbonnements';
 import AdminArticles from '../components/admin/AdminArticles';
+import AdminWaitlist from '../components/admin/AdminWaitlist';
 
-type Tab = 'reservations' | 'disponibilites' | 'messages' | 'utilisateurs' | 'videos' | 'forum' | 'abonnements' | 'articles';
+type Tab = 'reservations' | 'disponibilites' | 'messages' | 'utilisateurs' | 'videos' | 'forum' | 'abonnements' | 'articles' | 'waitlist';
 
 const TABS: { key: Tab; label: string; icon: typeof CalendarDays }[] = [
   { key: 'reservations', label: 'Réservations', icon: CreditCard },
@@ -20,6 +21,7 @@ const TABS: { key: Tab; label: string; icon: typeof CalendarDays }[] = [
   { key: 'videos', label: 'Vidéos', icon: Video },
   { key: 'forum', label: 'Forum', icon: MessageCircle },
   { key: 'articles', label: 'Articles', icon: FileText },
+  { key: 'waitlist', label: 'Liste d'attente', icon: Bell },
 ];
 
 export default function Admin() {
@@ -65,6 +67,7 @@ export default function Admin() {
         {activeTab === 'videos' && <AdminVideos />}
         {activeTab === 'forum' && <AdminForum />}
         {activeTab === 'articles' && <AdminArticles />}
+        {activeTab === 'waitlist' && <AdminWaitlist />}
       </div>
     </div>
   );
