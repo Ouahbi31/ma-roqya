@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Check,
@@ -54,12 +54,9 @@ const PLANS = [
 
 export default function Tarifs() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { user, profile } = useAuthStore();
+  useAuthStore();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string>('monthly');
-  const [subscriptionLoading, setSubscriptionLoading] = useState(false);
-  const [subscriptionError, setSubscriptionError] = useState<string | null>(null);
 
   // ═══ Slots from Supabase ═══
   const [weeklySlots, setWeeklySlots] = useState<Record<number, string[]>>(FALLBACK_SLOTS);
@@ -329,8 +326,12 @@ export default function Tarifs() {
           </div>
 
           {/* Premium */}
-          <div className="card-islamic relative flex flex-col border-2 border-gold p-6 md:p-8">
-            <div className="absolute -top-3 right-6 rounded-full bg-gold px-4 py-1 text-xs font-bold text-white">
+          <div className="card-islamic relative flex flex-col border-2 border-gold/40 p-6 md:p-8 opacity-80 overflow-hidden">
+            {/* Bandeau bientôt disponible */}
+            <div className="absolute top-8 -right-10 w-48 bg-gray-500/80 text-white text-[10px] font-bold tracking-widest text-center py-1.5 rotate-45 uppercase shadow pointer-events-none z-10">
+              Bientôt disponible
+            </div>
+            <div className="absolute -top-3 right-6 rounded-full bg-gold/50 px-4 py-1 text-xs font-bold text-white">
               Premium
             </div>
             <h2 className="font-heading text-2xl font-bold text-text-primary">Premium</h2>
@@ -377,51 +378,9 @@ export default function Tarifs() {
               ))}
             </ul>
 
-            {profile?.is_premium ? (
-              <div className="mt-8 rounded-xl bg-green-islamic/10 py-3 text-center font-semibold text-green-islamic">
-                Vous &ecirc;tes Premium
-              </div>
-            ) : (
-              <button
-                disabled={subscriptionLoading}
-                onClick={async () => {
-                  if (!user) {
-                    navigate('/login');
-                    return;
-                  }
-                  setSubscriptionLoading(true);
-                  setSubscriptionError(null);
-                  try {
-                    const plan = PLANS.find((p) => p.key === selectedPlan)!;
-                    const res = await fetch('/api/create-subscription', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        priceId: plan.priceId,
-                        email: user.email,
-                        userId: user.id,
-                      }),
-                    });
-                    const data = await res.json();
-                    if (data.url) {
-                      window.location.href = data.url;
-                    } else {
-                      setSubscriptionError('Erreur lors de la création du paiement. Veuillez réessayer.');
-                      setSubscriptionLoading(false);
-                    }
-                  } catch {
-                    setSubscriptionError('Erreur de connexion. Veuillez réessayer.');
-                    setSubscriptionLoading(false);
-                  }
-                }}
-                className="mt-8 block rounded-xl bg-gold py-3 text-center font-semibold text-white transition hover:opacity-90 disabled:opacity-60"
-              >
-                {subscriptionLoading ? 'Redirection...' : "S'abonner au Premium"}
-              </button>
-            )}
-            {subscriptionError && (
-              <p className="mt-3 text-center text-sm text-red-600">{subscriptionError}</p>
-            )}
+            <div className="mt-8 rounded-xl bg-gray-100 py-3 text-center font-semibold text-gray-400 cursor-not-allowed select-none">
+              🕐 Bientôt disponible
+            </div>
           </div>
         </div>
 
@@ -432,8 +391,8 @@ export default function Tarifs() {
           <div className="mx-auto mt-14 max-w-3xl">
             {/* Header */}
             <div className="text-center">
-              <span className="inline-block rounded-full bg-green-islamic/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-green-islamic">
-                Nouveau
+              <span className="inline-block rounded-full bg-green-islamic px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white shadow-sm">
+                ✅ Disponible maintenant
               </span>
               <h2 className="mt-4 font-heading text-3xl font-bold text-green-islamic md:text-4xl">
                 Séances de Psycho-Roqya
