@@ -625,19 +625,17 @@ export default function Tarifs() {
                   {/* Calendar */}
                   <div className="flex-1">
                     {/* Month nav */}
-                    <div className="mb-4 flex items-center justify-between">
+                    <div className="mb-4 flex items-center gap-2 pr-8">
+                      <button onClick={goToPrevMonth} className="rounded-lg p-1.5 hover:bg-cream-dark">
+                        <ChevronLeft size={18} className="text-text-secondary" />
+                      </button>
+                      <button onClick={goToNextMonth} className="rounded-lg p-1.5 hover:bg-cream-dark">
+                        <ChevronRight size={18} className="text-text-secondary" />
+                      </button>
                       <h4 className="font-heading text-lg font-semibold text-text-primary">
                         {MONTHS_FR[currentMonth.month]}{' '}
                         <span className="text-gold">{currentMonth.year}</span>
                       </h4>
-                      <div className="flex gap-1">
-                        <button onClick={goToPrevMonth} className="rounded-lg p-1.5 hover:bg-cream-dark">
-                          <ChevronLeft size={18} className="text-text-secondary" />
-                        </button>
-                        <button onClick={goToNextMonth} className="rounded-lg p-1.5 hover:bg-cream-dark">
-                          <ChevronRight size={18} className="text-text-secondary" />
-                        </button>
-                      </div>
                     </div>
 
                     {/* Day headers */}
