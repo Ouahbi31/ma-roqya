@@ -34,6 +34,7 @@ const PremiumSuccess = lazy(() => import('./pages/PremiumSuccess'));
 const MentionsLegales = lazy(() => import('./pages/MentionsLegales'));
 const PolitiqueConfidentialite = lazy(() => import('./pages/PolitiqueConfidentialite'));
 const ConditionsUtilisation = lazy(() => import('./pages/ConditionsUtilisation'));
+const Bio = lazy(() => import('./pages/Bio'));
 
 // ─── Pages Coaching : lazy
 const CoachingHome = lazy(() => import('./pages/coaching/CoachingHome'));
@@ -114,6 +115,9 @@ export default function App() {
           <Routes>
             {/* ── Landing page (sans Layout) ── */}
             <Route path="/" element={<Landing />} />
+
+            {/* ── Page bio (lien réseaux sociaux, sans Layout) ── */}
+            <Route path="/bio" element={<Bio />} />
 
             {/* ── Section Roqya (avec Layout existant) ── */}
             <Route
