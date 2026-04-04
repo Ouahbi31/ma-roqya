@@ -313,7 +313,7 @@ export default function Programme() {
             <p className="text-white font-bold text-base">🕐 Programme bientôt disponible</p>
             <p className="text-white/80 text-sm mt-1">En attendant, bénéficiez d'un accompagnement personnalisé en direct.</p>
             <Link
-              to="/tarifs#psycho-roqya"
+              to="/tarifs?booking=1"
               className="mt-3 inline-block rounded-xl bg-white px-5 py-2 text-sm font-bold text-green-islamic shadow transition hover:opacity-90"
             >
               Réserver une séance →
