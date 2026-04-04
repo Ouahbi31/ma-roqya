@@ -74,7 +74,7 @@ export const coachingProgrammes: CoachingProgramme[] = [
     slug: 'gestion-conflits',
     title: 'Gérer les conflits dans le couple',
     subtitle: 'Transformer les disputes en opportunités de rapprochement',
-    price: 147,
+    price: 97,
     duration: '14 jours',
     videosCount: 10,
     totalHours: '2h',
