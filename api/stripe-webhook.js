@@ -1,7 +1,10 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  httpClient: Stripe.createFetchHttpClient(),
+  apiVersion: '2024-06-20',
+});
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -122,17 +125,33 @@ export default async function handler(req, res) {
           to: session.customer_email,
           subject: 'Votre réservation CoachMyNefs est confirmée ✅',
           html: `
-            <h2>Assalamu alaykum ${metadata.nom || ''},</h2>
-            <p>Votre séance de coaching <strong>${typeSeance}</strong> est confirmée.</p>
-            <p><strong>Date :</strong> ${metadata.date_reservation || 'N/A'}</p>
-            <p><strong>Heure :</strong> ${metadata.heure || 'N/A'}</p>
-            <p><strong>Format :</strong> Visioconférence / Appel vocal</p>
-            <p><strong>Durée :</strong> 1 heure</p>
-            <p><strong>Montant réglé :</strong> ${montantEur}€</p>
-            <hr />
-            <p>Vous recevrez le lien de la visioconférence par email avant la séance.</p>
-            <p>Qu'Allah vous bénisse dans votre démarche. 🤲</p>
-            <p>— L'équipe CoachMyNefs</p>
+            <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:24px;color:#1a1a1a;">
+              <h2 style="color:#2d6a4f;">Assalamu alaykum ${metadata.nom || ''},</h2>
+              <p>Votre séance de coaching <strong>${typeSeance}</strong> est confirmée. Voici le récapitulatif :</p>
+
+              <div style="background:#f9f5ef;border-radius:12px;padding:20px;margin:20px 0;">
+                <p style="margin:6px 0;"><strong>📅 Date :</strong> ${metadata.date_reservation || 'N/A'}</p>
+                <p style="margin:6px 0;"><strong>🕐 Heure :</strong> ${metadata.heure || 'N/A'}</p>
+                <p style="margin:6px 0;"><strong>⏱ Durée :</strong> 1 heure</p>
+                <p style="margin:6px 0;"><strong>💶 Montant réglé :</strong> ${montantEur}€</p>
+              </div>
+
+              <div style="background:#fff8e1;border:2px solid #d4a017;border-radius:12px;padding:20px;margin:20px 0;text-align:center;">
+                <p style="margin:0 0 12px;font-size:16px;font-weight:bold;">🎥 Rejoindre la séance Google Meet</p>
+                <a href="https://meet.google.com/uat-dxgw-avc"
+                   style="display:inline-block;background:#d4a017;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:15px;">
+                  Cliquez ici pour rejoindre →
+                </a>
+                <p style="margin:12px 0 0;font-size:12px;color:#666;">
+                  Lien : https://meet.google.com/uat-dxgw-avc<br/>
+                  Aucune application requise — fonctionne depuis votre navigateur
+                </p>
+              </div>
+
+              <p style="color:#555;font-size:14px;">⚠️ Merci d'être disponible 5 minutes avant l'heure prévue.</p>
+              <p>Qu'Allah vous bénisse dans votre démarche. 🤲</p>
+              <p style="color:#888;font-size:13px;">— Dr Fère Muz · CoachMyNefs</p>
+            </div>
           `,
         }),
       });
