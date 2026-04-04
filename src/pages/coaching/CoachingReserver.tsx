@@ -178,11 +178,6 @@ export default function CoachingReserver() {
             </Link>
           </div>
 
-          <div className="inline-flex items-center gap-2 rounded-full bg-gold/15 px-4 py-1.5 text-sm font-semibold text-gold mb-4">
-            <span className="h-2 w-2 rounded-full bg-gold animate-pulse" />
-            Réponse sous 24h
-          </div>
-
           <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-green-islamic">
             Réservez votre séance
           </h1>
