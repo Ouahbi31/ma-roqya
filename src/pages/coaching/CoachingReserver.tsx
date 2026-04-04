@@ -387,13 +387,10 @@ export default function CoachingReserver() {
           </section>
         )}
 
-        {/* Étape 4 — Formulaire */}
-        <section>
+        {/* Étape 4 — Formulaire (seulement après avoir choisi date + heure) */}
+        {selectedHeure && <section>
           <h2 className="font-heading text-xl font-bold text-green-islamic mb-5">
-            {preselectedType
-              ? selectedDate ? '3.' : '2.'
-              : selectedDate ? '4.' : '3.'
-            } Vos coordonnées
+            {preselectedType ? '3.' : '4.'} Vos coordonnées
           </h2>
           <div className="rounded-2xl bg-white border border-cream-dark p-5 sm:p-6 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -449,7 +446,7 @@ export default function CoachingReserver() {
               />
             </div>
           </div>
-        </section>
+        </section>}
 
         {/* Récapitulatif + CTA */}
         {selectedService && selectedDate && selectedHeure && (

@@ -20,7 +20,7 @@ export default function Bio() {
 
         {/* Coaching Psycho-Roqya */}
         <a
-          href="https://coachmynefs.com/coaching/reserver?type=individuel"
+          href="https://ma-roqya.fr/tarifs?booking=1"
           className="flex items-center gap-4 rounded-2xl bg-green-islamic px-6 py-4 text-white shadow-md transition hover:bg-green-islamic/90 active:scale-95"
         >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20">
