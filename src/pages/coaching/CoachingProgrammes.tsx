@@ -73,7 +73,7 @@ export default function CoachingProgrammes() {
                   Séance de coaching individuel
                 </h2>
                 <p className="mt-1.5 text-sm sm:text-base text-white/80 leading-relaxed">
-                  Les programmes arrivent bientôt — en attendant, bénéficiez d'un accompagnement personnalisé en direct avec Nefs.
+                  Les programmes arrivent bientôt — en attendant, bénéficiez d'un accompagnement personnalisé en direct avec Dr Fère Muz.
                 </p>
               </div>
               {/* CTA */}
