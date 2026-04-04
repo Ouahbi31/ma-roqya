@@ -33,7 +33,7 @@ export default function Bio() {
 
         {/* Coaching individuel ou de couple */}
         <a
-          href="https://coachmynefs.com/coaching/reserver?type=couple"
+          href="https://coachmynefs.com/coaching/reserver"
           className="flex items-center gap-4 rounded-2xl bg-gold px-6 py-4 text-white shadow-md transition hover:bg-gold/90 active:scale-95"
         >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20">
