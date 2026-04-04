@@ -229,12 +229,12 @@ export default function Tarifs() {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert('Erreur lors de la création du paiement. Veuillez réessayer.');
+        alert('Erreur : ' + (data.error || 'Réponse inattendue'));
         setLoading(false);
       }
     } catch (err) {
       console.error(err);
-      alert('Erreur de connexion. Veuillez réessayer.');
+      alert('Erreur de connexion : ' + String(err));
       setLoading(false);
     }
   }
