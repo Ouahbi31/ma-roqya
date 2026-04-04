@@ -74,6 +74,13 @@ export default function CoachingServices() {
                   key={service.title}
                   className="card-islamic flex flex-col p-6 sm:p-8 gap-5"
                 >
+                  {/* Badge disponible */}
+                  <div className="flex justify-center">
+                    <span className="inline-block rounded-full bg-green-islamic px-3 py-1 text-xs font-bold text-white shadow-sm">
+                      ✅ Disponible maintenant
+                    </span>
+                  </div>
+
                   {/* Icon & Title */}
                   <div className="flex flex-col items-center text-center gap-3">
                     <div
@@ -151,15 +158,20 @@ export default function CoachingServices() {
           <h2 className="font-heading text-xl sm:text-2xl font-bold text-green-islamic mb-3">
             Vous préférez avancer à votre rythme ?
           </h2>
-          <p className="text-text-secondary text-sm sm:text-base leading-relaxed mb-6">
+          <p className="text-text-secondary text-sm sm:text-base leading-relaxed mb-4">
             Découvrez nos programmes en ligne : des formations courtes, accessibles et ancrées dans l'Islam.
           </p>
-          <Link
-            to="/coaching/programmes"
-            className="inline-block rounded-xl bg-gold px-8 py-3.5 font-semibold text-white text-base transition hover:opacity-90"
-          >
-            Voir les programmes
-          </Link>
+          <span className="inline-block rounded-full bg-gray-200 px-3 py-1 text-xs font-bold text-gray-500 mb-4">
+            🕐 Bientôt disponible
+          </span>
+          <div>
+            <Link
+              to="/coaching/programmes"
+              className="inline-block rounded-xl bg-gold px-8 py-3.5 font-semibold text-white text-base transition hover:opacity-90"
+            >
+              Voir les programmes
+            </Link>
+          </div>
         </div>
       </section>
     </div>
