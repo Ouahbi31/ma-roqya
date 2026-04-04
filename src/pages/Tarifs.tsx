@@ -87,6 +87,7 @@ export default function Tarifs() {
   // ═══ Modal booking state ═══
   const [searchParams] = useSearchParams();
   const [modalOpen, setModalOpen] = useState(false);
+  const fromBio = searchParams.get('from') === 'bio';
 
   // Auto-open modal if ?booking=1 in URL
   useEffect(() => {
@@ -163,7 +164,11 @@ export default function Tarifs() {
   }
 
   function closeModal() {
-    setModalOpen(false);
+    if (fromBio) {
+      window.location.href = 'https://coachmynefs.com/bio';
+    } else {
+      setModalOpen(false);
+    }
   }
 
   function goToPrevMonth() {

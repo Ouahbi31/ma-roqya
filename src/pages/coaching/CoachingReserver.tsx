@@ -44,6 +44,7 @@ export default function CoachingReserver() {
   const [searchParams] = useSearchParams();
   const success = searchParams.get('success') === '1';
   const typeParam = searchParams.get('type');
+  const fromBio = searchParams.get('from') === 'bio';
   const preselectedType: TypeSeance | null =
     typeParam === 'individuel' || typeParam === 'couple' ? typeParam : null;
   const { user } = useAuthStore();
@@ -167,11 +168,11 @@ export default function CoachingReserver() {
         <div className="islamic-pattern-bg absolute inset-0 z-0 opacity-50" />
         <div className="relative z-10 mx-auto max-w-4xl px-5 sm:px-4 text-center">
           <Link
-            to="/coaching/services"
+            to={fromBio ? '/bio' : '/coaching/services'}
             className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-gold transition-colors mb-6"
           >
             <ChevronLeft className="h-4 w-4" />
-            Retour aux services
+            {fromBio ? 'Retour' : 'Retour aux services'}
           </Link>
 
           <div className="inline-flex items-center gap-2 rounded-full bg-gold/15 px-4 py-1.5 text-sm font-semibold text-gold mb-4">
@@ -537,8 +538,8 @@ export default function CoachingReserver() {
 
         {/* Lien retour */}
         <div className="text-center pb-4">
-          <Link to="/coaching/services" className="text-sm text-text-secondary hover:text-gold transition-colors">
-            ← Retour aux services de coaching
+          <Link to={fromBio ? '/bio' : '/coaching/services'} className="text-sm text-text-secondary hover:text-gold transition-colors">
+            ← {fromBio ? 'Retour' : 'Retour aux services de coaching'}
           </Link>
         </div>
       </div>
