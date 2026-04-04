@@ -55,8 +55,17 @@ export default function CoachingProgrammes() {
               return (
                 <div
                   key={prog.slug}
-                  className="card-islamic flex flex-col p-6 gap-4 hover:-translate-y-0.5 transition-transform"
+                  className={`card-islamic flex flex-col p-6 gap-4 hover:-translate-y-0.5 transition-transform relative overflow-hidden${prog.comingSoon ? ' opacity-80' : ''}`}
                 >
+                  {/* Bandeau "Bientôt disponible" */}
+                  {prog.comingSoon && (
+                    <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none z-10">
+                      <div className="absolute top-7 -right-10 w-48 bg-gray-500/75 text-white text-[10px] font-bold tracking-widest text-center py-1.5 rotate-45 uppercase shadow">
+                        Bientôt disponible
+                      </div>
+                    </div>
+                  )}
+
                   {/* Badge + icône */}
                   <div className="flex items-start justify-between">
                     <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-cream-dark`}>

@@ -16,6 +16,7 @@ export interface CoachingProgramme {
   icon: string; // nom icône lucide
   color: string; // classe tailwind pour la couleur accent
   badge?: string; // ex: "Best-seller", "Nouveau"
+  comingSoon?: boolean; // programme pas encore disponible à l'achat
 }
 
 export const coachingProgrammes: CoachingProgramme[] = [
@@ -69,6 +70,7 @@ export const coachingProgrammes: CoachingProgramme[] = [
     icon: 'Star',
     color: 'text-gold',
     badge: undefined,
+    comingSoon: true,
   },
   {
     slug: 'gestion-conflits',
@@ -115,6 +117,7 @@ export const coachingProgrammes: CoachingProgramme[] = [
     icon: 'Shield',
     color: 'text-blue-500',
     badge: undefined,
+    comingSoon: true,
   },
   {
     slug: 'preparer-mariage',
@@ -169,6 +172,7 @@ export const coachingProgrammes: CoachingProgramme[] = [
     icon: 'Users',
     color: 'text-emerald-500',
     badge: 'Nouveau',
+    comingSoon: true,
   },
   {
     slug: 'transformation-nefs',
@@ -242,6 +246,7 @@ export const coachingProgrammes: CoachingProgramme[] = [
     icon: 'Zap',
     color: 'text-purple-500',
     badge: 'Programme phare',
+    comingSoon: true,
   },
   {
     slug: 'education-enfants',
@@ -297,6 +302,7 @@ export const coachingProgrammes: CoachingProgramme[] = [
     icon: 'BookOpen',
     color: 'text-emerald-600',
     badge: 'Nouveau',
+    comingSoon: true,
   },
   {
     slug: 'sexualite-islam',
@@ -353,5 +359,6 @@ export const coachingProgrammes: CoachingProgramme[] = [
     icon: 'Heart',
     color: 'text-rose-400',
     badge: 'Nouveau',
+    comingSoon: true,
   },
 ];

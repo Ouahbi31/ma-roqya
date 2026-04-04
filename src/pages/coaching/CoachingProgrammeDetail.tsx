@@ -177,7 +177,11 @@ export default function CoachingProgrammeDetail() {
             <div className="hidden md:flex flex-col items-center gap-3 bg-white rounded-2xl shadow-md p-6 min-w-[220px]">
               <span className="font-heading text-4xl font-bold text-gold">{prog.price}€</span>
               <span className="text-xs text-text-secondary">Paiement unique — accès à vie</span>
-              {hasPurchased ? (
+              {prog.comingSoon ? (
+                <div className="w-full text-center rounded-xl bg-gray-200 text-gray-500 px-5 py-3 text-sm font-semibold cursor-not-allowed">
+                  🕐 Bientôt disponible
+                </div>
+              ) : hasPurchased ? (
                 <div className="w-full text-center rounded-xl bg-green-islamic px-5 py-3 text-sm font-semibold text-white">
                   Accéder au programme
                 </div>
@@ -187,16 +191,16 @@ export default function CoachingProgrammeDetail() {
                   disabled={buying}
                   className="w-full rounded-xl bg-gold px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  {buying ? 'Redirection…' : 'Acheter ce programme'}
+                  {buying ? 'Redirection…' : 'Commencer ce programme'}
                 </button>
               )}
-              {buyError && (
+              {!prog.comingSoon && buyError && (
                 <p className="text-xs text-red-500 flex items-start gap-1.5 mt-1">
                   <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
                   {buyError}
                 </p>
               )}
-              {isSuccess && (
+              {!prog.comingSoon && isSuccess && (
                 <p className="text-xs text-green-islamic flex items-center gap-1.5">
                   <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
                   Paiement confirmé !
@@ -330,7 +334,11 @@ export default function CoachingProgrammeDetail() {
           </span>
           <p className="text-sm text-text-secondary mb-5">Paiement unique — accès à vie</p>
 
-          {hasPurchased ? (
+          {prog.comingSoon ? (
+            <div className="inline-block rounded-xl bg-gray-200 text-gray-500 px-10 py-4 font-semibold text-base cursor-not-allowed">
+              🕐 Bientôt disponible
+            </div>
+          ) : hasPurchased ? (
             <div className="inline-block rounded-xl bg-green-islamic px-8 py-3.5 text-base font-semibold text-white">
               Accéder au programme
             </div>
@@ -340,26 +348,28 @@ export default function CoachingProgrammeDetail() {
               disabled={buying}
               className="inline-block rounded-xl bg-gold px-10 py-4 font-semibold text-white text-base transition hover:opacity-90 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {buying ? 'Redirection vers le paiement…' : 'Acheter ce programme'}
+              {buying ? 'Redirection vers le paiement…' : 'Commencer ce programme'}
             </button>
           )}
 
-          {buyError && (
+          {!prog.comingSoon && buyError && (
             <p className="mt-3 text-sm text-red-500 flex items-center justify-center gap-1.5">
               <AlertCircle className="h-4 w-4 shrink-0" />
               {buyError}
             </p>
           )}
-          {isSuccess && (
+          {!prog.comingSoon && isSuccess && (
             <p className="mt-3 text-sm text-green-islamic flex items-center justify-center gap-1.5 font-medium">
               <CheckCircle2 className="h-4 w-4 shrink-0" />
               Paiement confirmé — bienvenue dans le programme !
             </p>
           )}
 
-          <p className="mt-4 text-xs text-text-secondary">
-            Paiement sécurisé par Stripe · Satisfait ou remboursé 7 jours
-          </p>
+          {!prog.comingSoon && (
+            <p className="mt-4 text-xs text-text-secondary">
+              Paiement sécurisé par Stripe · Satisfait ou remboursé 7 jours
+            </p>
+          )}
         </section>
       </div>
 
@@ -367,7 +377,11 @@ export default function CoachingProgrammeDetail() {
       <div className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-gray-200 p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <div className="flex items-center justify-between gap-3 max-w-md mx-auto">
           <span className="font-heading text-2xl font-bold text-gold">{prog.price}€</span>
-          {hasPurchased ? (
+          {prog.comingSoon ? (
+            <div className="flex-1 text-center rounded-xl bg-gray-200 text-gray-500 px-4 py-3 text-sm font-semibold cursor-not-allowed">
+              🕐 Bientôt disponible
+            </div>
+          ) : hasPurchased ? (
             <div className="flex-1 text-center rounded-xl bg-green-islamic px-4 py-3 text-sm font-semibold text-white">
               Accéder au programme
             </div>
@@ -377,11 +391,11 @@ export default function CoachingProgrammeDetail() {
               disabled={buying}
               className="flex-1 rounded-xl bg-gold px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {buying ? 'Redirection…' : 'Acheter ce programme'}
+              {buying ? 'Redirection…' : 'Commencer ce programme'}
             </button>
           )}
         </div>
-        {buyError && (
+        {!prog.comingSoon && buyError && (
           <p className="mt-1 text-xs text-red-500 text-center">{buyError}</p>
         )}
       </div>
