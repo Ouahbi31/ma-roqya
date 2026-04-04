@@ -20,63 +20,10 @@ export interface CoachingProgramme {
 
 export const coachingProgrammes: CoachingProgramme[] = [
   {
-    slug: 'communication-couple',
-    title: 'Communication dans le couple',
-    subtitle: "Retrouvez la connexion et l'harmonie dans votre relation",
-    price: 47,
-    duration: '21 jours',
-    videosCount: 12,
-    totalHours: '2h30',
-    description:
-      'Apprenez à communiquer avec bienveillance, écouter vraiment votre conjoint et désamorcer les tensions — avec des outils ancrés dans les valeurs islamiques.',
-    whatYouLearn: [
-      'Identifier vos schémas de communication inconscients',
-      "Pratiquer l'écoute active et la Communication Non Violente",
-      'Exprimer vos besoins sans blesser l\'autre',
-      'Gérer les désaccords avec sagesse et rahma',
-      'Renforcer la confiance et la connexion émotionnelle',
-      'Ancrer votre communication dans les valeurs du Coran et de la Sunna',
-    ],
-    modules: [
-      {
-        title: 'Semaine 1 — Comprendre',
-        lessons: [
-          'Introduction : pourquoi on ne se comprend plus',
-          'Les 4 styles de communication',
-          'Identifier vos déclencheurs émotionnels',
-          'La base islamique de la communication conjugale',
-        ],
-      },
-      {
-        title: 'Semaine 2 — Outils',
-        lessons: [
-          'La Communication Non Violente (CNV)',
-          "L'écoute active : comment vraiment entendre",
-          'Exprimer ses besoins sans accusation',
-          'Script : comment aborder un sujet difficile',
-        ],
-      },
-      {
-        title: 'Semaine 3 — Ancrer',
-        lessons: [
-          'Rituals de connexion quotidiens',
-          'Gérer les crises et retours en arrière',
-          "Plan d'action à 90 jours",
-          'Vidéo de clôture + dua pour le couple',
-        ],
-      },
-    ],
-    forWho:
-      "Ce programme est pour vous si vous sentez que vous et votre conjoint vous parlez sans vraiment vous entendre, si les mêmes disputes reviennent en boucle, ou si vous voulez simplement renforcer votre lien.",
-    icon: 'Heart',
-    color: 'text-rose-500',
-    badge: 'Best-seller',
-  },
-  {
     slug: 'reprendre-confiance',
     title: 'Reprendre confiance en soi',
     subtitle: 'Reconstruire une estime solide ancrée dans votre foi',
-    price: 27,
+    price: 97,
     duration: '10 jours',
     videosCount: 7,
     totalHours: '1h20',
@@ -127,7 +74,7 @@ export const coachingProgrammes: CoachingProgramme[] = [
     slug: 'gestion-conflits',
     title: 'Gérer les conflits dans le couple',
     subtitle: 'Transformer les disputes en opportunités de rapprochement',
-    price: 47,
+    price: 147,
     duration: '14 jours',
     videosCount: 10,
     totalHours: '2h',
@@ -173,7 +120,7 @@ export const coachingProgrammes: CoachingProgramme[] = [
     slug: 'preparer-mariage',
     title: 'Préparer son mariage',
     subtitle: 'Poser des fondations solides pour une union bénie',
-    price: 57,
+    price: 97,
     duration: '21 jours',
     videosCount: 14,
     totalHours: '2h45',
@@ -295,5 +242,116 @@ export const coachingProgrammes: CoachingProgramme[] = [
     icon: 'Zap',
     color: 'text-purple-500',
     badge: 'Programme phare',
+  },
+  {
+    slug: 'education-enfants',
+    title: 'Relation parents-enfants',
+    subtitle: 'Élever des enfants qui aiment leur religion sans les dégoûter',
+    price: 97,
+    duration: '21 jours',
+    videosCount: 12,
+    totalHours: '2h30',
+    description:
+      "Vous vous inquiétez pour vos enfants — la prière, les mauvaises fréquentations, le manque de repères. Ce programme vous donne des conseils concrets et islamiques pour rester un parent présent et transmettre la foi sans les perdre.",
+    whatYouLearn: [
+      "Comprendre la psychologie de l'enfant et de l'adolescent",
+      'Créer un lien de confiance solide avec votre enfant',
+      'Aborder la prière sans provoquer de résistance',
+      'Gérer les mauvaises fréquentations avec sagesse',
+      "Poser des limites claires tout en restant bienveillant",
+      "Transmettre les valeurs islamiques naturellement au quotidien",
+      "Réagir calmement face à la désobéissance et aux conflits",
+      "Ce que le Prophète ﷺ nous enseigne sur l'éducation",
+    ],
+    modules: [
+      {
+        title: 'Module 1 — Comprendre son enfant',
+        lessons: [
+          "Pourquoi mon enfant ne m'écoute plus",
+          'Les besoins fondamentaux de l\'enfant selon l\'Islam',
+          'La psychologie de l\'ado : ce qui se passe vraiment',
+          'Ce que vos réactions lui transmettent',
+        ],
+      },
+      {
+        title: 'Module 2 — Renforcer le lien',
+        lessons: [
+          'La qualité du lien avant l\'autorité',
+          'Comment parler à votre enfant pour qu\'il vous entende',
+          'Créer des rituels en famille ancrés dans la foi',
+          'Aborder la prière et les adorations sans forcer',
+        ],
+      },
+      {
+        title: 'Module 3 — Poser des limites avec sagesse',
+        lessons: [
+          'L\'autorité bienveillante en Islam',
+          'Gérer les mauvaises fréquentations',
+          'Que faire quand il désobéit ou s\'éloigne',
+          'Plan d\'action personnalisé + dua pour vos enfants',
+        ],
+      },
+    ],
+    forWho:
+      "Ce programme est pour vous si vous vous inquiétez pour vos enfants ou adolescents, si vous avez du mal à leur transmettre la foi, s'ils ne prient pas ou s'éloignent de l'Islam, et si vous cherchez comment rester un parent proche et respecté.",
+    icon: 'BookOpen',
+    color: 'text-emerald-600',
+    badge: 'Nouveau',
+  },
+  {
+    slug: 'sexualite-islam',
+    title: 'Sexualité en Islam',
+    subtitle: 'De la frustration à l\'épanouissement',
+    price: 97,
+    duration: '21 jours',
+    videosCount: 14,
+    totalHours: '3h',
+    description:
+      "La sexualité est une grâce d'Allah — mais personne ne nous a appris à en parler. Ce programme aborde avec clarté et bienveillance la sexualité dans le cadre islamique : comprendre ses besoins, dépasser la frustration, et s'épanouir dans le halal.",
+    whatYouLearn: [
+      "Ce que l'Islam dit vraiment sur la sexualité (sans tabou)",
+      'Comprendre et gérer la frustration sexuelle',
+      'La sexualité dans le mariage : droits, devoirs et épanouissement',
+      'Dépasser la honte et les blocages liés à l\'éducation reçue',
+      'Le regard de l\'Islam sur le désir : ni refoulement ni débauche',
+      'Construire une vie intime saine et épanouie dans le halal',
+      'Gérer la période du célibat avec sérénité',
+      'Ce que la Sunna enseigne sur l\'intimité conjugale',
+    ],
+    modules: [
+      {
+        title: 'Module 1 — Comprendre',
+        lessons: [
+          "La sexualité en Islam : une grâce, pas un tabou",
+          "Le désir : ni ennemi ni maître",
+          "D'où vient la frustration ? Causes profondes",
+          "La honte apprise : comment s'en libérer",
+        ],
+      },
+      {
+        title: 'Module 2 — Le célibat et l\'attente',
+        lessons: [
+          "Gérer la frustration quand on est célibataire",
+          "Les outils islamiques : jeûne, dhikr, occupation",
+          "Garder ses limites sans se faire violence",
+          "Préparer son cœur et son âme au mariage",
+        ],
+      },
+      {
+        title: 'Module 3 — L\'épanouissement dans le mariage',
+        lessons: [
+          "Les droits et devoirs intimes en Islam",
+          "Communiquer avec son conjoint sur l'intimité",
+          "Dépasser les blocages et les maladresses",
+          "Construire une vie intime épanouie et bénie",
+          "Vidéo de clôture + dua pour le couple",
+        ],
+      },
+    ],
+    forWho:
+      "Ce programme est pour vous si vous ressentez de la frustration, de la confusion ou de la honte autour de la sexualité, si vous êtes célibataire et vous questionnez, ou si vous êtes marié(e) et souhaitez construire une intimité saine et épanouie dans le respect des valeurs islamiques.",
+    icon: 'Heart',
+    color: 'text-rose-400',
+    badge: 'Nouveau',
   },
 ];

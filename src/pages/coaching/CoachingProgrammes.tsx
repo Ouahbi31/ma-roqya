@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import {
   Clock,
   PlayCircle,
-  Timer,
   ChevronRight,
   Heart,
   Star,
@@ -89,10 +88,6 @@ export default function CoachingProgrammes() {
                     <span className="flex items-center gap-1">
                       <PlayCircle className="h-3.5 w-3.5 text-gold" />
                       {prog.videosCount} vidéos
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Timer className="h-3.5 w-3.5 text-gold" />
-                      {prog.totalHours}
                     </span>
                   </div>
 
