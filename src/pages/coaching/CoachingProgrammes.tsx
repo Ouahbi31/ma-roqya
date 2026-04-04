@@ -100,7 +100,7 @@ export default function CoachingProgrammes() {
                   Offre de lancement exclusive — inscrivez-vous avant tout le monde
                 </p>
                 <p className="mt-1 text-sm text-text-secondary leading-relaxed">
-                  Les <strong className="text-gold">10 premiers inscrits</strong> obtiennent <strong className="text-gold">-50%</strong> au lancement · Les <strong className="text-gold">50 premiers</strong> obtiennent <strong className="text-gold">-30%</strong> · Réservez votre place dès maintenant, c'est gratuit.
+                  Les <strong className="text-gold">10 premiers inscrits</strong> obtiennent <strong className="text-gold">-50%</strong> au lancement · Les <strong className="text-gold">50 premiers</strong> obtiennent <strong className="text-gold">-30%</strong> · Réservez votre place en avant-première dès maintenant.
                 </p>
               </div>
             </div>
