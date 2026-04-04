@@ -18,21 +18,20 @@ export default function Bio() {
       {/* Boutons */}
       <div className="w-full max-w-sm flex flex-col gap-4">
 
-        {/* Coaching Roqya */}
+        {/* Coaching Psycho-Roqya */}
         <a
-          href="https://ma-roqya.fr/tarifs?booking=1"
+          href="https://coachmynefs.com/coaching/reserver"
           className="flex items-center gap-4 rounded-2xl bg-green-islamic px-6 py-4 text-white shadow-md transition hover:bg-green-islamic/90 active:scale-95"
         >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20">
             <HeartHandshake className="h-5 w-5" />
           </div>
           <div>
-            <p className="font-bold text-sm leading-tight">Séance Roqya individuelle</p>
-            <p className="text-xs text-white/75 mt-0.5">Réserver sur ma-roqya.fr — 50€</p>
+            <p className="font-bold text-sm leading-tight">Coaching Psycho-Roqya individuel</p>
           </div>
         </a>
 
-        {/* Coaching accompagnement */}
+        {/* Coaching individuel ou de couple */}
         <a
           href="https://coachmynefs.com/coaching/reserver"
           className="flex items-center gap-4 rounded-2xl bg-gold px-6 py-4 text-white shadow-md transition hover:bg-gold/90 active:scale-95"
@@ -41,8 +40,7 @@ export default function Bio() {
             <CalendarCheck className="h-5 w-5" />
           </div>
           <div>
-            <p className="font-bold text-sm leading-tight">Coaching accompagnement</p>
-            <p className="text-xs text-white/75 mt-0.5">Individuel 50€ · Couple 65€</p>
+            <p className="font-bold text-sm leading-tight">Coaching individuel ou de couple</p>
           </div>
         </a>
 
@@ -64,7 +62,7 @@ export default function Bio() {
 
       {/* Footer discret */}
       <p className="mt-12 text-xs text-text-secondary/50">
-        coachmynefs.com · ma-roqya.fr
+        coachmynefs.com
       </p>
     </div>
   );
