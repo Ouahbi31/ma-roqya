@@ -40,7 +40,7 @@ export default function WaitlistModal({ programmeTitle, programmeSlug, onClose }
     }
   };
 
-  const getDiscountLabel = (pos: number, pct: number) => {
+  const getDiscountLabel = (_pos: number, pct: number) => {
     if (pct === 50) return { badge: '🥇 Tarif Fondateur', text: `Félicitations ! Vous êtes parmi les 10 premiers — vous bénéficierez de -50% au lancement.` };
     if (pct === 30) return { badge: '🥈 Early Bird', text: `Vous bénéficierez de -30% au lancement — réservé aux 50 premiers inscrits.` };
     return { badge: '✅ Inscrit(e)', text: `Vous serez parmi les premiers avertis dès que le programme sera disponible.` };

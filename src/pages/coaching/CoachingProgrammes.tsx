@@ -204,15 +204,15 @@ export default function CoachingProgrammes() {
           </div>
         </div>
       </section>
-    </div>
 
-    {/* Modale waitlist */}
-    {waitlistProg && (
-      <WaitlistModal
-        programmeTitle={waitlistProg.title}
-        programmeSlug={waitlistProg.slug}
-        onClose={() => setWaitlistProg(null)}
-      />
-    )}
+      {/* Modale waitlist */}
+      {waitlistProg && (
+        <WaitlistModal
+          programmeTitle={waitlistProg.title}
+          programmeSlug={waitlistProg.slug}
+          onClose={() => setWaitlistProg(null)}
+        />
+      )}
+    </div>
   );
 }

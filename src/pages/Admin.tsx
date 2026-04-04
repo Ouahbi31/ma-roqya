@@ -21,7 +21,7 @@ const TABS: { key: Tab; label: string; icon: typeof CalendarDays }[] = [
   { key: 'videos', label: 'Vidéos', icon: Video },
   { key: 'forum', label: 'Forum', icon: MessageCircle },
   { key: 'articles', label: 'Articles', icon: FileText },
-  { key: 'waitlist', label: 'Liste d'attente', icon: Bell },
+  { key: 'waitlist', label: "Liste d'attente", icon: Bell },
 ];
 
 export default function Admin() {
