@@ -10,8 +10,8 @@ export default function Bio() {
           <Star className="h-9 w-9 text-white fill-white" />
         </div>
         <h1 className="font-heading text-2xl font-bold text-text-primary">Dr Fère Muz</h1>
-        <p className="text-sm text-text-secondary mt-1 text-center max-w-xs">
-          Praticienne en Roqya · Coach de vie islamique
+        <p className="text-sm text-text-secondary mt-1 text-center max-w-xs leading-relaxed">
+          Praticien Psycho-Roqya · Coach de vie islamique · Médiation conjugale · Gestion de conflit familial
         </p>
       </div>
 
