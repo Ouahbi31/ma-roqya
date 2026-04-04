@@ -8,6 +8,8 @@ import {
   Shield,
   Users,
   Zap,
+  CalendarCheck,
+  ArrowRight,
 } from 'lucide-react';
 import SEO from '../../components/SEO';
 import { coachingProgrammes } from '../../data/coachingProgrammes';
@@ -45,6 +47,42 @@ export default function CoachingProgrammes() {
       </section>
 
       <div className="arabesque-separator mx-auto max-w-lg" />
+
+      {/* ✅ Bannière coaching individuel — disponible maintenant */}
+      <section className="py-8 sm:py-10">
+        <div className="mx-auto max-w-4xl px-5 sm:px-4">
+          <div className="relative overflow-hidden rounded-2xl bg-green-islamic px-6 py-8 sm:px-10 sm:py-10 shadow-lg">
+            {/* Motif décoratif */}
+            <div className="islamic-pattern-bg absolute inset-0 opacity-10" />
+            <div className="relative z-10 flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+              {/* Icône */}
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/20">
+                <CalendarCheck className="h-8 w-8 text-white" />
+              </div>
+              {/* Texte */}
+              <div className="flex-1 text-center sm:text-left">
+                <span className="inline-block mb-2 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white tracking-wide uppercase">
+                  ✅ Disponible maintenant
+                </span>
+                <h2 className="font-heading text-xl sm:text-2xl font-bold text-white leading-snug">
+                  Séance de coaching individuel
+                </h2>
+                <p className="mt-1.5 text-sm sm:text-base text-white/80 leading-relaxed">
+                  Les programmes arrivent bientôt — en attendant, bénéficiez d'un accompagnement personnalisé en direct avec Nefs.
+                </p>
+              </div>
+              {/* CTA */}
+              <Link
+                to="/coaching/reserver"
+                className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-bold text-green-islamic shadow transition hover:bg-cream active:scale-[0.98]"
+              >
+                Réserver ma séance
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Grid des programmes */}
       <section className="py-10 sm:py-16 md:py-20">
@@ -125,11 +163,14 @@ export default function CoachingProgrammes() {
       {/* CTA coaching individuel */}
       <section className="py-10 sm:py-16 md:py-20">
         <div className="mx-auto max-w-3xl px-5 sm:px-4 text-center">
+          <span className="inline-block mb-4 rounded-full bg-gold/10 border border-gold/30 px-4 py-1.5 text-xs font-bold text-gold tracking-wide uppercase">
+            ✅ Disponible maintenant
+          </span>
           <h2 className="font-heading text-2xl sm:text-3xl font-bold text-green-islamic">
-            Vous préférez un accompagnement personnalisé ?
+            Vous voulez être accompagné(e) dès aujourd'hui ?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-text-secondary leading-relaxed">
-            Réservez une séance de coaching individuelle ou de couple pour un suivi sur mesure.
+            Les programmes arrivent bientôt. En attendant, réservez une séance individuelle ou de couple avec Nefs — un suivi personnalisé, en direct.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
@@ -140,9 +181,10 @@ export default function CoachingProgrammes() {
             </Link>
             <Link
               to="/coaching/reserver"
-              className="inline-block rounded-xl bg-gold px-8 py-3.5 font-semibold text-white text-base transition hover:opacity-90 active:scale-[0.98] text-center"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gold px-8 py-3.5 font-semibold text-white text-base transition hover:opacity-90 active:scale-[0.98]"
             >
-              Réserver une séance
+              <CalendarCheck className="h-5 w-5" />
+              Réserver ma séance
             </Link>
           </div>
         </div>
