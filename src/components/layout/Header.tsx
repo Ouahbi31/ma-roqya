@@ -91,8 +91,15 @@ export default function Header() {
       <header className="sticky top-0 z-50 bg-cream border-b border-cream-dark">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-14 md:h-16 items-center justify-between">
-            {/* Logo */}
+            {/* Logo + retour accueil général */}
             <div className="flex items-center gap-3">
+              <Link
+                to="/"
+                className="hidden sm:flex items-center gap-1 rounded-lg border border-cream-dark px-2.5 py-1.5 text-xs font-semibold text-text-secondary hover:bg-cream-dark hover:text-text-primary transition"
+              >
+                <Home className="h-3.5 w-3.5" />
+                Accueil
+              </Link>
               <Link to="/roqya" className="flex items-center gap-2">
                 <Star className="h-5 w-5 md:h-6 md:w-6 text-gold fill-gold" />
                 <span className="font-heading text-lg md:text-xl font-bold text-green-islamic">
