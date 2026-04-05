@@ -113,8 +113,8 @@ export default function App() {
       <ChunkErrorBoundary>
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            {/* ── Landing page (sans Layout) ── */}
-            <Route path="/" element={<Landing />} />
+            {/* ── Landing page (avec CoachingLayout pour nav + bottom bar) ── */}
+            <Route path="/" element={<CoachingLayout><Landing /></CoachingLayout>} />
 
             {/* ── Page bio (lien réseaux sociaux, sans Layout) ── */}
             <Route path="/bio" element={<Bio />} />

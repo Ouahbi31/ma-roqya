@@ -204,7 +204,7 @@ export default function CoachingProgrammes() {
             Vous voulez être accompagné(e) dès aujourd'hui ?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-text-secondary leading-relaxed">
-            Les programmes arrivent bientôt. En attendant, réservez une séance individuelle ou de couple avec Nefs — un suivi personnalisé, en direct.
+            Les programmes arrivent bientôt. En attendant, réservez une séance individuelle ou de couple avec Dr Frère Muz — un suivi personnalisé, en direct.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Link

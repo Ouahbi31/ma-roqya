@@ -65,7 +65,7 @@ export default function CoachingHeader() {
   };
 
   const isActive = (path: string) => {
-    if (path === '/coaching') return location.pathname === '/coaching';
+    if (path === '/coaching') return location.pathname === '/coaching' || location.pathname === '/';
     return location.pathname.startsWith(path);
   };
 
