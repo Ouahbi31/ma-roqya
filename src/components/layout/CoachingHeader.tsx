@@ -38,7 +38,7 @@ export default function CoachingHeader() {
   }, [moreOpen]);
 
   const desktopNavLinks = [
-    { to: '/coaching', label: 'Accueil' },
+    { to: '/', label: 'Accueil' },
     { to: '/coaching/articles', label: 'Articles' },
     { to: '/coaching/services', label: 'Services' },
     { to: '/coaching/programmes', label: 'Programmes' },
@@ -47,7 +47,7 @@ export default function CoachingHeader() {
   ];
 
   const bottomTabs = [
-    { to: '/coaching', label: 'Accueil', icon: Home },
+    { to: '/', label: 'Accueil', icon: Home },
     { to: '/coaching/articles', label: 'Articles', icon: BookOpen },
     { to: '/coaching/services', label: 'Services', icon: Briefcase },
     { to: '/coaching/programmes', label: 'Programmes', icon: Calendar },
@@ -65,7 +65,7 @@ export default function CoachingHeader() {
   };
 
   const isActive = (path: string) => {
-    if (path === '/coaching') return location.pathname === '/coaching' || location.pathname === '/';
+    if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
   };
 
