@@ -162,7 +162,9 @@ export default function AdminWaitlist() {
     setDeleting(true);
     const ids = Array.from(selected);
     const { error } = await supabase.from('waitlist').delete().in('id', ids);
-    if (!error) {
+    if (error) {
+      alert(`Erreur lors de la suppression : ${error.message}`);
+    } else {
       setSelected(new Set());
       await fetchWaitlist();
     }
