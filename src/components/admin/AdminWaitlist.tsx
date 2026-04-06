@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Bell, Download, Send, Loader2, ChevronDown } from 'lucide-react';
+import { Bell, Download, Send, Loader2, ChevronDown, Trash2 } from 'lucide-react';
 
 interface WaitlistEntry {
   id: string;
@@ -33,6 +33,8 @@ export default function AdminWaitlist() {
   const [filterSlug, setFilterSlug] = useState<string>('all');
   const [sending, setSending] = useState<string | null>(null);
   const [sendResult, setSendResult] = useState<string | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     fetchWaitlist();
@@ -104,9 +106,10 @@ export default function AdminWaitlist() {
     }
 
     let sent = 0;
+    const errors: string[] = [];
     for (const entry of toNotify) {
       try {
-        await fetch('/api/send-email', {
+        const response = await fetch('/api/send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -115,14 +118,55 @@ export default function AdminWaitlist() {
             html: buildLaunchEmail(entry, progName),
           }),
         });
-        await supabase.from('waitlist').update({ notified: true }).eq('id', entry.id);
-        sent++;
-      } catch { /* continue */ }
+        if (response.ok) {
+          await supabase.from('waitlist').update({ notified: true }).eq('id', entry.id);
+          sent++;
+        } else {
+          const err = await response.json().catch(() => ({}));
+          errors.push(`${entry.email}: ${err.error || response.status}`);
+        }
+      } catch (e: unknown) {
+        errors.push(`${entry.email}: ${e instanceof Error ? e.message : 'erreur réseau'}`);
+      }
     }
 
-    setSendResult(`✅ ${sent} email(s) envoyé(s) pour "${progName}".`);
+    if (errors.length > 0) {
+      setSendResult(`⚠️ ${sent} envoyé(s), ${errors.length} erreur(s) : ${errors.join(' | ')}`);
+    } else {
+      setSendResult(`✅ ${sent} email(s) envoyé(s) pour "${progName}".`);
+    }
     setSending(null);
     fetchWaitlist();
+  };
+
+  const toggleSelect = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selected.size === filtered.length) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(filtered.map((e) => e.id)));
+    }
+  };
+
+  const deleteSelected = async () => {
+    if (selected.size === 0) return;
+    if (!confirm(`Supprimer ${selected.size} inscription(s) ? Cette action est irréversible.`)) return;
+    setDeleting(true);
+    const ids = Array.from(selected);
+    const { error } = await supabase.from('waitlist').delete().in('id', ids);
+    if (!error) {
+      setSelected(new Set());
+      await fetchWaitlist();
+    }
+    setDeleting(false);
   };
 
   const buildLaunchEmail = (entry: WaitlistEntry, progName: string) => {
@@ -219,7 +263,18 @@ export default function AdminWaitlist() {
           <h2 className="font-heading text-lg font-bold text-text-primary">
             Liste complète ({filtered.length} inscrits)
           </h2>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
+            {/* Supprimer sélection */}
+            {selected.size > 0 && (
+              <button
+                onClick={deleteSelected}
+                disabled={deleting}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600 disabled:opacity-50"
+              >
+                {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                Supprimer ({selected.size})
+              </button>
+            )}
             {/* Filtre */}
             <div className="relative">
               <select
@@ -253,6 +308,14 @@ export default function AdminWaitlist() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-cream-dark/60 text-left">
+                  <th className="px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={selected.size === filtered.length && filtered.length > 0}
+                      onChange={toggleSelectAll}
+                      className="rounded"
+                    />
+                  </th>
                   <th className="px-4 py-3 font-semibold text-text-secondary text-xs uppercase tracking-wide">#</th>
                   <th className="px-4 py-3 font-semibold text-text-secondary text-xs uppercase tracking-wide">Email</th>
                   <th className="px-4 py-3 font-semibold text-text-secondary text-xs uppercase tracking-wide">Programme</th>
@@ -263,7 +326,15 @@ export default function AdminWaitlist() {
               </thead>
               <tbody>
                 {filtered.map((e, i) => (
-                  <tr key={e.id} className={`border-t border-cream-dark/40 ${i % 2 === 0 ? 'bg-white' : 'bg-cream/40'}`}>
+                  <tr key={e.id} className={`border-t border-cream-dark/40 ${selected.has(e.id) ? 'bg-red-50' : i % 2 === 0 ? 'bg-white' : 'bg-cream/40'}`}>
+                    <td className="px-4 py-3">
+                      <input
+                        type="checkbox"
+                        checked={selected.has(e.id)}
+                        onChange={() => toggleSelect(e.id)}
+                        className="rounded"
+                      />
+                    </td>
                     <td className="px-4 py-3 font-mono text-xs text-text-secondary">{e.position}</td>
                     <td className="px-4 py-3 text-text-primary font-medium">{e.email}</td>
                     <td className="px-4 py-3 text-text-secondary text-xs">
