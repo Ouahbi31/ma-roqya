@@ -97,10 +97,10 @@ export default function CoachingProgrammes() {
               <div className="text-3xl shrink-0">🎁</div>
               <div className="flex-1">
                 <p className="font-heading font-bold text-text-primary text-base sm:text-lg leading-snug">
-                  Offre de lancement exclusive — inscrivez-vous avant tout le monde
+                  Offre de lancement — programmes en ligne
                 </p>
                 <p className="mt-1 text-sm text-text-secondary leading-relaxed">
-                  Les <strong className="text-gold">10 premiers inscrits</strong> obtiennent <strong className="text-gold">-50%</strong> au lancement · Les <strong className="text-gold">50 premiers</strong> obtiennent <strong className="text-gold">-30%</strong> · Réservez votre place en avant-première dès maintenant.
+                  Soyez parmi les premiers à accéder aux <strong className="text-gold">programmes en ligne</strong> de Dr Frère Muz. Les <strong className="text-gold">10 premiers inscrits</strong> obtiennent <strong className="text-gold">-50%</strong> · Les <strong className="text-gold">50 premiers</strong> obtiennent <strong className="text-gold">-30%</strong>.
                 </p>
               </div>
             </div>
