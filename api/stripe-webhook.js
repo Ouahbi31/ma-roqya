@@ -101,7 +101,7 @@ export default async function handler(req, res) {
             <p><strong>Heure :</strong> ${metadata.heure || 'N/A'}</p>
             <p><strong>Montant :</strong> ${(session.amount_total / 100).toFixed(2)}€</p>
             <hr />
-            <p><a href="https://ma-roqya.fr/admin">Voir dans l'administration</a></p>
+            <p><a href="https://coachmynefs.com/admin">Voir dans l'administration</a></p>
           `,
         }),
       });

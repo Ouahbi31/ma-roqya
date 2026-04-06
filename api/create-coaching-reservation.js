@@ -111,8 +111,8 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'payment',
-      success_url: `${req.headers.origin || 'https://ma-roqya.fr'}/coaching/reserver?success=1`,
-      cancel_url: `${req.headers.origin || 'https://ma-roqya.fr'}/coaching/reserver`,
+      success_url: `${req.headers.origin || 'https://coachmynefs.com'}/coaching/reserver?success=1`,
+      cancel_url: `${req.headers.origin || 'https://coachmynefs.com'}/coaching/reserver`,
       metadata: {
         reservation_id: reservation.id,
         nom,

@@ -6,7 +6,7 @@ const supabase = createClient(
 );
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM = 'CoachMyNefs <noreply@ma-roqya.fr>';
+const FROM = 'CoachMyNefs <noreply@coachmynefs.com>';
 
 // Noms complets des programmes
 const PROGRAMME_NAMES = {

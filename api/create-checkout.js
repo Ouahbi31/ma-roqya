@@ -77,8 +77,8 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'payment',
-      success_url: `${req.headers.origin || 'https://ma-roqya.fr'}/reservation-confirmee?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.origin || 'https://ma-roqya.fr'}/tarifs?cancelled=true`,
+      success_url: `${req.headers.origin || 'https://coachmynefs.com'}/reservation-confirmee?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin || 'https://coachmynefs.com'}/tarifs?cancelled=true`,
       metadata: {
         reservation_id: reservation.id,
         nom,
