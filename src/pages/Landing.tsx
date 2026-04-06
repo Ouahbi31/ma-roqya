@@ -171,16 +171,9 @@ export default function Landing() {
                     </p>
                   </div>
 
-                  {/* Prix */}
-                  <div className="shrink-0 text-right">
-                    <span
-                      className={`font-heading text-xl font-bold ${
-                        isGreen ? 'text-green-islamic' : 'text-gold'
-                      }`}
-                    >
-                      {s.price}
-                    </span>
-                    <p className="text-[10px] text-text-secondary">/ séance</p>
+                  {/* Flèche */}
+                  <div className="shrink-0">
+                    <span className={`text-lg font-bold ${isGreen ? 'text-green-islamic' : 'text-gold'}`}>→</span>
                   </div>
                 </a>
               );
