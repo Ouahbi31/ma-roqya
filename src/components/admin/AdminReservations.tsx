@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Loader2, Trash2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 interface Reservation {
@@ -32,6 +33,8 @@ const STATUT_LABELS: Record<string, string> = {
 export default function AdminReservations() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     fetchReservations();
@@ -55,6 +58,43 @@ export default function AdminReservations() {
     return `${jours[d.getDay()]} ${d.getDate()} ${mois[d.getMonth()]}`;
   }
 
+  const toggleSelect = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = (list: Reservation[]) => {
+    const allSelected = list.every((r) => selected.has(r.id));
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allSelected) {
+        list.forEach((r) => next.delete(r.id));
+      } else {
+        list.forEach((r) => next.add(r.id));
+      }
+      return next;
+    });
+  };
+
+  const deleteSelected = async () => {
+    if (selected.size === 0) return;
+    if (!confirm(`Supprimer ${selected.size} réservation(s) ? Cette action est irréversible.`)) return;
+    setDeleting(true);
+    const ids = Array.from(selected);
+    const { error } = await supabase.from('reservations').delete().in('id', ids);
+    if (error) {
+      alert(`Erreur lors de la suppression : ${error.message}`);
+    } else {
+      setSelected(new Set());
+      await fetchReservations();
+    }
+    setDeleting(false);
+  };
+
   const upcoming = reservations.filter(
     (r) => r.statut === 'payee' && new Date(r.date_reservation) >= new Date(new Date().toDateString())
   );
@@ -69,11 +109,23 @@ export default function AdminReservations() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center gap-4">
-        <h2 className="font-heading text-xl font-bold text-green-islamic">Réservations</h2>
-        <span className="rounded-full bg-green-islamic/10 px-3 py-1 text-xs font-semibold text-green-islamic">
-          {upcoming.length} à venir
-        </span>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-4">
+          <h2 className="font-heading text-xl font-bold text-green-islamic">Réservations</h2>
+          <span className="rounded-full bg-green-islamic/10 px-3 py-1 text-xs font-semibold text-green-islamic">
+            {upcoming.length} à venir
+          </span>
+        </div>
+        {selected.size > 0 && (
+          <button
+            onClick={deleteSelected}
+            disabled={deleting}
+            className="inline-flex items-center gap-2 rounded-xl bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600 disabled:opacity-50"
+          >
+            {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+            Supprimer ({selected.size})
+          </button>
+        )}
       </div>
 
       {/* Stats */}
@@ -98,46 +150,40 @@ export default function AdminReservations() {
         </div>
       </div>
 
-      {/* Upcoming */}
-      {upcoming.length > 0 && (
-        <div>
-          <h3 className="mb-3 text-sm font-semibold text-text-secondary uppercase tracking-wide">
-            Séances à venir
-          </h3>
-          <div className="space-y-3">
-            {upcoming.map((r) => (
-              <ReservationCard key={r.id} reservation={r} formatDate={formatDate} />
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Pending */}
       {pending.length > 0 && (
-        <div>
-          <h3 className="mb-3 text-sm font-semibold text-text-secondary uppercase tracking-wide">
-            Paiements en attente
-          </h3>
-          <div className="space-y-3">
-            {pending.map((r) => (
-              <ReservationCard key={r.id} reservation={r} formatDate={formatDate} />
-            ))}
-          </div>
-        </div>
+        <Section
+          title="Paiements en attente"
+          list={pending}
+          selected={selected}
+          onToggle={toggleSelect}
+          onToggleAll={() => toggleSelectAll(pending)}
+          formatDate={formatDate}
+        />
+      )}
+
+      {/* Upcoming */}
+      {upcoming.length > 0 && (
+        <Section
+          title="Séances à venir"
+          list={upcoming}
+          selected={selected}
+          onToggle={toggleSelect}
+          onToggleAll={() => toggleSelectAll(upcoming)}
+          formatDate={formatDate}
+        />
       )}
 
       {/* Past */}
       {past.length > 0 && (
-        <div>
-          <h3 className="mb-3 text-sm font-semibold text-text-secondary uppercase tracking-wide">
-            Séances passées
-          </h3>
-          <div className="space-y-3">
-            {past.map((r) => (
-              <ReservationCard key={r.id} reservation={r} formatDate={formatDate} />
-            ))}
-          </div>
-        </div>
+        <Section
+          title="Séances passées"
+          list={past}
+          selected={selected}
+          onToggle={toggleSelect}
+          onToggleAll={() => toggleSelectAll(past)}
+          formatDate={formatDate}
+        />
       )}
 
       {reservations.length === 0 && (
@@ -152,44 +198,108 @@ export default function AdminReservations() {
   );
 }
 
+function Section({
+  title,
+  list,
+  selected,
+  onToggle,
+  onToggleAll,
+  formatDate,
+}: {
+  title: string;
+  list: Reservation[];
+  selected: Set<string>;
+  onToggle: (id: string) => void;
+  onToggleAll: () => void;
+  formatDate: (d: string) => string;
+}) {
+  const allSelected = list.length > 0 && list.every((r) => selected.has(r.id));
+  const someSelected = list.some((r) => selected.has(r.id));
+
+  return (
+    <div>
+      <div className="mb-3 flex items-center gap-3">
+        <input
+          type="checkbox"
+          checked={allSelected}
+          ref={(el) => { if (el) el.indeterminate = someSelected && !allSelected; }}
+          onChange={onToggleAll}
+          className="rounded"
+          title="Tout sélectionner"
+        />
+        <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wide">{title}</h3>
+      </div>
+      <div className="space-y-3">
+        {list.map((r) => (
+          <ReservationCard
+            key={r.id}
+            reservation={r}
+            isSelected={selected.has(r.id)}
+            onToggle={() => onToggle(r.id)}
+            formatDate={formatDate}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ReservationCard({
   reservation: r,
+  isSelected,
+  onToggle,
   formatDate,
 }: {
   reservation: Reservation;
+  isSelected: boolean;
+  onToggle: () => void;
   formatDate: (d: string) => string;
 }) {
   return (
-    <div className="rounded-xl border border-cream-dark bg-white p-4 shadow-sm">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="font-semibold text-text-primary">{r.nom}</p>
-          <p className="text-sm text-text-secondary">{r.email}</p>
-          {r.telephone && <p className="text-sm text-text-secondary">📞 {r.telephone}</p>}
+    <div
+      className={`rounded-xl border p-4 shadow-sm transition ${
+        isSelected ? 'border-red-300 bg-red-50' : 'border-cream-dark bg-white'
+      }`}
+    >
+      <div className="flex items-start gap-3">
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={onToggle}
+          className="mt-1 rounded"
+        />
+        <div className="flex-1">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="font-semibold text-text-primary">{r.nom}</p>
+              <p className="text-sm text-text-secondary">{r.email}</p>
+              {r.telephone && <p className="text-sm text-text-secondary">📞 {r.telephone}</p>}
+            </div>
+            <span className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUT_COLORS[r.statut] || 'bg-gray-100'}`}>
+              {STATUT_LABELS[r.statut] || r.statut}
+            </span>
+          </div>
+          <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-text-secondary">
+            <span>📅 {formatDate(r.date_reservation)}</span>
+            <span>🕐 {r.heure}</span>
+            <span>💰 {r.montant ? r.montant / 100 : '—'}€</span>
+            {r.type_seance && (
+              <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+                r.type_seance === 'couple'
+                  ? 'bg-gold/10 text-yellow-700'
+                  : 'bg-green-islamic/10 text-green-800'
+              }`}>
+                {r.type_seance === 'couple' ? '👫 Couple' : '👤 Individuel'}
+              </span>
+            )}
+          </div>
+          {r.notes && (
+            <div className="mt-3 rounded-lg bg-cream-dark/20 p-3 text-sm text-text-secondary">
+              <span className="font-medium">Notes :</span> {r.notes}
+            </div>
+          )}
         </div>
-        <span className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUT_COLORS[r.statut] || 'bg-gray-100'}`}>
-          {STATUT_LABELS[r.statut] || r.statut}
-        </span>
       </div>
-      <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-text-secondary">
-        <span>📅 {formatDate(r.date_reservation)}</span>
-        <span>🕐 {r.heure}</span>
-        <span>💰 {r.montant ? r.montant / 100 : '—'}€</span>
-        {r.type_seance && (
-          <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
-            r.type_seance === 'couple'
-              ? 'bg-gold/10 text-yellow-700'
-              : 'bg-green-islamic/10 text-green-800'
-          }`}>
-            {r.type_seance === 'couple' ? '👫 Couple' : '👤 Individuel'}
-          </span>
-        )}
-      </div>
-      {r.notes && (
-        <div className="mt-3 rounded-lg bg-cream-dark/20 p-3 text-sm text-text-secondary">
-          <span className="font-medium">Notes :</span> {r.notes}
-        </div>
-      )}
     </div>
   );
 }
