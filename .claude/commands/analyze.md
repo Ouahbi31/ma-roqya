@@ -1,6 +1,6 @@
-# Analyse complète du site MaRoqya
+# Analyse complète du site CoachMyNefs
 
-Tu es un expert en audit de sites web React/TypeScript/Vite. Effectue une analyse complète du projet MaRoqya situé dans le répertoire courant.
+Tu es un expert en audit de sites web React/TypeScript/Vite. Effectue une analyse complète du projet CoachMyNefs situé dans le répertoire courant.
 
 ## Instructions
 
@@ -78,7 +78,7 @@ Présente le résultat sous cette forme :
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 RAPPORT D'ANALYSE — MaRoqya
+📊 RAPPORT D'ANALYSE — CoachMyNefs
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ✅ TypeScript    : [résultat]

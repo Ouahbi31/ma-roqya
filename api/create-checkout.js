@@ -68,7 +68,7 @@ export default async function handler(req, res) {
           price_data: {
             currency: 'eur',
             product_data: {
-              name: 'Séance individuelle MaRoqya',
+              name: 'Séance individuelle CoachMyNefs',
               description: `${dateFormatted} à ${heure} — Visioconférence / Appel vocal`,
             },
             unit_amount: 5000, // 50€ in cents
