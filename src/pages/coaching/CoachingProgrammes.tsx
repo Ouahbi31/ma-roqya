@@ -77,13 +77,15 @@ export default function CoachingProgrammes() {
                 </p>
               </div>
               {/* CTA */}
-              <Link
-                to="/coaching/reserver"
+              <a
+                href="https://cal.com/coachmynefs"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-bold text-green-islamic shadow transition hover:bg-cream active:scale-[0.98]"
               >
                 Réserver ma séance
                 <ArrowRight className="h-4 w-4" />
-              </Link>
+              </a>
             </div>
           </div>
         </div>
@@ -213,13 +215,15 @@ export default function CoachingProgrammes() {
             >
               Voir les services
             </Link>
-            <Link
-              to="/coaching/reserver"
+            <a
+              href="https://cal.com/coachmynefs"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-gold px-8 py-3.5 font-semibold text-white text-base transition hover:opacity-90 active:scale-[0.98]"
             >
               <CalendarCheck className="h-5 w-5" />
               Réserver ma séance
-            </Link>
+            </a>
           </div>
         </div>
       </section>

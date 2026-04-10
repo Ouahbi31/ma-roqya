@@ -91,12 +91,14 @@ export default function CoachingSpiritualite() {
             >
               Voir le programme <ArrowRight className="h-5 w-5" />
             </Link>
-            <Link
-              to="/coaching/reserver?type=individuel"
+            <a
+              href="https://cal.com/coachmynefs/coaching-individuel"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-gold/40 px-8 py-4 font-semibold text-gold text-base hover:bg-gold/10 transition"
             >
               Réserver une séance
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -267,12 +269,14 @@ export default function CoachingSpiritualite() {
             <p className="text-sm text-text-secondary mb-6 leading-relaxed">
               Une séance individuelle en visioconférence — 1h pour travailler sur ta spiritualité avec un accompagnement personnalisé et bienveillant.
             </p>
-            <Link
-              to="/coaching/reserver?type=individuel"
+            <a
+              href="https://cal.com/coachmynefs/coaching-individuel"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-xl bg-gold px-8 py-4 font-bold text-white text-base hover:opacity-90 transition"
             >
               Réserver une séance <ArrowRight className="h-5 w-5" />
-            </Link>
+            </a>
           </div>
         </div>
       </section>

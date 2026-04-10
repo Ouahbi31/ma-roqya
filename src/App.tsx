@@ -42,7 +42,6 @@ const CoachingArticles = lazy(() => import('./pages/coaching/CoachingArticles'))
 const CoachingServices = lazy(() => import('./pages/coaching/CoachingServices'));
 const CoachingProgrammes = lazy(() => import('./pages/coaching/CoachingProgrammes'));
 const CoachingProgrammeDetail = lazy(() => import('./pages/coaching/CoachingProgrammeDetail'));
-const CoachingReserver = lazy(() => import('./pages/coaching/CoachingReserver'));
 const CoachingCouple = lazy(() => import('./pages/coaching/CoachingCouple'));
 const CoachingIndividuel = lazy(() => import('./pages/coaching/CoachingIndividuel'));
 const CoachingSpiritualite = lazy(() => import('./pages/coaching/CoachingSpiritualite'));
@@ -267,14 +266,6 @@ export default function App() {
               element={
                 <CoachingLayout>
                   <CoachingProgrammeDetail />
-                </CoachingLayout>
-              }
-            />
-            <Route
-              path="/coaching/reserver"
-              element={
-                <CoachingLayout>
-                  <CoachingReserver />
                 </CoachingLayout>
               }
             />

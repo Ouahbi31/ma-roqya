@@ -79,7 +79,7 @@ function buildConfirmationEmail({ email, programmeTitle, position, discountPerce
       </p>
 
       <div style="text-align:center;margin:32px 0;">
-        <a href="https://coachmynefs.com/coaching/reserver"
+        <a href="https://cal.com/coachmynefs"
            style="display:inline-block;background:#c9a84c;color:#fff;padding:14px 32px;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none;">
           Réserver une séance →
         </a>

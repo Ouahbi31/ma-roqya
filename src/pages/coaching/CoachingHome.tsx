@@ -68,12 +68,14 @@ export default function CoachingHome() {
               Voir les programmes
               <ArrowRight className="h-5 w-5" />
             </Link>
-            <Link
-              to="/coaching/reserver"
+            <a
+              href="https://cal.com/coachmynefs"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-gold/40 px-8 py-4 font-semibold text-gold text-base transition hover:bg-gold/10 active:scale-[0.98]"
             >
               Réserver une séance
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -210,12 +212,14 @@ export default function CoachingHome() {
               Je choisis mon programme
               <ArrowRight className="h-5 w-5" />
             </Link>
-            <Link
-              to="/coaching/reserver"
+            <a
+              href="https://cal.com/coachmynefs"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-xl border border-gold/40 px-8 py-4 font-semibold text-gold text-base transition hover:bg-gold/10"
             >
               Réserver une séance
-            </Link>
+            </a>
           </div>
         </div>
       </section>

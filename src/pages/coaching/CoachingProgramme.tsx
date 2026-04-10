@@ -219,12 +219,14 @@ export default function CoachingProgramme() {
                 Les 25 jours restants et l'ensemble du contenu coaching sont accessibles avec un abonnement Premium ou en réservant une séance d'accompagnement.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link
-                  to="/coaching/reserver"
+                <a
+                  href="https://cal.com/coachmynefs"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="rounded-xl bg-gold px-6 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
                 >
                   Réserver une séance
-                </Link>
+                </a>
                 <Link
                   to="/tarifs"
                   className="rounded-xl border border-gold/40 px-6 py-2.5 text-sm font-semibold text-gold transition hover:bg-gold/10"

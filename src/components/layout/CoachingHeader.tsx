@@ -132,12 +132,14 @@ export default function CoachingHeader() {
             {/* Desktop: Right section */}
             <div className="hidden md:flex items-center gap-3">
               {/* Bouton Réserver desktop */}
-              <Link
-                to="/coaching/reserver"
+              <a
+                href="https://cal.com/coachmynefs"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="rounded-full bg-gold px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-gold/90"
               >
                 Réserver une séance
-              </Link>
+              </a>
 
               {user ? (
                 <div className="relative">

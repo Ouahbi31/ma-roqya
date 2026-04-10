@@ -80,12 +80,14 @@ export default function CoachingCouple() {
             >
               Découvrir les programmes <ArrowRight className="h-5 w-5" />
             </Link>
-            <Link
-              to="/coaching/reserver?type=couple"
+            <a
+              href="https://cal.com/coachmynefs/coaching-de-couple"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-gold/40 px-8 py-4 font-semibold text-gold text-base hover:bg-gold/10 transition"
             >
               Réserver une séance couple
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -252,12 +254,14 @@ export default function CoachingCouple() {
             <p className="text-sm text-text-secondary mb-6 leading-relaxed">
               Une séance de coaching de couple en visioconférence — 1h pour travailler sur votre situation spécifique avec un accompagnement sur mesure.
             </p>
-            <Link
-              to="/coaching/reserver?type=couple"
+            <a
+              href="https://cal.com/coachmynefs/coaching-de-couple"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-xl bg-gold px-8 py-4 font-bold text-white text-base hover:opacity-90 transition"
             >
               Réserver une séance couple <ArrowRight className="h-5 w-5" />
-            </Link>
+            </a>
           </div>
         </div>
       </section>
