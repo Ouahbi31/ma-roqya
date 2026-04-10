@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Loader2, Trash2 } from 'lucide-react';
+import { Check, Loader2, RotateCcw, Trash2, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 interface Reservation {
@@ -35,6 +35,7 @@ export default function AdminReservations() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [deleting, setDeleting] = useState(false);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchReservations();
@@ -78,6 +79,21 @@ export default function AdminReservations() {
       }
       return next;
     });
+  };
+
+  const updateStatut = async (id: string, nouveauStatut: 'payee' | 'en_attente' | 'annulee' | 'remboursee', confirmMessage?: string) => {
+    if (confirmMessage && !confirm(confirmMessage)) return;
+    setUpdatingId(id);
+    const { error } = await supabase
+      .from('reservations')
+      .update({ statut: nouveauStatut })
+      .eq('id', id);
+    if (error) {
+      alert(`Erreur : ${error.message}`);
+    } else {
+      await fetchReservations();
+    }
+    setUpdatingId(null);
   };
 
   const deleteSelected = async () => {
@@ -159,6 +175,8 @@ export default function AdminReservations() {
           onToggle={toggleSelect}
           onToggleAll={() => toggleSelectAll(pending)}
           formatDate={formatDate}
+          updatingId={updatingId}
+          onUpdateStatut={updateStatut}
         />
       )}
 
@@ -171,6 +189,8 @@ export default function AdminReservations() {
           onToggle={toggleSelect}
           onToggleAll={() => toggleSelectAll(upcoming)}
           formatDate={formatDate}
+          updatingId={updatingId}
+          onUpdateStatut={updateStatut}
         />
       )}
 
@@ -183,6 +203,8 @@ export default function AdminReservations() {
           onToggle={toggleSelect}
           onToggleAll={() => toggleSelectAll(past)}
           formatDate={formatDate}
+          updatingId={updatingId}
+          onUpdateStatut={updateStatut}
         />
       )}
 
@@ -205,6 +227,8 @@ function Section({
   onToggle,
   onToggleAll,
   formatDate,
+  updatingId,
+  onUpdateStatut,
 }: {
   title: string;
   list: Reservation[];
@@ -212,6 +236,8 @@ function Section({
   onToggle: (id: string) => void;
   onToggleAll: () => void;
   formatDate: (d: string) => string;
+  updatingId: string | null;
+  onUpdateStatut: (id: string, statut: 'payee' | 'en_attente' | 'annulee' | 'remboursee', confirmMessage?: string) => void;
 }) {
   const allSelected = list.length > 0 && list.every((r) => selected.has(r.id));
   const someSelected = list.some((r) => selected.has(r.id));
@@ -237,6 +263,8 @@ function Section({
             isSelected={selected.has(r.id)}
             onToggle={() => onToggle(r.id)}
             formatDate={formatDate}
+            updating={updatingId === r.id}
+            onUpdateStatut={onUpdateStatut}
           />
         ))}
       </div>
@@ -249,11 +277,15 @@ function ReservationCard({
   isSelected,
   onToggle,
   formatDate,
+  updating,
+  onUpdateStatut,
 }: {
   reservation: Reservation;
   isSelected: boolean;
   onToggle: () => void;
   formatDate: (d: string) => string;
+  updating: boolean;
+  onUpdateStatut: (id: string, statut: 'payee' | 'en_attente' | 'annulee' | 'remboursee', confirmMessage?: string) => void;
 }) {
   return (
     <div
@@ -298,6 +330,47 @@ function ReservationCard({
               <span className="font-medium">Notes :</span> {r.notes}
             </div>
           )}
+
+          {/* Action buttons */}
+          <div className="mt-4 flex flex-wrap gap-2 border-t border-cream-dark/40 pt-3">
+            {updating && <Loader2 className="h-4 w-4 animate-spin text-text-secondary" />}
+            {!updating && r.statut !== 'payee' && (
+              <button
+                onClick={() => onUpdateStatut(r.id, 'payee', `Marquer la réservation de ${r.nom} comme payée ?`)}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-green-100 px-3 py-1.5 text-xs font-semibold text-green-800 transition hover:bg-green-200"
+              >
+                <Check className="h-3.5 w-3.5" />
+                Marquer payée
+              </button>
+            )}
+            {!updating && r.statut !== 'annulee' && (
+              <button
+                onClick={() => onUpdateStatut(r.id, 'annulee', `Annuler la réservation de ${r.nom} ?`)}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-red-100 px-3 py-1.5 text-xs font-semibold text-red-800 transition hover:bg-red-200"
+              >
+                <X className="h-3.5 w-3.5" />
+                Annuler
+              </button>
+            )}
+            {!updating && r.statut === 'payee' && (
+              <button
+                onClick={() => onUpdateStatut(r.id, 'remboursee', `Marquer la réservation de ${r.nom} comme remboursée ?`)}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 transition hover:bg-gray-200"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                Remboursée
+              </button>
+            )}
+            {!updating && r.statut !== 'en_attente' && (
+              <button
+                onClick={() => onUpdateStatut(r.id, 'en_attente', `Remettre la réservation de ${r.nom} en attente ?`)}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-yellow-100 px-3 py-1.5 text-xs font-semibold text-yellow-800 transition hover:bg-yellow-200"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                Remettre en attente
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

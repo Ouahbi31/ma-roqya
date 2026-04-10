@@ -130,6 +130,45 @@ export default async function handler(req, res) {
       .update({ stripe_session_id: session.id })
       .eq('id', reservation.id);
 
+    // Send notification email to admin (immediately on booking, even before payment)
+    try {
+      if (process.env.RESEND_API_KEY) {
+        const montantEur = (montantCentimes / 100).toFixed(2);
+        await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: 'CoachMyNefs <noreply@coachmynefs.com>',
+            to: 'coachmynefs@gmail.com',
+            subject: `🆕 Nouvelle réservation (en attente de paiement) — ${nom}`,
+            html: `
+              <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:24px;color:#1a1a1a;">
+                <h2 style="color:#2d6a4f;">Nouvelle demande de réservation</h2>
+                <p>Un client vient de remplir le formulaire de réservation. Statut : <strong>en attente de paiement</strong>.</p>
+                <div style="background:#f9f5ef;border-radius:12px;padding:20px;margin:20px 0;">
+                  <p style="margin:6px 0;"><strong>👤 Client :</strong> ${nom}</p>
+                  <p style="margin:6px 0;"><strong>📧 Email :</strong> ${email}</p>
+                  ${telephone ? `<p style="margin:6px 0;"><strong>📞 Téléphone :</strong> ${telephone}</p>` : ''}
+                  <p style="margin:6px 0;"><strong>📅 Date :</strong> ${dateFormatted}</p>
+                  <p style="margin:6px 0;"><strong>🕐 Heure :</strong> ${heure}</p>
+                  <p style="margin:6px 0;"><strong>💶 Montant :</strong> ${montantEur}€</p>
+                  <p style="margin:6px 0;"><strong>📝 Type :</strong> Coaching ${type_seance === 'couple' ? 'de couple' : 'individuel'}</p>
+                  ${notes ? `<p style="margin:6px 0;"><strong>💬 Notes :</strong> ${notes}</p>` : ''}
+                </div>
+                <p style="color:#888;font-size:13px;">Si le client paie via Stripe, le statut passera automatiquement à "payée". Sinon (PayPal, virement…), tu peux le marquer manuellement depuis l'admin.</p>
+                <p><a href="https://coachmynefs.com/admin" style="display:inline-block;background:#2d6a4f;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:bold;">Voir dans l'administration →</a></p>
+              </div>
+            `,
+          }),
+        });
+      }
+    } catch (emailErr) {
+      console.error('Admin email error (non-blocking):', emailErr);
+    }
+
     return res.status(200).json({ url: session.url });
   } catch (err) {
     console.error('Stripe Error:', err);
