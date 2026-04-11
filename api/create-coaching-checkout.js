@@ -1,4 +1,5 @@
 import Stripe from 'stripe';
+import { safeOrigin } from './_lib/origin.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   httpClient: Stripe.createFetchHttpClient(),
@@ -38,14 +39,14 @@ export default async function handler(req, res) {
           quantity: 1,
         },
       ],
-      success_url: `${req.headers.origin || 'https://coachmynefs.com'}/coaching/programmes/${slug}?success=1`,
-      cancel_url: `${req.headers.origin || 'https://coachmynefs.com'}/coaching/programmes/${slug}`,
+      success_url: `${safeOrigin(req)}/coaching/programmes/${slug}?success=1`,
+      cancel_url: `${safeOrigin(req)}/coaching/programmes/${slug}`,
       metadata: { userId: userId || '', programmeSlug: slug },
     });
 
     return res.status(200).json({ url: session.url });
   } catch (err) {
-    console.error('Coaching checkout error:', err.message);
-    return res.status(500).json({ error: err.message });
+    console.error('Coaching checkout error:', err);
+    return res.status(500).json({ error: 'Payment processing error' });
   }
 }

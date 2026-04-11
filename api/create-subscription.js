@@ -1,4 +1,5 @@
 import Stripe from 'stripe';
+import { safeOrigin } from './_lib/origin.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -19,14 +20,14 @@ export default async function handler(req, res) {
       payment_method_types: ['card'],
       customer_email: email,
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${req.headers.origin || 'https://coachmynefs.com'}/premium-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.origin || 'https://coachmynefs.com'}/tarifs`,
+      success_url: `${safeOrigin(req)}/premium-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${safeOrigin(req)}/tarifs`,
       metadata: { userId: userId || '' },
     });
 
     return res.status(200).json({ url: session.url });
   } catch (err) {
-    console.error('Stripe subscription error:', err.message);
-    return res.status(500).json({ error: err.message });
+    console.error('Stripe subscription error:', err);
+    return res.status(500).json({ error: 'Payment processing error' });
   }
 }

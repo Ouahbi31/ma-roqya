@@ -32,16 +32,22 @@ export default async function handler(req, res) {
   const buf = await buffer(req);
   const sig = req.headers['stripe-signature'];
 
+  // Sécurité : on REFUSE absolument les webhooks non signés
+  if (!sig) {
+    console.error('Webhook rejected: missing stripe-signature header');
+    return res.status(400).json({ error: 'Missing stripe-signature header' });
+  }
+  if (!process.env.STRIPE_WEBHOOK_SECRET) {
+    console.error('FATAL: STRIPE_WEBHOOK_SECRET not configured — webhook disabled');
+    return res.status(500).json({ error: 'Webhook not configured' });
+  }
+
   let event;
   try {
-    if (process.env.STRIPE_WEBHOOK_SECRET) {
-      event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET);
-    } else {
-      event = JSON.parse(buf.toString());
-    }
+    event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
     console.error('Webhook signature verification failed:', err.message);
-    return res.status(400).json({ error: `Webhook Error: ${err.message}` });
+    return res.status(400).json({ error: 'Webhook Error: invalid signature' });
   }
 
   if (event.type === 'checkout.session.completed') {

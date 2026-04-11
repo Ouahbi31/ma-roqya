@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from './_lib/admin-auth.js';
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL,
@@ -8,7 +9,7 @@ const supabase = createClient(
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -17,6 +18,10 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // Sécurité : seuls les admins peuvent envoyer des emails (sinon c'est un spammer paradise)
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return res.status(auth.status).json({ error: auth.error });
 
   try {
     const { to, toAll, subject, html } = req.body;
@@ -88,6 +93,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true, data });
   } catch (err) {
     console.error('send-email error:', err);
-    return res.status(500).json({ error: err.message || 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
+import { adminFetch } from '../../lib/admin-api';
 import { Bell, Download, Send, Loader2, ChevronDown, Trash2 } from 'lucide-react';
 
 interface WaitlistEntry {
@@ -109,9 +110,8 @@ export default function AdminWaitlist() {
     const errors: string[] = [];
     for (const entry of toNotify) {
       try {
-        const response = await fetch('/api/send-email', {
+        const response = await adminFetch('/api/send-email', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             to: entry.email,
             subject: `🎉 ${progName} est maintenant disponible !`,

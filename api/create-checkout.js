@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { safeOrigin } from './_lib/origin.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   httpClient: Stripe.createFetchHttpClient(),
@@ -77,8 +78,8 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'payment',
-      success_url: `${req.headers.origin || 'https://coachmynefs.com'}/reservation-confirmee?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.origin || 'https://coachmynefs.com'}/tarifs?cancelled=true`,
+      success_url: `${safeOrigin(req)}/reservation-confirmee?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${safeOrigin(req)}/tarifs?cancelled=true`,
       metadata: {
         reservation_id: reservation.id,
         nom,
@@ -96,6 +97,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ url: session.url });
   } catch (err) {
     console.error('Stripe Error:', err);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: 'Payment processing error' });
   }
 }
