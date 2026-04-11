@@ -41,7 +41,7 @@ function toLocalKey(d: Date): string {
 
 function addEndTime(slot: string): string {
   const [h, m] = slot.split(':').map(Number);
-  const endM = m + 45;
+  const endM = m + 60;
   const endH = h + Math.floor(endM / 60);
   return `${String(endH).padStart(2, '0')}:${String(endM % 60).padStart(2, '0')}`;
 }
@@ -511,7 +511,7 @@ export default function Tarifs() {
                   Réserver ma séance
                 </button>
                 <p className="mt-3 text-xs text-text-secondary">
-                  45 min · Visioconférence / Appel vocal · Confidentiel et bienveillant
+                  1 heure · Visioconférence / Appel vocal · Confidentiel et bienveillant
                 </p>
               </div>
             </div>
@@ -612,7 +612,7 @@ export default function Tarifs() {
                   <div className="mt-4 space-y-3 text-sm text-text-secondary">
                     <div className="flex items-center gap-2.5">
                       <Clock size={16} className="shrink-0 text-green-islamic" />
-                      <span>45 min</span>
+                      <span>1 heure</span>
                     </div>
                     <div className="flex items-center gap-2.5">
                       <Video size={16} className="shrink-0 text-green-islamic" />
@@ -795,7 +795,7 @@ export default function Tarifs() {
                     <div className="rounded-xl bg-green-islamic/5 border border-green-islamic/15 px-4 py-3 text-center">
                       <span className="font-heading text-2xl font-bold text-green-islamic">50€</span>
                       <span className="ml-1 text-sm text-text-secondary">/ séance</span>
-                      <p className="mt-1 text-xs text-text-secondary">45 min · Paiement sécurisé via Stripe</p>
+                      <p className="mt-1 text-xs text-text-secondary">1 heure · Paiement sécurisé via Stripe</p>
                     </div>
 
                     {/* Cancellation policy */}
