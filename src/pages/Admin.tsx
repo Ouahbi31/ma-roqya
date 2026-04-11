@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { CalendarDays, MessageSquare, CreditCard, Users, Video, MessageCircle, Crown, FileText, Bell } from 'lucide-react';
+import { CalendarDays, MessageSquare, CreditCard, Users, Video, MessageCircle, Crown, FileText, Bell, LayoutDashboard } from 'lucide-react';
+import AdminDashboard from '../components/admin/AdminDashboard';
 import AdminDisponibilites from '../components/admin/AdminDisponibilites';
 import AdminMessages from '../components/admin/AdminMessages';
 import AdminReservations from '../components/admin/AdminReservations';
@@ -10,9 +11,10 @@ import AdminAbonnements from '../components/admin/AdminAbonnements';
 import AdminArticles from '../components/admin/AdminArticles';
 import AdminWaitlist from '../components/admin/AdminWaitlist';
 
-type Tab = 'reservations' | 'disponibilites' | 'messages' | 'utilisateurs' | 'videos' | 'forum' | 'abonnements' | 'articles' | 'waitlist';
+type Tab = 'dashboard' | 'reservations' | 'disponibilites' | 'messages' | 'utilisateurs' | 'videos' | 'forum' | 'abonnements' | 'articles' | 'waitlist';
 
 const TABS: { key: Tab; label: string; icon: typeof CalendarDays }[] = [
+  { key: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
   { key: 'reservations', label: 'Réservations', icon: CreditCard },
   { key: 'disponibilites', label: 'Disponibilités', icon: CalendarDays },
   { key: 'messages', label: 'Messages', icon: MessageSquare },
@@ -25,7 +27,7 @@ const TABS: { key: Tab; label: string; icon: typeof CalendarDays }[] = [
 ];
 
 export default function Admin() {
-  const [activeTab, setActiveTab] = useState<Tab>('reservations');
+  const [activeTab, setActiveTab] = useState<Tab>('dashboard');
 
   return (
     <div className="min-h-screen bg-cream">
@@ -59,6 +61,7 @@ export default function Admin() {
         </div>
 
         {/* Content */}
+        {activeTab === 'dashboard' && <AdminDashboard />}
         {activeTab === 'reservations' && <AdminReservations />}
         {activeTab === 'disponibilites' && <AdminDisponibilites />}
         {activeTab === 'messages' && <AdminMessages />}

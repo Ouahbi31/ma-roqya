@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Check, Loader2, RotateCcw, Trash2, X } from 'lucide-react';
+import { Check, Loader2, RotateCcw, Trash2, X, Banknote } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { adminPost } from '../../lib/admin-api';
 
 interface Reservation {
   id: string;
@@ -13,6 +14,7 @@ interface Reservation {
   montant: number;
   statut: string;
   type_seance: string | null;
+  stripe_payment_intent: string | null;
   created_at: string;
 }
 
@@ -92,6 +94,28 @@ export default function AdminReservations() {
       alert(`Erreur : ${error.message}`);
     } else {
       await fetchReservations();
+    }
+    setUpdatingId(null);
+  };
+
+  const refundStripe = async (r: Reservation) => {
+    if (!r.stripe_payment_intent) {
+      alert("Impossible de rembourser : aucun paiement Stripe lié à cette réservation.");
+      return;
+    }
+    const eur = r.montant / 100;
+    if (!confirm(`Rembourser ${eur}€ à ${r.nom} via Stripe ? Cette action est IRRÉVERSIBLE.`)) return;
+    setUpdatingId(r.id);
+    try {
+      await adminPost('/api/admin/stripe-refund', {
+        paymentIntentId: r.stripe_payment_intent,
+        amount: r.montant,
+        reservationId: r.id,
+      });
+      await fetchReservations();
+      alert(`✅ Remboursement de ${eur}€ effectué avec succès. Le client sera crédité sous 5-10 jours.`);
+    } catch (e) {
+      alert(`Erreur : ${e instanceof Error ? e.message : 'inconnue'}`);
     }
     setUpdatingId(null);
   };
@@ -177,6 +201,7 @@ export default function AdminReservations() {
           formatDate={formatDate}
           updatingId={updatingId}
           onUpdateStatut={updateStatut}
+          onRefund={refundStripe}
         />
       )}
 
@@ -191,6 +216,7 @@ export default function AdminReservations() {
           formatDate={formatDate}
           updatingId={updatingId}
           onUpdateStatut={updateStatut}
+          onRefund={refundStripe}
         />
       )}
 
@@ -205,6 +231,7 @@ export default function AdminReservations() {
           formatDate={formatDate}
           updatingId={updatingId}
           onUpdateStatut={updateStatut}
+          onRefund={refundStripe}
         />
       )}
 
@@ -229,6 +256,7 @@ function Section({
   formatDate,
   updatingId,
   onUpdateStatut,
+  onRefund,
 }: {
   title: string;
   list: Reservation[];
@@ -238,6 +266,7 @@ function Section({
   formatDate: (d: string) => string;
   updatingId: string | null;
   onUpdateStatut: (id: string, statut: 'payee' | 'en_attente' | 'annulee' | 'remboursee', confirmMessage?: string) => void;
+  onRefund: (r: Reservation) => void;
 }) {
   const allSelected = list.length > 0 && list.every((r) => selected.has(r.id));
   const someSelected = list.some((r) => selected.has(r.id));
@@ -265,6 +294,7 @@ function Section({
             formatDate={formatDate}
             updating={updatingId === r.id}
             onUpdateStatut={onUpdateStatut}
+            onRefund={onRefund}
           />
         ))}
       </div>
@@ -279,6 +309,7 @@ function ReservationCard({
   formatDate,
   updating,
   onUpdateStatut,
+  onRefund,
 }: {
   reservation: Reservation;
   isSelected: boolean;
@@ -286,6 +317,7 @@ function ReservationCard({
   formatDate: (d: string) => string;
   updating: boolean;
   onUpdateStatut: (id: string, statut: 'payee' | 'en_attente' | 'annulee' | 'remboursee', confirmMessage?: string) => void;
+  onRefund: (r: Reservation) => void;
 }) {
   return (
     <div
@@ -352,13 +384,24 @@ function ReservationCard({
                 Annuler
               </button>
             )}
+            {!updating && r.statut === 'payee' && r.stripe_payment_intent && (
+              <button
+                onClick={() => onRefund(r)}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-orange-100 px-3 py-1.5 text-xs font-semibold text-orange-800 transition hover:bg-orange-200"
+                title={`Rembourser ${r.montant / 100}€ via Stripe`}
+              >
+                <Banknote className="h-3.5 w-3.5" />
+                Rembourser via Stripe
+              </button>
+            )}
             {!updating && r.statut === 'payee' && (
               <button
-                onClick={() => onUpdateStatut(r.id, 'remboursee', `Marquer la réservation de ${r.nom} comme remboursée ?`)}
+                onClick={() => onUpdateStatut(r.id, 'remboursee', `Marquer la réservation de ${r.nom} comme remboursée (sans Stripe) ?`)}
                 className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 transition hover:bg-gray-200"
+                title="Marquer comme remboursée sans appeler Stripe (si paiement hors-Stripe)"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
-                Remboursée
+                Marquer remboursée
               </button>
             )}
             {!updating && r.statut !== 'en_attente' && (
